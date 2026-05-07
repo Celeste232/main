@@ -33,7 +33,7 @@ export function Cat() {
       {frameUrl ? (
         <img src={frameUrl} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
       ) : (
-        <CatSvg action={cat.action} />
+        <CatSvg action={cat.action} frame={frame} />
       )}
       {settings?.showSpeechBubble && cat.message && (
         <div className="speech-bubble">{cat.message}</div>
