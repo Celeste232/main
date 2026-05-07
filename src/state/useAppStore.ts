@@ -44,9 +44,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   settings: null,
   cat: {
     action: 'idle',
-    x: 400,
-    y: 500,
-    facing: 'right',
+    x: 520,
+    y: 480,
+    facing: 'left',
     message: null,
   },
   housePos: { x: 200, y: 400 },

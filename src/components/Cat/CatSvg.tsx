@@ -162,37 +162,41 @@ function PlayCursorCat({ frame }: { frame: number }) {
   );
 }
 
+// Side-profile cat hunched over a bowl on its right. Used for eating and
+// drinking — the parent flips horizontally via facing for the water bowl.
 function EatingCat({ frame }: { frame: number }) {
-  // Head bob into bowl
-  const headDip = (frame % 4) * 2;
-  const chew = frame % 2 === 0 ? 0 : 1;
-  return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
-      <g transform={`translate(0 ${headDip})`}>
-        <Ears />
-        <ellipse cx="50" cy="52" rx="26" ry="24" fill={fill} stroke={stroke} strokeWidth={sw} />
-        <Face mouthOpen={chew * 0.6} />
-        <Whiskers />
-      </g>
-      <ellipse cx="50" cy="80" rx="22" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
-    </svg>
-  );
+  const dip = (frame % 4) * 2;
+  return <SideHunchedCat dip={dip} />;
 }
 
 function DrinkingCat({ frame }: { frame: number }) {
-  const headDip = frame === 1 ? 4 : frame === 2 ? 2 : 0;
+  const dip = frame === 1 ? 4 : frame === 2 ? 2 : 0;
+  return <SideHunchedCat dip={dip} drip={frame === 2} />;
+}
+
+function SideHunchedCat({ dip, drip = false }: { dip: number; drip?: boolean }) {
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
-      <g transform={`translate(0 ${headDip})`}>
-        <Ears />
-        <ellipse cx="50" cy="52" rx="26" ry="24" fill={fill} stroke={stroke} strokeWidth={sw} />
-        <Face />
-        <Whiskers />
-        {frame === 1 && (
-          <line x1="50" y1="62" x2="50" y2="68" stroke="#6aa8d8" strokeWidth={2} strokeLinecap="round" />
+    <svg viewBox="0 0 120 80" width="100%" height="100%">
+      {/* Body */}
+      <ellipse cx="50" cy="56" rx="34" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* Head dipped toward the right (the bowl side) */}
+      <g transform={`translate(${78 + dip * 0.2} ${44 + dip})`}>
+        <ellipse cx="0" cy="0" rx="16" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <path d="M-12 -10 L-8 -20 L-4 -10 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <path d="M4 -10 L8 -20 L12 -10 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <circle cx="-4" cy="0" r="1.6" fill={stroke} />
+        <circle cx="6" cy="0" r="1.6" fill={stroke} />
+        <path d="M-3 6 Q1 8 5 6" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <path d="M-14 0 L-20 -2 M-14 4 L-20 6" stroke={stroke} strokeWidth={1.4} strokeLinecap="round" />
+        {drip && (
+          <line x1="2" y1="10" x2="2" y2="14" stroke="#6aa8d8" strokeWidth={2} strokeLinecap="round" />
         )}
       </g>
-      <ellipse cx="50" cy="82" rx="22" ry="13" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* Tail curling up at the back */}
+      <path d="M16 56 Q4 46 8 36" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      {/* Legs */}
+      <line x1="32" y1="68" x2="32" y2="76" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <line x1="62" y1="68" x2="62" y2="76" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
     </svg>
   );
 }

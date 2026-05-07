@@ -38,7 +38,12 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
 
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const walkRaf = useRef<number | null>(null);
-  const target = useRef<{ x: number; y: number } | null>(null);
+  const target = useRef<{ x: number; y: number; meta?: 'food' | 'water' } | null>(null);
+
+  // Cat sprite is 80×80; bowls are 60×50 anchored at housePos+offset.
+  // Stand the cat to the side of each bowl so it's not on top of it.
+  const eatSpot = { x: housePos.x + 130 - 50, y: housePos.y + 70 - 30 };
+  const drinkSpot = { x: housePos.x + 195 + 50, y: housePos.y + 70 - 30 };
 
   // Behavior scheduler — every cycle picks a next action.
   useEffect(() => {
@@ -55,10 +60,10 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       const wantsWater = (settings.waterLevel ?? 0) > 0.05 && Math.random() < 0.12;
       if (wantsFood) {
         action = 'walking';
-        target.current = { x: housePos.x + 130, y: housePos.y + 90 };
+        target.current = { ...eatSpot, meta: 'food' };
       } else if (wantsWater) {
         action = 'walking';
-        target.current = { x: housePos.x + 195, y: housePos.y + 90 };
+        target.current = { ...drinkSpot, meta: 'water' };
       } else if (action === 'walking') {
         const tx = Math.random() * (displayBounds.width - 100) + 50;
         const ty = Math.random() * (displayBounds.height - 200) + 150;
@@ -75,7 +80,7 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-  }, [settings, displayBounds, setCat, housePos.x, housePos.y]);
+  }, [settings, displayBounds, setCat, eatSpot.x, eatSpot.y, drinkSpot.x, drinkSpot.y]);
 
   // Walking — move toward current target, then trigger eat/drink if at a bowl.
   useEffect(() => {
@@ -88,14 +93,12 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       const dy = t.y - cat.y;
       const dist = Math.hypot(dx, dy);
       if (dist < 4) {
+        const meta = t.meta;
         target.current = null;
-        // If we walked to a bowl, switch to eating/drinking
-        const foodPos = { x: housePos.x + 130, y: housePos.y + 90 };
-        const waterPos = { x: housePos.x + 195, y: housePos.y + 90 };
-        if (Math.hypot(t.x - foodPos.x, t.y - foodPos.y) < 6 && (settings?.foodLevel ?? 0) > 0) {
-          setCat({ action: 'eating' });
-        } else if (Math.hypot(t.x - waterPos.x, t.y - waterPos.y) < 6 && (settings?.waterLevel ?? 0) > 0) {
-          setCat({ action: 'drinking' });
+        if (meta === 'food' && (settings?.foodLevel ?? 0) > 0) {
+          setCat({ action: 'eating', facing: 'right' });
+        } else if (meta === 'water' && (settings?.waterLevel ?? 0) > 0) {
+          setCat({ action: 'drinking', facing: 'left' });
         }
         return;
       }
@@ -114,7 +117,7 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     return () => {
       if (walkRaf.current) cancelAnimationFrame(walkRaf.current);
     };
-  }, [cat.action, cat.x, cat.y, setCat, settings, housePos.x, housePos.y]);
+  }, [cat.action, cat.x, cat.y, setCat, settings]);
 
   // Eating / drinking — drain bowl while the action lasts.
   useEffect(() => {
@@ -171,7 +174,7 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
   }, [cat.action, setCat]);
 
   const callToHouse = () => {
-    target.current = { x: housePos.x + 30, y: housePos.y + 60 };
+    target.current = { x: housePos.x + 20, y: housePos.y + 40 };
     setCat({ action: 'walking', message: '갈게~' });
     setTimeout(() => setCat({ message: null }), 1500);
   };
