@@ -1,0 +1,238 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+#root {
+  position: relative;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.interactive {
+  pointer-events: auto;
+}
+
+.cat-sprite,
+.house-sprite,
+.bowl-sprite {
+  position: absolute;
+  image-rendering: pixelated;
+}
+
+.house {
+  width: 120px;
+  height: 120px;
+  cursor: grab;
+}
+
+.house:active {
+  cursor: grabbing;
+}
+
+.house-roof-button {
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.bowl {
+  width: 60px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.cat {
+  width: 80px;
+  height: 80px;
+  transition: transform 0.1s linear;
+}
+
+.speech-bubble {
+  position: absolute;
+  background: white;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.settings-panel {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 12px 14px;
+  min-width: 240px;
+  font-size: 13px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+.settings-panel h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.settings-row input[type="text"],
+.settings-row input[type="range"],
+.settings-row select {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.settings-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.settings-actions button {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Placeholder cat drawn with CSS — replaced when PNG frames are dropped in. */
+.cat-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: white;
+  border: 2px solid #222;
+  border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+}
+.cat-placeholder::before,
+.cat-placeholder::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 16px solid #222;
+}
+.cat-placeholder::before { left: 12px; }
+.cat-placeholder::after { right: 12px; }
+
+.house-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.house-placeholder .body {
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 60%;
+  background: white;
+  border: 2px solid #222;
+  border-radius: 6px;
+}
+.house-placeholder .roof {
+  position: absolute;
+  top: 8%;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 50px solid white;
+  filter: drop-shadow(0 -2px 0 #222) drop-shadow(2px 0 0 #222) drop-shadow(-2px 0 0 #222);
+}
+.house-placeholder .door {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 40px;
+  background: #f4f4f4;
+  border: 2px solid #222;
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+}
+
+.bowl-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.bowl-placeholder .rim {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: white;
+  border: 2px solid #222;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+.bowl-food {
+  position: absolute;
+  bottom: 24px;
+  left: 8px;
+  right: 8px;
+  background: #d9b97a;
+  border: 2px solid #222;
+  border-radius: 50%;
+  transition: height 0.3s;
+}
+.bowl-water {
+  position: absolute;
+  bottom: 14px;
+  left: 8px;
+  right: 8px;
+  background: rgba(120, 180, 230, 0.7);
+  border-top: 2px solid #6aa8d8;
+  border-radius: 50%;
+  transition: height 0.3s;
+}
