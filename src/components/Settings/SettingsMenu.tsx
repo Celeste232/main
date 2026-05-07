@@ -30,6 +30,16 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
         />
       </div>
       <div className="settings-row">
+        <label>스킨</label>
+        <select
+          value={settings.catSkin}
+          onChange={(e) => void patch({ catSkin: e.target.value as typeof settings.catSkin })}
+        >
+          <option value="png">PNG (있으면)</option>
+          <option value="svg-doodle">병맛 낙서</option>
+        </select>
+      </div>
+      <div className="settings-row">
         <label>활동량</label>
         <select
           value={settings.activityLevel}

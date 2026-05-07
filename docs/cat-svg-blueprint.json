@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema#",
+  "name": "cat-svg-doodle",
+  "description": "Blueprint for the low-effort SVG cat that ships as the PNG-less fallback. Preserved on purpose because it is cursed and funny. Each pose is a function in src/components/Cat/CatSvg.tsx that takes a frame index and returns an inline SVG.",
+  "conventions": {
+    "stroke": "#222",
+    "strokeWidth": 2.5,
+    "fill": "#fff",
+    "secondaryStrokeWidth": 1.5,
+    "facingDefault": "right",
+    "facingFlip": "Parent applies transform: scaleX(-1) when cat.facing === 'left'. Side-profile poses are drawn with head on the right; head-on-left source SVGs are wrapped in <g transform='translate(W 0) scale(-1 1)'> so the default still faces right.",
+    "frameInterval": "Driven by FRAME_SPECS in catFrames.ts; renderer cycles frame 0..count-1 at intervalMs."
+  },
+  "buildingBlocks": {
+    "Ears": {
+      "left":  { "shape": "triangle", "points": [[28, 28], [36, 18], [44, 28]] },
+      "right": { "shape": "triangle", "points": [[56, 28], [64, 18], [72, 28]] }
+    },
+    "Whiskers": {
+      "left":  ["M30 52 L22 50", "M30 56 L22 58"],
+      "right": ["M70 52 L78 50", "M70 56 L78 58"],
+      "stroke": "#222",
+      "strokeWidth": 1.5
+    },
+    "Face": {
+      "eyes": { "open": [{"cx": 40, "cy": 48, "r": 2.5}, {"cx": 60, "cy": 48, "r": 2.5}], "blink": ["M37 47 L43 49", "M57 49 L63 47"] },
+      "mouth": { "closed": "M48 56 Q50 58 52 56", "open": "ellipse(50, 58, 2+open*3, 1+open*3) fill=#f08aa6" }
+    }
+  },
+  "poses": {
+    "idle": {
+      "frameCount": 3,
+      "intervalMs": 400,
+      "alias": "sitting",
+      "view": "front",
+      "notes": "Falls through to SittingCat."
+    },
+    "sitting": {
+      "frameCount": 3,
+      "intervalMs": 400,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front",
+      "elements": {
+        "ears": "Ears block",
+        "head": { "shape": "ellipse", "cx": 50, "cy": 48, "rx": 26, "ry": 26 },
+        "body": { "shape": "ellipse", "cx": 50, "cy": 78, "rx": 22, "ry": 16 },
+        "tail": { "path": "M72 78 Q86 70 84 56", "rotateAround": [78, 70] },
+        "face": "Face block",
+        "whiskers": "Whiskers block"
+      },
+      "perFrame": {
+        "0": { "bodyScale": 1.00, "tailRotDeg": -10 },
+        "1": { "bodyScale": 1.02, "tailRotDeg":  10 },
+        "2": { "bodyScale": 1.00, "tailRotDeg": -10 }
+      }
+    },
+    "walking": {
+      "frameCount": 4,
+      "intervalMs": 100,
+      "viewBox": [0, 0, 120, 80],
+      "view": "side",
+      "mirrored": true,
+      "elements": {
+        "head": { "shape": "ellipse", "cx": 38, "cy": 32, "rx": 18, "ry": 16 },
+        "body": { "shape": "ellipse", "cx": 72, "cy": 46, "rx": 32, "ry": 18 },
+        "tail": "M100 40 Q112 30 108 18",
+        "ears": [[[22,22],[28,12],[36,22]], [[40,22],[46,12],[54,22]]],
+        "eyes": [{"cx":32,"cy":32,"r":2}, {"cx":44,"cy":32,"r":2}],
+        "mouth": "M36 38 Q38 40 40 38",
+        "whiskers": ["M22 32 L14 30", "M22 36 L14 38"],
+        "legs": [
+          {"id": "leg-front-1", "x": 52, "yTop": 60, "yBottom": "70 - legA"},
+          {"id": "leg-front-2", "x": 62, "yTop": 60, "yBottom": "70 - legB"},
+          {"id": "leg-rear-1",  "x": 82, "yTop": 60, "yBottom": "70 - legB"},
+          {"id": "leg-rear-2",  "x": 92, "yTop": 60, "yBottom": "70 - legA"}
+        ]
+      },
+      "perFrame": {
+        "0": { "bobY": 0,    "legA": 0, "legB": 8 },
+        "1": { "bobY": -1.5, "legA": 0, "legB": 8 },
+        "2": { "bobY": 0,    "legA": 8, "legB": 0 },
+        "3": { "bobY": -1.5, "legA": 8, "legB": 0 }
+      }
+    },
+    "sleeping": {
+      "frameCount": 3,
+      "intervalMs": 800,
+      "viewBox": [0, 0, 120, 70],
+      "view": "side-curled",
+      "mirrored": true,
+      "elements": {
+        "body": { "shape": "ellipse", "cx": 70, "cy": 42, "rx": 42, "ry": 22 },
+        "head": { "shape": "ellipse", "cx": 28, "cy": 36, "rx": 20, "ry": 18 },
+        "ears": [[[16,26],[22,16],[30,26]], [[30,28],[36,18],[42,28]]],
+        "tail": "M108 38 Q120 30 110 22",
+        "closedEyes": ["M22 36 Q24 38 26 36", "M30 38 Q32 40 34 38"],
+        "whiskers": ["M14 40 L8 38", "M14 44 L8 46"]
+      },
+      "perFrame": {
+        "0": { "bodyScaleY": 1.00, "z": "z" },
+        "1": { "bodyScaleY": 1.04, "z": null },
+        "2": { "bodyScaleY": 1.00, "z": "Z" }
+      }
+    },
+    "grooming": {
+      "frameCount": 3,
+      "intervalMs": 200,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front",
+      "elements": "Sitting body + paw raised to mouth, eyes closed",
+      "perFrame": {
+        "0": { "pawY": 56 },
+        "1": { "pawY": 54 },
+        "2": { "pawY": 52 }
+      }
+    },
+    "stretching": {
+      "frameCount": 3,
+      "intervalMs": 200,
+      "viewBox": [0, 0, 140, 70],
+      "view": "side-bow",
+      "mirrored": true,
+      "elements": "Front low + rear high; rear ellipse gets stretchX scale per frame",
+      "perFrame": {
+        "0": { "stretchX": 1.00 },
+        "1": { "stretchX": 1.05 },
+        "2": { "stretchX": 1.10 }
+      }
+    },
+    "yawning": {
+      "frameCount": 2,
+      "intervalMs": 400,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front",
+      "perFrame": {
+        "0": { "mouthOpen": 1, "blink": true },
+        "1": { "mouthOpen": 0, "blink": false }
+      }
+    },
+    "tail-wag": {
+      "frameCount": 3,
+      "intervalMs": 150,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front",
+      "elements": "Sitting body + tail rotated by (frame-1)*14 degrees around (78,72)",
+      "perFrame": {
+        "0": { "tailRotDeg": -14 },
+        "1": { "tailRotDeg":   0 },
+        "2": { "tailRotDeg":  14 }
+      }
+    },
+    "jumping": {
+      "frameCount": 3,
+      "intervalMs": 120,
+      "viewBox": [0, 0, 120, 90],
+      "view": "side",
+      "mirrored": true,
+      "elements": "Walking-like side body + ground shadow ellipse on frame 1",
+      "perFrame": {
+        "0": { "translateY":  4, "scaleY": 1.00, "shadow": false },
+        "1": { "translateY": -16, "scaleY": 1.15, "shadow": true },
+        "2": { "translateY": -2, "scaleY": 1.00, "shadow": false }
+      }
+    },
+    "curious": {
+      "frameCount": 2,
+      "intervalMs": 400,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front-tilted",
+      "elements": "Front sitting + ? mark at (78,22)",
+      "perFrame": {
+        "0": { "tiltDeg": -8 },
+        "1": { "tiltDeg":  8 }
+      }
+    },
+    "eating": {
+      "frameCount": 4,
+      "intervalMs": 200,
+      "viewBox": [0, 0, 120, 80],
+      "view": "side-hunched",
+      "facingDefault": "right",
+      "elements": "SideHunchedCat: body ellipse cx=50, head shifted to cx=78, dipped down by frame*2",
+      "perFrame": {
+        "0": { "headDip": 0 },
+        "1": { "headDip": 2 },
+        "2": { "headDip": 4 },
+        "3": { "headDip": 6 }
+      }
+    },
+    "drinking": {
+      "frameCount": 3,
+      "intervalMs": 250,
+      "viewBox": [0, 0, 120, 80],
+      "view": "side-hunched",
+      "facingDefault": "left",
+      "elements": "SideHunchedCat with optional water drip line on frame 2",
+      "perFrame": {
+        "0": { "headDip": 0, "drip": false },
+        "1": { "headDip": 4, "drip": false },
+        "2": { "headDip": 2, "drip": true }
+      }
+    },
+    "play-cursor": {
+      "frameCount": 4,
+      "intervalMs": 120,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front-leaning",
+      "elements": "Sitting body shifted by lean px; raised paw alternates",
+      "perFrame": {
+        "0": { "leanX": 0, "pawDelta": 0 },
+        "1": { "leanX": 2, "pawDelta": -8 },
+        "2": { "leanX": 4, "pawDelta": 0 },
+        "3": { "leanX": 6, "pawDelta": -8 }
+      }
+    },
+    "in-house": {
+      "frameCount": 3,
+      "intervalMs": 800,
+      "alias": "sleeping",
+      "notes": "Renders sleeping pose; outer App may also draw the cat behind the house door."
+    },
+    "startled": {
+      "frameCount": 2,
+      "intervalMs": 150,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front",
+      "elements": "Sitting body scaled up + open mouth + '!' '!' marks at corners",
+      "perFrame": {
+        "0": { "puffScale": 1.08, "mouthOpen": 0.6 },
+        "1": { "puffScale": 1.00, "mouthOpen": 0.6 }
+      }
+    }
+  },
+  "supportingAssets": {
+    "house": {
+      "file": "src/components/House/HouseSvg.tsx",
+      "viewBox": [0, 0, 120, 120],
+      "parts": ["body rect (14,56)-(106,114)", "roof triangle (6,60)-(60,16)-(114,60)", "chimney (86,22 10x22)", "arched door (44,114)-(76,114) with Q60,76", "paw icon at (60,64)"]
+    },
+    "bowls": {
+      "file": "src/components/Bowls/BowlSvg.tsx",
+      "viewBox": [0, 0, 80, 64],
+      "shared": "outer bowl path + cat icon + rim ellipse",
+      "food": "level ∈ [0,1] → up to 12 pellets at preset positions, fill #d9b97a",
+      "water": "level ∈ [0,1] → ellipse rim at y=32-level*4, fill rgba(120,180,230,.85)"
+    }
+  },
+  "notes": [
+    "Kept on purpose — user said it's cursed-funny (병맛). Do not silently delete.",
+    "PNG sprites placed in src/assets/cat/<action>/n.png override this fallback automatically via import.meta.glob.",
+    "Setting catSkin='svg-doodle' forces the doodle even when PNGs are present.",
+    "Setting catSkin='png' (default) prefers PNG when available, falls back to doodle when missing."
+  ]
+}

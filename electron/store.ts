@@ -2,7 +2,7 @@ import Store from 'electron-store';
 
 export interface Settings {
   catName: string;
-  catSkin: string;
+  catSkin: 'png' | 'svg-doodle';
   activityLevel: 'calm' | 'normal' | 'energetic';
   showSpeechBubble: boolean;
   launchAtStartup: boolean;
@@ -18,7 +18,7 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   catName: '나비',
-  catSkin: 'default',
+  catSkin: 'png',
   activityLevel: 'normal',
   showSpeechBubble: true,
   launchAtStartup: false,

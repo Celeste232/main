@@ -18,7 +18,8 @@ export function Cat() {
   }, [cat.action]);
 
   if (settings?.hideCat) return null;
-  const frames = getFrames(cat.action);
+  const useDoodle = settings?.catSkin === 'svg-doodle';
+  const frames = useDoodle ? [] : getFrames(cat.action);
   const frameUrl = frames[frame % Math.max(frames.length, 1)];
 
   return (
