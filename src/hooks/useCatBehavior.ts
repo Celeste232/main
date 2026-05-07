@@ -3,26 +3,58 @@ import { useAppStore, type CatAction } from '../state/useAppStore';
 
 const ACTION_DURATIONS: Record<CatAction, [number, number]> = {
   idle: [3000, 6000],
-  walking: [4000, 9000],
-  sitting: [4000, 8000],
-  sleeping: [15000, 30000],
-  grooming: [4000, 7000],
+  walking: [3000, 7000],
+  sitting: [4000, 9000],
+  sleeping: [20000, 60000],
+  grooming: [4000, 8000],
   stretching: [2000, 3500],
   yawning: [1500, 2500],
-  'tail-wag': [3000, 5000],
+  'tail-wag': [3000, 6000],
   jumping: [1500, 2500],
   curious: [2000, 4000],
   eating: [4000, 6000],
   drinking: [3000, 5000],
-  'play-cursor': [3000, 6000],
-  'in-house': [10000, 25000],
+  'play-cursor': [3000, 8000],
+  'in-house': [10000, 60000],
   startled: [1500, 2500],
+  loaf: [10000, 30000],
+  sprawl: [10000, 40000],
+  held: [600, 600],
 };
 
+// Activity-level → weighted action pool. Repeated entries = higher weight.
 const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
-  calm: ['idle', 'sitting', 'sleeping', 'grooming', 'sitting', 'sleeping'],
-  normal: ['idle', 'walking', 'sitting', 'grooming', 'stretching', 'tail-wag', 'walking'],
-  energetic: ['walking', 'walking', 'jumping', 'play-cursor', 'tail-wag', 'stretching'],
+  calm: [
+    'sitting', 'sitting',
+    'loaf', 'loaf', 'loaf',
+    'sprawl', 'sprawl',
+    'sleeping', 'sleeping',
+    'grooming',
+    'yawning',
+    'walking',
+  ],
+  normal: [
+    'walking', 'walking',
+    'sitting',
+    'loaf', 'loaf',
+    'sprawl',
+    'grooming',
+    'stretching',
+    'tail-wag',
+    'yawning',
+    'curious',
+    'sleeping',
+  ],
+  energetic: [
+    'walking', 'walking', 'walking',
+    'play-cursor', 'play-cursor',
+    'jumping',
+    'tail-wag',
+    'stretching',
+    'curious',
+    'sitting',
+    'loaf',
+  ],
 };
 
 function pick<T>(arr: T[]): T {
@@ -39,21 +71,50 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const walkRaf = useRef<number | null>(null);
   const target = useRef<{ x: number; y: number; meta?: 'food' | 'water' } | null>(null);
+  const lastAction = useRef<CatAction | null>(null);
 
   // Cat sprite is 80×80; bowls are 60×50 anchored at housePos+offset.
-  // Stand the cat to the side of each bowl so it's not on top of it.
   const eatSpot = { x: housePos.x + 130 - 50, y: housePos.y + 70 - 30 };
   const drinkSpot = { x: housePos.x + 195 + 50, y: housePos.y + 70 - 30 };
+
+  // Pick a wandering target inside the configured roam area.
+  const pickWanderTarget = (): { x: number; y: number } => {
+    if (!displayBounds) return { x: housePos.x, y: housePos.y };
+    if (settings?.roamArea === 'near-house') {
+      const radius = 350;
+      const cx = housePos.x + 60;
+      const cy = housePos.y + 60;
+      const angle = Math.random() * Math.PI * 2;
+      const r = Math.random() * radius;
+      const tx = Math.max(20, Math.min(displayBounds.width - 100, cx + Math.cos(angle) * r));
+      const ty = Math.max(120, Math.min(displayBounds.height - 120, cy + Math.sin(angle) * r));
+      return { x: tx, y: ty };
+    }
+    return {
+      x: Math.random() * (displayBounds.width - 100) + 50,
+      y: Math.random() * (displayBounds.height - 200) + 150,
+    };
+  };
 
   // Behavior scheduler — every cycle picks a next action.
   useEffect(() => {
     if (!settings || settings.hideCat) return;
     if (!displayBounds) return;
+    if (cat.locked) return;
 
     const next = () => {
       if (timer.current) clearTimeout(timer.current);
       const bias = ACTIVITY_BIAS[settings.activityLevel];
-      let action: CatAction = pick(bias);
+
+      // Pick an action — but avoid repeating the same one back-to-back so it
+      // doesn't feel like a loop.
+      let action: CatAction;
+      let tries = 0;
+      do {
+        action = pick(bias);
+        tries++;
+      } while (action === lastAction.current && tries < 4);
+      lastAction.current = action;
 
       // Occasionally seek out a bowl if hungry/thirsty.
       const wantsFood = (settings.foodLevel ?? 0) > 0.05 && Math.random() < 0.18;
@@ -65,9 +126,7 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
         action = 'walking';
         target.current = { ...drinkSpot, meta: 'water' };
       } else if (action === 'walking') {
-        const tx = Math.random() * (displayBounds.width - 100) + 50;
-        const ty = Math.random() * (displayBounds.height - 200) + 150;
-        target.current = { x: tx, y: ty };
+        target.current = pickWanderTarget();
       }
 
       setCat({ action });
@@ -80,7 +139,7 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-  }, [settings, displayBounds, setCat, eatSpot.x, eatSpot.y, drinkSpot.x, drinkSpot.y]);
+  }, [settings, displayBounds, setCat, eatSpot.x, eatSpot.y, drinkSpot.x, drinkSpot.y, cat.locked]);
 
   // Walking — move toward current target, then trigger eat/drink if at a bowl.
   useEffect(() => {
@@ -173,9 +232,42 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     };
   }, [cat.action, setCat]);
 
+  // Look-at-cursor — when cursor is near, just turn to face it (no movement).
+  useEffect(() => {
+    const watchActions: CatAction[] = ['sitting', 'idle', 'loaf', 'tail-wag', 'curious', 'grooming'];
+    if (!watchActions.includes(cat.action)) return;
+    if (cat.locked) return;
+
+    let alive = true;
+    const tick = async () => {
+      if (!alive) return;
+      try {
+        const p = await window.api.getCursorPos();
+        const c = useAppStore.getState().cat;
+        const dist = Math.hypot(p.x - (c.x + 40), p.y - (c.y + 40));
+        if (dist < 200) {
+          const wantFacing: 'left' | 'right' = p.x > c.x + 40 ? 'right' : 'left';
+          if (c.facing !== wantFacing) setCat({ facing: wantFacing });
+          // Small chance to perk up to 'curious' if cursor lingers very close
+          if (dist < 80 && c.action !== 'curious' && Math.random() < 0.04) {
+            setCat({ action: 'curious' });
+          }
+        }
+      } catch {
+        // ignore
+      }
+      setTimeout(tick, 250);
+    };
+    void tick();
+
+    return () => {
+      alive = false;
+    };
+  }, [cat.action, cat.locked, setCat]);
+
   const callToHouse = () => {
     target.current = { x: housePos.x + 20, y: housePos.y + 40 };
-    setCat({ action: 'walking', message: '갈게~' });
+    setCat({ action: 'walking', message: '갈게~', locked: null });
     setTimeout(() => setCat({ message: null }), 1500);
   };
 
@@ -184,5 +276,18 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     setTimeout(() => setCat({ message: null }), 1200);
   };
 
-  return { callToHouse, startle };
+  const putInHouse = () => {
+    setCat({
+      action: 'in-house',
+      x: housePos.x + 30,
+      y: housePos.y + 30,
+      locked: 'in-house',
+    });
+  };
+
+  const releaseFromHouse = () => {
+    setCat({ action: 'idle', locked: null, x: housePos.x + 130, y: housePos.y + 60 });
+  };
+
+  return { callToHouse, startle, putInHouse, releaseFromHouse };
 }

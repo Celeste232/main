@@ -27,7 +27,72 @@ export function CatSvg({ action, frame }: CatSvgProps) {
   if (action === 'tail-wag') return <TailWagCat frame={frame} />;
   if (action === 'curious') return <CuriousCat frame={frame} />;
   if (action === 'startled') return <StartledCat frame={frame} />;
+  if (action === 'loaf') return <LoafCat frame={frame} />;
+  if (action === 'sprawl') return <SprawlCat frame={frame} />;
+  if (action === 'held') return <HeldCat frame={frame} />;
   return <SittingCat frame={frame} />;
+}
+
+function LoafCat({ frame }: { frame: number }) {
+  // 식빵 — paws tucked, body a rounded loaf, content blink
+  const breathe = frame % 2 === 0 ? 1 : 1.04;
+  return (
+    <svg viewBox="0 0 100 90" width="100%" height="100%">
+      <Ears />
+      <g transform={`translate(50 56) scale(1 ${breathe}) translate(-50 -56)`}>
+        <path
+          d="M16 78 L16 56 Q16 30 50 30 Q84 30 84 56 L84 78 Z"
+          fill={fill}
+          stroke={stroke}
+          strokeWidth={sw}
+          strokeLinejoin="round"
+        />
+      </g>
+      <Face blink={frame % 2 === 1} />
+      <Whiskers />
+      <path d="M82 78 Q90 76 86 64" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SprawlCat({ frame }: { frame: number }) {
+  // 퍼져있음 — long horizontal blob, paws splayed
+  const breathe = frame % 2 === 0 ? 1 : 1.05;
+  return (
+    <svg viewBox="0 0 140 70" width="100%" height="100%">
+      <g transform={`translate(70 50) scale(${breathe} 1) translate(-70 -50)`}>
+        <ellipse cx="70" cy="50" rx="56" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+      </g>
+      <ellipse cx="20" cy="42" rx="14" ry="12" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <path d="M10 32 L14 22 L20 32 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M22 32 L28 22 L32 32 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M16 42 Q18 44 20 42" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M24 42 Q26 44 28 42" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M124 50 Q138 42 132 30" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      {/* splayed back legs */}
+      <line x1="100" y1="60" x2="106" y2="68" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <line x1="92" y1="60" x2="86" y2="68" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function HeldCat({ frame }: { frame: number }) {
+  // Dangling cat — limbs hanging down with wobble
+  const wobble = frame % 2 === 0 ? -2 : 2;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <g transform={`rotate(${wobble} 50 50)`}>
+        <Ears />
+        <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <ellipse cx="50" cy="80" rx="22" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <Face mouthOpen={0.4} />
+        <Whiskers />
+        <line x1="40" y1="92" x2="38" y2="100" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+        <line x1="60" y1="92" x2="62" y2="100" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      </g>
+      <text x="14" y="22" fontSize="14" fill={stroke}>!</text>
+    </svg>
+  );
 }
 
 // Building blocks ───────────────────────────────────────────────────────────

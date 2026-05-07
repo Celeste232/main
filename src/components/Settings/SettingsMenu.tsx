@@ -9,8 +9,15 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
   const settings = useAppStore((s) => s.settings);
   const patch = useAppStore((s) => s.patchSettings);
   const setOpen = useAppStore((s) => s.setSettingsOpen);
+  const catActions = useAppStore((s) => s.catActions);
+  const cat = useAppStore((s) => s.cat);
 
   if (!settings) return null;
+
+  const toggleFocus = (enabled: boolean) => {
+    void patch({ focusMode: enabled });
+    window.api.setFocusMode(enabled);
+  };
 
   return (
     <div
@@ -51,6 +58,16 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
         </select>
       </div>
       <div className="settings-row">
+        <label>돌아다닐 영역</label>
+        <select
+          value={settings.roamArea}
+          onChange={(e) => void patch({ roamArea: e.target.value as typeof settings.roamArea })}
+        >
+          <option value="full">전체 화면</option>
+          <option value="near-house">집 근처만</option>
+        </select>
+      </div>
+      <div className="settings-row">
         <label>말풍선</label>
         <input
           type="checkbox"
@@ -66,8 +83,24 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
           onChange={(e) => void patch({ hideCat: e.target.checked })}
         />
       </div>
+      <div className="settings-actions">
+        {cat.locked === 'in-house' ? (
+          <button onClick={() => catActions?.releaseFromHouse()}>집에서 꺼내기</button>
+        ) : (
+          <button onClick={() => catActions?.putInHouse()}>집에 넣기</button>
+        )}
+        <button onClick={() => catActions?.callToHouse()}>부르기</button>
+      </div>
 
       <h3>프로그램</h3>
+      <div className="settings-row">
+        <label>집중 모드 (뒤로 보내기)</label>
+        <input
+          type="checkbox"
+          checked={settings.focusMode}
+          onChange={(e) => toggleFocus(e.target.checked)}
+        />
+      </div>
       <div className="settings-row">
         <label>시작 시 자동 실행</label>
         <input

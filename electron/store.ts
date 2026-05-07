@@ -10,6 +10,8 @@ export interface Settings {
   soundEnabled: boolean;
   volume: number;
   hideCat: boolean;
+  roamArea: 'full' | 'near-house';
+  focusMode: boolean;
   housePosition: { x: number; y: number };
   foodLevel: number;
   waterLevel: number;
@@ -26,6 +28,8 @@ export const DEFAULT_SETTINGS: Settings = {
   soundEnabled: true,
   volume: 0.5,
   hideCat: false,
+  roamArea: 'full',
+  focusMode: false,
   housePosition: { x: 200, y: 400 },
   foodLevel: 1,
   waterLevel: 1,

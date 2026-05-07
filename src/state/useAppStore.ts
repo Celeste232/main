@@ -16,7 +16,10 @@ export type CatAction =
   | 'drinking'
   | 'play-cursor'
   | 'in-house'
-  | 'startled';
+  | 'startled'
+  | 'loaf'
+  | 'sprawl'
+  | 'held';
 
 export interface CatState {
   action: CatAction;
@@ -24,6 +27,14 @@ export interface CatState {
   y: number;
   facing: 'left' | 'right';
   message: string | null;
+  /** When non-null, the behavior scheduler must not change action. */
+  locked: 'in-house' | 'held' | null;
+}
+
+export interface CatActionHandles {
+  callToHouse: () => void;
+  putInHouse: () => void;
+  releaseFromHouse: () => void;
 }
 
 interface AppState {
@@ -32,6 +43,7 @@ interface AppState {
   housePos: { x: number; y: number };
   bowlsVisible: boolean;
   settingsOpen: boolean;
+  catActions: CatActionHandles | null;
   setSettings: (s: Settings) => void;
   patchSettings: (p: Partial<Settings>) => Promise<void>;
   setCat: (patch: Partial<CatState>) => void;
@@ -48,10 +60,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     y: 480,
     facing: 'left',
     message: null,
+    locked: null,
   },
   housePos: { x: 200, y: 400 },
   bowlsVisible: true,
   settingsOpen: false,
+  catActions: null,
 
   setSettings: (s) => set({ settings: s, housePos: s.housePosition }),
 

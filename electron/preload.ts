@@ -15,6 +15,7 @@ const api = {
   quit: () => ipcRenderer.send('app:quit'),
   hide: () => ipcRenderer.send('window:hide'),
   show: () => ipcRenderer.send('window:show'),
+  setFocusMode: (enabled: boolean) => ipcRenderer.send('window:focus-mode', enabled),
 };
 
 contextBridge.exposeInMainWorld('api', api);

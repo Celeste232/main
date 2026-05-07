@@ -25,30 +25,35 @@ export function App() {
     void window.api.getDisplayBounds().then((b) => setBounds({ width: b.width, height: b.height }));
   }, [setSettings]);
 
-  const { callToHouse, startle } = useCatBehavior(bounds);
+  const { callToHouse, startle, putInHouse, releaseFromHouse } = useCatBehavior(bounds);
 
-  const isResting = cat.action === 'sleeping' || cat.action === 'in-house';
-  const isNearHouse = Math.hypot(cat.x - housePos.x, cat.y - housePos.y) < 80;
+  // Expose house actions to the settings menu via the store.
+  useEffect(() => {
+    useAppStore.setState({ catActions: { callToHouse, putInHouse, releaseFromHouse } });
+  }, [callToHouse, putInHouse, releaseFromHouse]);
 
   const onHouseDragStart = () => {
-    // Sleeping cat moves with the house — handled in onHouseDragStep.
-    if (isResting) return;
-    if (isNearHouse) {
+    if (cat.locked === 'in-house') return;
+    if (cat.action === 'sleeping') return;
+    if (Math.hypot(cat.x - housePos.x, cat.y - housePos.y) < 80) {
       setCat({ x: housePos.x + 120, y: housePos.y + 40 });
     }
     startle();
   };
 
   const onHouseDragStep = (delta: { dx: number; dy: number }) => {
-    if (isResting && isNearHouse) {
-      const c = useAppStore.getState().cat;
+    const c = useAppStore.getState().cat;
+    const stuckToHouse =
+      c.action === 'sleeping' ||
+      c.locked === 'in-house' ||
+      Math.hypot(c.x - housePos.x, c.y - housePos.y) < 80;
+    if (stuckToHouse) {
       setCat({ x: c.x + delta.dx, y: c.y + delta.dy });
     }
   };
 
   if (!settings) return null;
 
-  // Bowls sit to the right of the house.
   const foodBowlPos = { x: housePos.x + 130, y: housePos.y + 70 };
   const waterBowlPos = { x: housePos.x + 195, y: housePos.y + 70 };
 

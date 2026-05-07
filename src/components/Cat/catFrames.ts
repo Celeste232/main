@@ -27,6 +27,9 @@ export const FRAME_SPECS: Record<CatAction, FrameSpec> = {
   'play-cursor': { count: 4, intervalMs: 120 },
   'in-house': { count: 3, intervalMs: 800 },
   startled: { count: 2, intervalMs: 150 },
+  loaf: { count: 2, intervalMs: 1200 },
+  sprawl: { count: 2, intervalMs: 1500 },
+  held: { count: 2, intervalMs: 200 },
 };
 
 /**

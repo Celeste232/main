@@ -116,6 +116,20 @@ function registerIpc() {
   ipcMain.on('app:quit', () => app.quit());
   ipcMain.on('window:hide', () => mainWindow?.hide());
   ipcMain.on('window:show', () => mainWindow?.show());
+
+  ipcMain.on('window:focus-mode', (_e, enabled: boolean) => {
+    if (!mainWindow) return;
+    if (enabled) {
+      mainWindow.setAlwaysOnTop(false);
+      mainWindow.blur();
+      if (process.platform === 'darwin') {
+        mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: false });
+      }
+    } else {
+      const aot = settingsStore.get().alwaysOnTop;
+      mainWindow.setAlwaysOnTop(aot, aot ? 'screen-saver' : 'normal');
+    }
+  });
 }
 
 app.whenReady().then(() => {
