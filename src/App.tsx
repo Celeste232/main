@@ -27,16 +27,23 @@ export function App() {
 
   const { callToHouse, startle } = useCatBehavior(bounds);
 
+  const isResting = cat.action === 'sleeping' || cat.action === 'in-house';
+  const isNearHouse = Math.hypot(cat.x - housePos.x, cat.y - housePos.y) < 80;
+
   const onHouseDragStart = () => {
-    if (cat.action === 'sleeping' || cat.action === 'in-house') {
-      // sleeping cat moves with the house — handled via offset render below
-      return;
-    }
-    // jolt the cat out of the house
-    if (Math.hypot(cat.x - housePos.x, cat.y - housePos.y) < 80) {
+    // Sleeping cat moves with the house — handled in onHouseDragStep.
+    if (isResting) return;
+    if (isNearHouse) {
       setCat({ x: housePos.x + 120, y: housePos.y + 40 });
     }
     startle();
+  };
+
+  const onHouseDragStep = (delta: { dx: number; dy: number }) => {
+    if (isResting && isNearHouse) {
+      const c = useAppStore.getState().cat;
+      setCat({ x: c.x + delta.dx, y: c.y + delta.dy });
+    }
   };
 
   if (!settings) return null;
@@ -47,7 +54,7 @@ export function App() {
 
   return (
     <div className="stage">
-      <House onCall={callToHouse} onDragStart={onHouseDragStart} />
+      <House onCall={callToHouse} onDragStart={onHouseDragStart} onDragStep={onHouseDragStep} />
       <FoodBowl x={foodBowlPos.x} y={foodBowlPos.y} />
       <WaterBowl x={waterBowlPos.x} y={waterBowlPos.y} />
       <Cat />

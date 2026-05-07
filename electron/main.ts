@@ -107,6 +107,12 @@ function registerIpc() {
     return display.bounds;
   });
 
+  ipcMain.handle('cursor:get', () => {
+    const display = getLeftmostDisplay();
+    const p = screen.getCursorScreenPoint();
+    return { x: p.x - display.bounds.x, y: p.y - display.bounds.y };
+  });
+
   ipcMain.on('app:quit', () => app.quit());
   ipcMain.on('window:hide', () => mainWindow?.hide());
   ipcMain.on('window:show', () => mainWindow?.show());

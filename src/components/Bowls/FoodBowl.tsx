@@ -1,4 +1,5 @@
 import { useAppStore } from '../../state/useAppStore';
+import { BowlSvg } from './BowlSvg';
 
 interface FoodBowlProps {
   x: number;
@@ -19,15 +20,7 @@ export function FoodBowl({ x, y }: FoodBowlProps) {
       onClick={refill}
       title="밥 채우기"
     >
-      <div className="bowl-placeholder">
-        <div className="rim" />
-        {level > 0 && (
-          <div
-            className="bowl-food"
-            style={{ height: `${Math.max(level * 22, 4)}px` }}
-          />
-        )}
-      </div>
+      <BowlSvg level={level} variant="food" />
     </div>
   );
 }

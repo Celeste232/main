@@ -1,4 +1,5 @@
 import { useAppStore } from '../../state/useAppStore';
+import { BowlSvg } from './BowlSvg';
 
 interface WaterBowlProps {
   x: number;
@@ -19,15 +20,7 @@ export function WaterBowl({ x, y }: WaterBowlProps) {
       onClick={refill}
       title="물 채우기"
     >
-      <div className="bowl-placeholder">
-        <div className="rim" />
-        {level > 0 && (
-          <div
-            className="bowl-water"
-            style={{ height: `${Math.max(level * 18, 4)}px` }}
-          />
-        )}
-      </div>
+      <BowlSvg level={level} variant="water" />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAppStore } from '../../state/useAppStore';
 import { FRAME_SPECS, getFrames } from './catFrames';
+import { CatSvg } from './CatSvg';
 
 export function Cat() {
   const cat = useAppStore((s) => s.cat);
@@ -32,7 +33,7 @@ export function Cat() {
       {frameUrl ? (
         <img src={frameUrl} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
       ) : (
-        <div className="cat-placeholder" />
+        <CatSvg action={cat.action} />
       )}
       {settings?.showSpeechBubble && cat.message && (
         <div className="speech-bubble">{cat.message}</div>

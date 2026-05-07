@@ -10,6 +10,8 @@ const api = {
     ipcRenderer.send('window:set-ignore-mouse', ignore),
   getDisplayBounds: (): Promise<{ x: number; y: number; width: number; height: number }> =>
     ipcRenderer.invoke('display:get-bounds'),
+  getCursorPos: (): Promise<{ x: number; y: number }> =>
+    ipcRenderer.invoke('cursor:get'),
   quit: () => ipcRenderer.send('app:quit'),
   hide: () => ipcRenderer.send('window:hide'),
   show: () => ipcRenderer.send('window:show'),
