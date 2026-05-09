@@ -43,10 +43,9 @@ export function App() {
 
   const onHouseDragStep = (delta: { dx: number; dy: number }) => {
     const c = useAppStore.getState().cat;
-    const stuckToHouse =
-      c.action === 'sleeping' ||
-      c.locked === 'in-house' ||
-      Math.hypot(c.x - housePos.x, c.y - housePos.y) < 80;
+    // Only stick when actually inside the house or sleeping. Just standing
+    // nearby shouldn't drag the cat along.
+    const stuckToHouse = c.action === 'sleeping' || c.locked === 'in-house';
     if (stuckToHouse) {
       setCat({ x: c.x + delta.dx, y: c.y + delta.dy });
     }
