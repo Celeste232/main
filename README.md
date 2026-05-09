@@ -10,6 +10,14 @@ cd cat-house
 npm install
 ```
 
+## 업데이트 + 재설치 (터미널 안 쓰고)
+
+`update-and-install.command` 파일을 Finder에서 더블클릭하면 끝.
+
+내부 동작: `git pull` → `npm install` → `npm run build` → 기존 CatHouse 종료/제거 → 새 dmg 마운트 → `/Applications`로 복사 → quarantine 플래그 제거 → 앱 실행.
+
+> 처음 한 번만 권한 필요할 수 있음. Finder에서 `update-and-install.command` 우클릭 → 열기 → 열기.
+
 ## 그냥 띄워보기
 
 ```bash
