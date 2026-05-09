@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build && electron-builder",
     "build:unpacked": "tsc -b && vite build && electron-builder --dir",
     "preview": "vite preview",
-    "typecheck": "tsc -b --noEmit"
+    "typecheck": "tsc -b --noEmit",
+    "slice": "node scripts/slice-frames.mjs"
   },
   "dependencies": {
     "electron-store": "^10.0.1",
@@ -23,6 +24,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "electron": "^33.2.1",
     "electron-builder": "^25.1.8",
+    "sharp": "^0.34.5",
     "typescript": "^5.7.2",
     "vite": "^6.0.3",
     "vite-plugin-electron": "^0.29.0",
@@ -42,8 +44,24 @@
       "target": "nsis"
     },
     "mac": {
-      "target": "dmg",
-      "category": "public.app-category.entertainment"
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.entertainment",
+      "identity": null
     },
     "linux": {
       "target": "AppImage"

@@ -1,0 +1,30 @@
+{
+  "_comment": "Copy this to layout.json after putting your sheet PNG files in this folder, and edit the pixel coordinates to match your actual sheets. Run 'npm run slice' after editing.",
+  "outputSize": 512,
+  "trim": true,
+  "sheets": [
+    {
+      "file": "sheet-1.png",
+      "_layoutHint": "Use the 'grid' shorthand for evenly-spaced frames. Set x/y to the top-left of the FIRST frame, then w/h to one cell. cols/rows enumerate the rest.",
+      "frames": [
+        { "action": "walking",    "grid": { "x":   0, "y":   0, "w": 200, "h": 200, "cols": 4 } },
+        { "action": "sitting",    "grid": { "x": 800, "y":   0, "w": 200, "h": 200, "cols": 3 } },
+        { "action": "grooming",   "grid": { "x":   0, "y": 200, "w": 200, "h": 200, "cols": 3 } },
+        { "action": "stretching", "grid": { "x": 600, "y": 200, "w": 200, "h": 200, "cols": 3 } },
+        { "action": "yawning",    "grid": { "x":   0, "y": 400, "w": 200, "h": 200, "cols": 2 } },
+        { "action": "tail-wag",   "grid": { "x": 400, "y": 400, "w": 200, "h": 200, "cols": 3 } },
+        { "action": "jumping",    "grid": { "x":   0, "y": 600, "w": 200, "h": 200, "cols": 3 } },
+        { "action": "curious",    "grid": { "x": 600, "y": 600, "w": 200, "h": 200, "cols": 2 } }
+      ]
+    },
+    {
+      "_comment": "Per-frame coordinates work too if your sheet isn't a clean grid:",
+      "file": "sheet-2.png",
+      "frames": [
+        { "action": "sleeping", "frame": 1, "x":  10, "y":  10, "w": 220, "h": 180 },
+        { "action": "sleeping", "frame": 2, "x": 240, "y":  10, "w": 220, "h": 180 },
+        { "action": "sleeping", "frame": 3, "x": 470, "y":  10, "w": 220, "h": 180 }
+      ]
+    }
+  ]
+}
