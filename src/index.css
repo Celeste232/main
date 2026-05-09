@@ -36,6 +36,7 @@ html, body, #root {
   width: 120px;
   height: 120px;
   cursor: grab;
+  touch-action: none;
 }
 
 .house:active {
@@ -68,6 +69,7 @@ html, body, #root {
   width: 80px;
   height: 80px;
   transition: transform 0.1s linear;
+  touch-action: none;
 }
 
 .speech-bubble {

@@ -29,7 +29,7 @@ export function useDraggable(
   }, [initial.x, initial.y]);
 
   const onPointerDown = (e: React.PointerEvent) => {
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragState.current = {
       startX: e.clientX,
       startY: e.clientY,
@@ -65,7 +65,11 @@ export function useDraggable(
   const onPointerUp = (e: React.PointerEvent) => {
     const s = dragState.current;
     if (!s) return;
-    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      // capture may have already been released
+    }
     if (s.moved) {
       onDragEnd?.(pos);
     } else {

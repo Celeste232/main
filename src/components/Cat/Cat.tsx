@@ -32,7 +32,7 @@ export function Cat() {
   const frameUrl = frames[frame % Math.max(frames.length, 1)];
 
   const onPointerDown = (e: React.PointerEvent) => {
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragState.current = {
       startX: e.clientX,
       startY: e.clientY,
@@ -60,7 +60,11 @@ export function Cat() {
   const onPointerUp = (e: React.PointerEvent) => {
     const s = dragState.current;
     if (!s) return;
-    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      // capture may have already been released
+    }
     dragState.current = null;
     if (s.moved) {
       setCat({ action: 'startled', locked: null, message: '내려놔!' });

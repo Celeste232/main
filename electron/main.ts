@@ -59,6 +59,11 @@ function createWindow() {
     mainWindow.setAlwaysOnTop(true, 'screen-saver');
   }
 
+  // For local Xvfb testing: skip click-through if env var is set.
+  if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') {
+    mainWindow.setIgnoreMouseEvents(false);
+  }
+
   if (VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(VITE_DEV_SERVER_URL);
   } else {
@@ -117,6 +122,7 @@ function registerIpc() {
 
   ipcMain.on('window:set-ignore-mouse', (_e, ignore: boolean) => {
     if (!mainWindow) return;
+    if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
     if (ignore) {
       mainWindow.setIgnoreMouseEvents(true, { forward: true });
     } else {
