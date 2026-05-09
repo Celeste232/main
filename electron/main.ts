@@ -9,6 +9,14 @@ process.env.APP_ROOT = path.join(__dirname, '..');
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
 const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 
+// Icons live in build/ at the repo root. In dev they're at APP_ROOT/build,
+// in a packaged app they're bundled inside the app resources.
+const ICON_DIR = VITE_DEV_SERVER_URL
+  ? path.join(process.env.APP_ROOT, 'build')
+  : path.join(process.resourcesPath, 'build');
+const APP_ICON = path.join(ICON_DIR, process.platform === 'win32' ? 'icon.ico' : 'icon.png');
+const TRAY_ICON = path.join(ICON_DIR, 'tray-icon.png');
+
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 
@@ -28,6 +36,7 @@ function createWindow() {
     y: display.bounds.y,
     width: display.bounds.width,
     height: display.bounds.height,
+    icon: APP_ICON,
     frame: false,
     transparent: true,
     alwaysOnTop: settings.alwaysOnTop,
@@ -66,7 +75,13 @@ function createWindow() {
 }
 
 function createTray() {
-  const icon = nativeImage.createEmpty();
+  let icon = nativeImage.createFromPath(TRAY_ICON);
+  if (icon.isEmpty()) {
+    icon = nativeImage.createEmpty();
+  } else if (process.platform === 'darwin') {
+    // 16px is the standard menu-bar size on macOS.
+    icon = icon.resize({ width: 16, height: 16 });
+  }
   tray = new Tray(icon);
   tray.setToolTip('Cat House');
   tray.setContextMenu(Menu.buildFromTemplate([
@@ -75,6 +90,13 @@ function createTray() {
     { type: 'separator' },
     { label: 'Quit', click: () => app.quit() },
   ]));
+}
+
+function setDockIcon() {
+  if (process.platform === 'darwin' && app.dock) {
+    const dockIcon = nativeImage.createFromPath(path.join(ICON_DIR, 'icon.png'));
+    if (!dockIcon.isEmpty()) app.dock.setIcon(dockIcon);
+  }
 }
 
 function registerIpc() {
@@ -133,6 +155,7 @@ function registerIpc() {
 }
 
 app.whenReady().then(() => {
+  setDockIcon();
   registerIpc();
   createTray();
   createWindow();
