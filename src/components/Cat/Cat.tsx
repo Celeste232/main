@@ -32,7 +32,9 @@ export function Cat() {
   const frameUrl = frames[frame % Math.max(frames.length, 1)];
 
   const onPointerDown = (e: React.PointerEvent) => {
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    // Don't capture pointer here — only capture if we actually start a drag.
+    // Otherwise short clicks should fall through to whatever is below the cat
+    // (typically a bowl).
     dragState.current = {
       startX: e.clientX,
       startY: e.clientY,
@@ -50,6 +52,7 @@ export function Cat() {
     const dy = e.clientY - s.startY;
     if (!s.moved && Math.hypot(dx, dy) > 4) {
       s.moved = true;
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
       setCat({ action: 'held', locked: 'held' });
     }
     if (s.moved) {
@@ -60,15 +63,28 @@ export function Cat() {
   const onPointerUp = (e: React.PointerEvent) => {
     const s = dragState.current;
     if (!s) return;
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {
-      // capture may have already been released
-    }
     dragState.current = null;
     if (s.moved) {
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // capture may have already been released
+      }
       setCat({ action: 'startled', locked: null, message: '내려놔!' });
       setTimeout(() => setCat({ message: null }), 1200);
+      return;
+    }
+    // Short click without drag — forward to the element below the cat so
+    // bowls / house / settings can still be clicked when the cat is on top.
+    const catEl = e.currentTarget as HTMLElement;
+    const prevPE = catEl.style.pointerEvents;
+    catEl.style.pointerEvents = 'none';
+    const elBelow = document.elementFromPoint(e.clientX, e.clientY);
+    catEl.style.pointerEvents = prevPE;
+    if (elBelow && elBelow !== catEl && !catEl.contains(elBelow)) {
+      elBelow.dispatchEvent(
+        new MouseEvent('click', { bubbles: true, clientX: e.clientX, clientY: e.clientY }),
+      );
     }
   };
 
