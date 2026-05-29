@@ -30,7 +30,126 @@ export function CatSvg({ action, frame }: CatSvgProps) {
   if (action === 'loaf') return <LoafCat frame={frame} />;
   if (action === 'sprawl') return <SprawlCat frame={frame} />;
   if (action === 'held') return <HeldCat frame={frame} />;
+  if (action === 'happy') return <HappyCat frame={frame} />;
+  if (action === 'meow') return <MeowCat frame={frame} />;
+  if (action === 'flop') return <FlopCat frame={frame} />;
+  if (action === 'sparkle') return <SparkleCat frame={frame} />;
+  if (action === 'caught') return <CaughtCat frame={frame} />;
   return <SittingCat frame={frame} />;
+}
+
+function HappyCat({ frame }: { frame: number }) {
+  // ^_^ eyes, slight tail swish, hearts
+  const tail = frame % 2 === 0 ? -16 : 16;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <Ears />
+      <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* ^_^ */}
+      <path d="M36 48 Q40 44 44 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M56 48 Q60 44 64 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M46 56 Q50 60 54 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <Whiskers />
+      <g transform={`rotate(${tail} 78 70)`}>
+        <path d="M72 78 Q88 66 86 50" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      </g>
+      {/* tiny heart */}
+      <path d="M80 18 q-3 -4 -6 0 q0 4 6 8 q6 -4 6 -8 q-3 -4 -6 0 Z"
+            fill="none" stroke={stroke} strokeWidth={1.6} strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function MeowCat({ frame }: { frame: number }) {
+  // Mouth opening + sound waves
+  const open = frame === 0 ? 0.3 : frame === 1 ? 1 : 0.6;
+  const wave = frame === 1 ? 1 : 0;
+  return (
+    <svg viewBox="0 0 110 100" width="100%" height="100%">
+      <Ears />
+      <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <Face mouthOpen={open} />
+      <Whiskers />
+      {wave === 1 && (
+        <>
+          <path d="M86 44 Q94 48 86 52" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+          <path d="M92 38 Q104 48 92 58" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+function FlopCat({ frame }: { frame: number }) {
+  // Belly-up flop, paws in the air
+  const wiggle = frame % 2 === 0 ? 0 : 2;
+  return (
+    <svg viewBox="0 0 140 80" width="100%" height="100%">
+      {/* Body — wider oval since cat is belly-up */}
+      <ellipse cx="70" cy="56" rx="56" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* Head at left, facing up */}
+      <ellipse cx="20" cy="56" rx="14" ry="13" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <path d="M10 48 L14 38 L20 48 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M22 48 L28 38 L32 48 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      {/* closed-content eyes */}
+      <path d="M14 56 Q16 58 18 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M24 56 Q26 58 28 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      {/* Paws in the air */}
+      <line x1={60} y1="38" x2={62 + wiggle} y2="48" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <line x1={72} y1="36" x2={74 - wiggle} y2="48" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <line x1={92} y1="38" x2={94 + wiggle} y2="48" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <line x1={104} y1="40" x2={106 - wiggle} y2="50" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <path d="M126 56 Q138 50 132 38" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SparkleCat({ frame }: { frame: number }) {
+  // Sitting cat with sparkle ✨ around — used as a cute moment
+  const stars = ['12,8', '82,12', '90,76', '6,72'];
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <Ears />
+      <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* sparkle eyes */}
+      <path d="M38 46 L40 48 L42 46 L40 50 Z" fill={stroke} />
+      <path d="M58 46 L60 48 L62 46 L60 50 Z" fill={stroke} />
+      <path d="M48 56 Q50 58 52 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <Whiskers />
+      {stars.map((s, i) => {
+        const [cx, cy] = s.split(',').map(Number);
+        const show = (frame + i) % 3 !== 2;
+        if (!show) return null;
+        return (
+          <g key={i} transform={`translate(${cx} ${cy})`}>
+            <path d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z" fill={stroke} />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function CaughtCat({ frame }: { frame: number }) {
+  // Surprised "caught in the act" face — wide eyes, ! mark
+  const wide = frame % 2 === 0 ? 4 : 3.5;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <Ears />
+      <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <circle cx="40" cy="48" r={wide} fill="none" stroke={stroke} strokeWidth={1.8} />
+      <circle cx="60" cy="48" r={wide} fill="none" stroke={stroke} strokeWidth={1.8} />
+      <circle cx="40" cy="48" r="1.4" fill={stroke} />
+      <circle cx="60" cy="48" r="1.4" fill={stroke} />
+      <ellipse cx="50" cy="58" rx="2" ry="2.5" fill="#f08aa6" stroke={stroke} strokeWidth={1.2} />
+      <Whiskers />
+      <text x="80" y="20" fontSize="14" fill={stroke}>!</text>
+    </svg>
+  );
 }
 
 function LoafCat({ frame }: { frame: number }) {

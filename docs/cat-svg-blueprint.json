@@ -229,6 +229,62 @@
         "0": { "puffScale": 1.08, "mouthOpen": 0.6 },
         "1": { "puffScale": 1.00, "mouthOpen": 0.6 }
       }
+    },
+    "loaf": {
+      "frameCount": 2,
+      "intervalMs": 1200,
+      "viewBox": [0, 0, 100, 90],
+      "view": "front-tucked",
+      "elements": "Loaf-shape rounded rectangle body; subtle breathe + blink on alt frames"
+    },
+    "sprawl": {
+      "frameCount": 2,
+      "intervalMs": 1500,
+      "viewBox": [0, 0, 140, 70],
+      "view": "side-long",
+      "elements": "Long horizontal body, head at left, paws splayed"
+    },
+    "held": {
+      "frameCount": 2,
+      "intervalMs": 200,
+      "viewBox": [0, 0, 100, 100],
+      "view": "dangling",
+      "elements": "Sitting body wobbling ±2deg, paws dangling, '!' indicator"
+    },
+    "happy": {
+      "frameCount": 2,
+      "intervalMs": 300,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front",
+      "elements": "^_^ closed eyes, smiling mouth, tail swishing ±16deg, tiny heart at top-right"
+    },
+    "meow": {
+      "frameCount": 3,
+      "intervalMs": 200,
+      "viewBox": [0, 0, 110, 100],
+      "view": "front",
+      "elements": "Front sitting body with mouth opening 0.3 → 1 → 0.6; sound waves on frame 1"
+    },
+    "flop": {
+      "frameCount": 2,
+      "intervalMs": 1200,
+      "viewBox": [0, 0, 140, 80],
+      "view": "side-belly-up",
+      "elements": "Wide oval body, head at left looking up, four paws sticking up wiggling, tail at right curling"
+    },
+    "sparkle": {
+      "frameCount": 3,
+      "intervalMs": 200,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front",
+      "elements": "Sitting body with diamond-sparkle eyes; 4 corner stars cycling on/off"
+    },
+    "caught": {
+      "frameCount": 2,
+      "intervalMs": 250,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front",
+      "elements": "Sitting body with wide-eyed surprise (eye ring 3.5–4 radius), pink mouth, '!' mark"
     }
   },
   "supportingAssets": {

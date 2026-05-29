@@ -30,6 +30,11 @@ export const FRAME_SPECS: Record<CatAction, FrameSpec> = {
   loaf: { count: 2, intervalMs: 1200 },
   sprawl: { count: 2, intervalMs: 1500 },
   held: { count: 2, intervalMs: 200 },
+  happy: { count: 2, intervalMs: 300 },
+  meow: { count: 3, intervalMs: 200 },
+  flop: { count: 2, intervalMs: 1200 },
+  sparkle: { count: 3, intervalMs: 200 },
+  caught: { count: 2, intervalMs: 250 },
 };
 
 /**

@@ -19,7 +19,12 @@ export type CatAction =
   | 'startled'
   | 'loaf'
   | 'sprawl'
-  | 'held';
+  | 'held'
+  | 'happy'
+  | 'meow'
+  | 'flop'
+  | 'sparkle'
+  | 'caught';
 
 export interface CatState {
   action: CatAction;

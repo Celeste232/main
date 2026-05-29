@@ -20,6 +20,11 @@ const ACTION_DURATIONS: Record<CatAction, [number, number]> = {
   loaf: [10000, 30000],
   sprawl: [10000, 40000],
   held: [600, 600],
+  happy: [1500, 3000],
+  meow: [1500, 2500],
+  flop: [8000, 25000],
+  sparkle: [1500, 3000],
+  caught: [1500, 2500],
 };
 
 // Activity-level → weighted action pool. Repeated entries = higher weight.
@@ -28,21 +33,28 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'sitting', 'sitting',
     'loaf', 'loaf', 'loaf',
     'sprawl', 'sprawl',
+    'flop',
     'sleeping', 'sleeping',
     'grooming',
     'yawning',
     'walking',
+    'meow',
+    'sparkle',
   ],
   normal: [
     'walking', 'walking',
     'sitting',
     'loaf', 'loaf',
     'sprawl',
+    'flop',
     'grooming',
     'stretching',
     'tail-wag',
     'yawning',
     'curious',
+    'meow',
+    'sparkle',
+    'caught',
     'sleeping',
   ],
   energetic: [
@@ -54,6 +66,9 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'curious',
     'sitting',
     'loaf',
+    'meow', 'meow',
+    'caught',
+    'sparkle',
   ],
 };
 
@@ -192,7 +207,7 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
         isEating ? { foodLevel: next, affinity } : { waterLevel: next, affinity },
       );
       if (next <= 0) {
-        setCat({ action: 'sitting', message: '맛있어!' });
+        setCat({ action: 'happy', message: '맛있어!' });
         setTimeout(() => setCat({ message: null }), 1200);
       }
     }, 600);
