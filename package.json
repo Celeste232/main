@@ -1,7 +1,20 @@
 {
   "name": "cat-house",
   "version": "0.1.0",
-  "description": "Desktop pet cat with house, food and water bowls",
+  "description": "A desktop pet kitten that wanders your screen with its own little house, bowls, and toys.",
+  "homepage": "https://github.com/Celeste232/main",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Celeste232/main.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Celeste232/main/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Celeste232",
+    "url": "https://github.com/Celeste232"
+  },
   "main": "dist-electron/main.js",
   "type": "module",
   "scripts": {
@@ -31,19 +44,29 @@
     "vite-plugin-electron-renderer": "^0.14.6"
   },
   "build": {
-    "appId": "com.cathouse.app",
+    "appId": "com.celeste232.cathouse",
     "productName": "CatHouse",
+    "copyright": "Copyright © 2026 Celeste232",
     "directories": {
-      "output": "release"
+      "output": "release",
+      "buildResources": "build"
     },
     "files": [
       "dist",
-      "dist-electron"
+      "dist-electron",
+      "!**/.*",
+      "!**/*.map"
     ],
     "extraResources": [
-      { "from": "build/icon.png",       "to": "build/icon.png" },
-      { "from": "build/tray-icon.png",  "to": "build/tray-icon.png" }
+      { "from": "build/icon.png",              "to": "build/icon.png" },
+      { "from": "build/tray-icon.png",         "to": "build/tray-icon.png" },
+      { "from": "build/tray-icon-paused.png",  "to": "build/tray-icon-paused.png" }
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "Celeste232",
+      "repo": "main"
+    },
     "win": {
       "target": "nsis",
       "icon": "build/icon.png"

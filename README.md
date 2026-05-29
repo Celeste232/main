@@ -1,6 +1,13 @@
-# Cat House
+# Cat House 🐱
 
 데스크탑 위에서 돌아다니는 고양이 펫 + 집 + 밥/물그릇.
+
+A desktop pet kitten that wanders your screen with its own little house, food
+and water bowls, and toys. Built with Electron + React + TypeScript.
+
+License: [MIT](./LICENSE) · Docs: [HANDOFF](./docs/HANDOFF.md) ·
+[Skin packs plan](./docs/SKIN_PACKS.md) ·
+[Doodle SVG blueprint](./docs/cat-svg-blueprint.json)
 
 ## 처음 한 번만
 
@@ -79,4 +86,12 @@ scripts/
 - **고양이 직접 드래그** → 들어 올림 (`held`), 놓으면 놀람
 - **마우스가 가까이** → 고양이가 쳐다봄
 - **밥/물그릇 클릭** → 채우기
-- **설정**: 영역 (전체/집 근처), 활동량, 집중 모드(뒤로 보내기), 집에 넣기, …
+- **메뉴바 트레이 아이콘**:
+  - 좌클릭 = 잠깐 끄기 / 다시 켜기 토글 (아이콘에 `z` 표시됨)
+  - 우클릭 = 메뉴 (잠깐 끄기, 화면 위치: 맨 앞/보통/맨 뒤, 종료)
+- **설정**: 영역 (전체/집 근처), 활동량, 화면 위치, 집에 넣기, 스킨 토글, …
+
+## 크레딧
+
+- 앱 아이콘: [Oneko](https://github.com/adryd325/oneko.js) 픽셀 고양이 모티브
+- 발그림 SVG: 의도치 않게 컨셉이 된 저연산 낙서 — `docs/cat-svg-blueprint.json` 에 명세 보존됨

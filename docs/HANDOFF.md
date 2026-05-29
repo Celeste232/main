@@ -2,7 +2,30 @@
 
 이 문서는 클라우드에서 작업하던 Claude가 본인 Mac에서 돌아가는 로컬 Claude에게 프로젝트를 넘기는 인수인계서. 처음 보는 사람도 이거 하나만 읽으면 바로 이어갈 수 있게 작성됨.
 
-마지막 업데이트: 클라우드 작업 종료 시점 (브랜치 `claude/cat-house-interactions-pFJxU`, HEAD `2b0ecc5`)
+마지막 업데이트: 판매 준비 시작 시점 (브랜치 `claude/cat-house-interactions-pFJxU`)
+
+---
+
+## ⚡ 최근 변경 (이전 인수인계 이후 추가됨)
+
+- 그릇 클릭이 안 채워지던 버그 fix — 고양이 위에 그릇이 있을 때 클릭 흡수되던 문제 (Cat.tsx에서 클릭은 forward, 드래그만 capture)
+- `windowLayer` 설정 추가 (`front` / `normal` / `back`) — `alwaysOnTop`, `focusMode` 둘 다 deprecated. windowLayer로 통합
+- `paused` 설정 추가 — 잠깐 끄기. 윈도우 hide. 트레이 아이콘은 유지
+- 트레이 메뉴 개편: 잠깐 끄기/다시 켜기 + 화면 위치 라디오 (맨 앞/보통/맨 뒤) + 종료. 좌클릭으로 pause 토글
+- `build/tray-icon-paused.png` — Pause 상태에서 보여지는 'z' 마크 트레이 아이콘
+- 새 액션 5개: `happy`, `meow`, `flop`, `sparkle`, `caught`. ACTIVITY_BIAS 가중치 다 들어감. 먹기 끝나면 `happy` 자세로 잠깐 전환
+- 라이선스(MIT) + `LICENSE` 파일 + `package.json` 메타데이터 정돈 (`author`, `homepage`, `repository`, `bugs`, electron-builder `publish: github`)
+- `docs/SKIN_PACKS.md` — 추가 판매용 스킨팩 시스템 설계도 (구현은 미정)
+
+**사용자 컨텍스트 업데이트**:
+- 사용자가 **GitHub에 올려서 판매할 계획**. 발그림 SVG 컨셉을 메인 셀링 포인트로 봄
+- 다음 우선순위:
+  1. (실행 중) 발그림 다양성 늘리기 ← 진행 중. 5개 추가됨, 더 필요할 수 있음
+  2. 스킨팩 시스템 실제 구현 (지금은 docs/SKIN_PACKS.md 로 설계만)
+  3. 메타/마케팅 자료 (#4 — 다 만들고 나서)
+  4. 캐릭터 시트 통합 (사용자가 시트 PNG 푸시하면 슬라이서 돌리기)
+
+---
 
 ---
 
