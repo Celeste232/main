@@ -45,11 +45,12 @@ export function HouseSvg() {
         strokeWidth={sw}
         strokeLinejoin="round"
       />
-      {/* Doodle fish nameplate above the door */}
-      <g transform="translate(60 64)">
+      {/* Doodle fish nameplate — sits between the roof and the door so it
+          reads as a sign mounted on the wall. Sized up for legibility. */}
+      <g transform="translate(60 56)">
         {/* Body */}
         <path
-          d="M-10 0 Q-6 -6 2 -6 Q10 -6 12 0 Q10 6 2 6 Q-6 6 -10 0 Z"
+          d="M-14 0 Q-9 -9 3 -9 Q15 -9 18 0 Q15 9 3 9 Q-9 9 -14 0 Z"
           fill={fill}
           stroke={stroke}
           strokeWidth={sw}
@@ -57,18 +58,18 @@ export function HouseSvg() {
         />
         {/* Tail */}
         <path
-          d="M12 0 L18 -5 L18 5 Z"
+          d="M18 0 L26 -7 L26 7 Z"
           fill={fill}
           stroke={stroke}
           strokeWidth={sw}
           strokeLinejoin="round"
         />
         {/* Eye */}
-        <circle cx="-3" cy="-1" r="1.2" fill={stroke} />
+        <circle cx="-5" cy="-1.5" r="1.6" fill={stroke} />
         {/* Smile */}
-        <path d="M-7 2 Q-5 4 -3 2" stroke={stroke} strokeWidth={1.2} fill="none" strokeLinecap="round" />
+        <path d="M-10 3 Q-7 6 -4 3" stroke={stroke} strokeWidth={1.4} fill="none" strokeLinecap="round" />
         {/* Gill */}
-        <path d="M5 -3 Q3 0 5 3" stroke={stroke} strokeWidth={1.2} fill="none" strokeLinecap="round" />
+        <path d="M7 -4 Q5 0 7 4" stroke={stroke} strokeWidth={1.4} fill="none" strokeLinecap="round" />
       </g>
     </svg>
   );

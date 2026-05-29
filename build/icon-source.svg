@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Rounded square background in soft cream -->
+  <rect x="64" y="64" width="896" height="896" rx="192"
+        fill="#ffe9d6" stroke="#222" stroke-width="28" stroke-linejoin="round"/>
+
+  <!-- Doodle cat, sitting front-on, scaled to fill -->
+  <g transform="translate(512 540)">
+    <!-- Ears -->
+    <path d="M-180 -90 L-130 -240 L-70 -90 Z"
+          fill="#fff" stroke="#222" stroke-width="28" stroke-linejoin="round"/>
+    <path d="M70 -90 L130 -240 L180 -90 Z"
+          fill="#fff" stroke="#222" stroke-width="28" stroke-linejoin="round"/>
+
+    <!-- Head -->
+    <ellipse cx="0" cy="-30" rx="220" ry="210"
+             fill="#fff" stroke="#222" stroke-width="28"/>
+
+    <!-- Body -->
+    <ellipse cx="0" cy="240" rx="190" ry="140"
+             fill="#fff" stroke="#222" stroke-width="28"/>
+
+    <!-- Eyes (dot pupils inside slightly wider rings) -->
+    <circle cx="-72" cy="-44" r="22" fill="#222"/>
+    <circle cx="72" cy="-44" r="22" fill="#222"/>
+
+    <!-- Mouth — a tiny w with a pink nose dot -->
+    <ellipse cx="0" cy="30" rx="8" ry="6" fill="#f08aa6" stroke="#222" stroke-width="6"/>
+    <path d="M-20 50 Q-10 70 0 50 Q10 70 20 50"
+          stroke="#222" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Whiskers -->
+    <path d="M-220 -10 L-300 -30 M-220 25 L-310 30"
+          stroke="#222" stroke-width="10" stroke-linecap="round"/>
+    <path d="M220 -10 L300 -30 M220 25 L310 30"
+          stroke="#222" stroke-width="10" stroke-linecap="round"/>
+
+    <!-- Curled tail behind body -->
+    <path d="M170 290 Q310 200 270 80"
+          stroke="#222" stroke-width="28" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
