@@ -56,15 +56,10 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
             stop(e);
             props.onChange(opt.value);
           }}
-          aria-label={opt.label}
-          title={opt.label}
-        />
+        >
+          {opt.label}
+        </button>
       ))}
-      <div className="labels">
-        {props.options.map((opt) => (
-          <span key={opt.value}>{opt.label}</span>
-        ))}
-      </div>
     </div>
   );
 
@@ -104,7 +99,7 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
         </div>
       </div>
 
-      <div className="settings-row" style={{ paddingBottom: 20 }}>
+      <div className="settings-row">
         <label>활동량</label>
         <Track
           options={ACTIVITY_LEVELS}
@@ -113,7 +108,7 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
         />
       </div>
 
-      <div className="settings-row" style={{ paddingBottom: 20 }}>
+      <div className="settings-row">
         <label>활동영역</label>
         <Track
           options={ROAM_AREAS}

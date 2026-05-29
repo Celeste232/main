@@ -197,67 +197,56 @@ html, body, #root {
   background: #fff5e0;
 }
 
-/* Dot-track with a fish marker for 활동량 / 활동영역 */
+/* Fish-on-line track for 활동량 / 활동영역.
+   Labels themselves are the click targets; a white fish floats above the
+   active label, swimming along the horizontal line. No dot stops. */
 .doodle-track {
   flex: 1;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  align-items: flex-end;
   position: relative;
+  padding-top: 22px;
 }
 .doodle-track .line {
   position: absolute;
-  left: 14px;
-  right: 14px;
-  top: 50%;
+  left: 12px;
+  right: 12px;
+  top: 22px;
   height: 2px;
   background: #222;
   border-radius: 1px;
-  z-index: 0;
 }
 .doodle-track .stop {
   position: relative;
-  z-index: 1;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid #222;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  padding: 6px 4px 0;
   cursor: pointer;
-  flex: 1;
-  max-width: 12px;
+  color: #888;
+  flex: 0 1 auto;
 }
 .doodle-track .stop:hover {
-  background: #fff5e0;
+  color: #444;
 }
 .doodle-track .stop.active {
-  background: transparent;
-  border-color: transparent;
+  color: #222;
 }
 .doodle-track .stop.active::before {
   content: '';
   position: absolute;
-  /* Fish image 32×18; center it on the 12×12 dot */
-  width: 32px;
-  height: 18px;
+  width: 40px;
+  height: 22px;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 18'><path d='M2 9 Q6 1 16 1 Q26 1 28 9 Q26 17 16 17 Q6 17 2 9 Z' fill='%23222' stroke='%23222' stroke-width='1.5' stroke-linejoin='round'/><path d='M28 9 L32 3 L32 15 Z' fill='%23222' stroke='%23222' stroke-width='1.5' stroke-linejoin='round'/><circle cx='10' cy='7' r='1.8' fill='%23fff'/></svg>");
+  bottom: calc(100% + 0px);
+  transform: translateX(-50%);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 18'><path d='M2 9 Q6 1 16 1 Q26 1 28 9 Q26 17 16 17 Q6 17 2 9 Z' fill='white' stroke='%23222' stroke-width='1.8' stroke-linejoin='round'/><path d='M28 9 L32 3 L32 15 Z' fill='white' stroke='%23222' stroke-width='1.8' stroke-linejoin='round'/><circle cx='10' cy='7' r='1.7' fill='%23222'/><path d='M5 11 Q7 13 9 11' stroke='%23222' stroke-width='1' fill='none' stroke-linecap='round'/></svg>");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-}
-.doodle-track .labels {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  margin-top: 4px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: #555;
 }
 
 /* Toggle: 있기/없기, On/Off, 숨김/안숨김 */
