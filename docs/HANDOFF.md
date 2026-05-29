@@ -1,8 +1,8 @@
-# Cat House — 인수인계서 (로컬 Claude용)
+# Meow Mode — 인수인계서 (로컬 Claude용)
 
 이 문서는 클라우드에서 작업하던 Claude가 본인 Mac에서 돌아가는 로컬 Claude에게 프로젝트를 넘기는 인수인계서. 처음 보는 사람도 이거 하나만 읽으면 바로 이어갈 수 있게 작성됨.
 
-마지막 업데이트: 판매 준비 시작 시점 (브랜치 `claude/cat-house-interactions-pFJxU`)
+마지막 업데이트: 판매 준비 시작 시점 (브랜치 `claude/meow-mode-interactions-pFJxU`)
 
 ---
 
@@ -33,7 +33,7 @@
 
 - **프로젝트**: 데스크탑 위에 떠있는 투명 오버레이 윈도우에 고양이 펫 + 집 + 밥/물그릇이 떠있는 macOS 앱 (Electron + React + TypeScript)
 - **사용자**: "wony" / GitHub `Celeste232`. Mac mini (M-series 추정). **한국어 반말** 사용. 직설적·짧은 메시지 선호. 농담 섞임. ㅋㅋ 같은 문구 자연스럽게 사용함
-- **저장소**: `https://github.com/Celeste232/main` 의 `claude/cat-house-interactions-pFJxU` 브랜치만 사용. main에는 절대 직접 푸시 금지
+- **저장소**: `https://github.com/Celeste232/main` 의 `claude/meow-mode-interactions-pFJxU` 브랜치만 사용. main에는 절대 직접 푸시 금지
 - **사용자가 터미널 싫어함**: 가능한 모든 작업을 더블클릭 가능한 `.command` 파일로 자동화. 새 기능 추가하면 빌드 흐름이 깨지지 않게 신경 써야 함
 - **사용자 의사 결정 패턴**: 빠르게 결정함. "둘 중 뭐 할까요?"보단 "A 추천하는데 ~한 트레이드오프 있음. 이걸로 가요?" 식이 잘 맞음
 
@@ -225,15 +225,15 @@ npm run build      # tsc → vite build → electron-builder
 ```
 
 `release/` 안에:
-- `CatHouse-x.x.x-arm64.dmg` (Apple Silicon)
-- `CatHouse-x.x.x-x64.dmg` (Intel)
-- `CatHouse-x.x.x-arm64-mac.zip` / `-mac.zip`
+- `MeowMode-x.x.x-arm64.dmg` (Apple Silicon)
+- `MeowMode-x.x.x-x64.dmg` (Intel)
+- `MeowMode-x.x.x-arm64-mac.zip` / `-mac.zip`
 
 `build/icon.icns` 가 macOS 앱 번들 아이콘으로 자동 들어감 (electron-builder convention).
 `extraResources` 가 build/icon.png + tray-icon.png 를 `process.resourcesPath/build/` 로 복사.
 
 ### 더블클릭 워크플로
-사용자는 터미널 거의 안 켜려 함. `~/cat-house/update-and-install.command` 더블클릭 → git pull → npm install → npm run build → 기존 CatHouse 종료/제거 → 새 dmg 마운트 → /Applications에 복사 → quarantine 제거 → 실행.
+사용자는 터미널 거의 안 켜려 함. `~/meow-mode/update-and-install.command` 더블클릭 → git pull → npm install → npm run build → 기존 MeowMode 종료/제거 → 새 dmg 마운트 → /Applications에 복사 → quarantine 제거 → 실행.
 
 스크립트 내용 자체가 진단용이기도 함 — 에러 시 Terminal 창 열린 채 멈추므로 사용자가 어디서 실패했는지 보고 가능.
 
@@ -271,7 +271,7 @@ DISPLAY=:99 CAT_HOUSE_DEBUG_NO_PASSTHROUGH=1 npm run dev
 - 사용자에게 보고할 때만 한국어
 
 ### 푸시
-브랜치 `claude/cat-house-interactions-pFJxU` 만 사용. PR 생성/머지는 사용자 명시 지시 시에만.
+브랜치 `claude/meow-mode-interactions-pFJxU` 만 사용. PR 생성/머지는 사용자 명시 지시 시에만.
 
 ---
 
@@ -286,7 +286,7 @@ DISPLAY=:99 CAT_HOUSE_DEBUG_NO_PASSTHROUGH=1 npm run dev
 - `defaults read` / `defaults write` 로 macOS 설정 확인
 - macOS 알림 발송 (`osascript -e 'display notification ...'`)
 - 사용자가 화면에서 보는 거 캡처해서 같이 보기 (`screencapture`)
-- 빌드 결과물의 실제 동작 확인 (Cat House 실행 → 스크린샷 → 검증)
+- 빌드 결과물의 실제 동작 확인 (Meow Mode 실행 → 스크린샷 → 검증)
 
 → **시트 통합 작업 우선순위 높음.** 사용자 자료 어디 있는지 물어보고, 자동으로 처리.
 

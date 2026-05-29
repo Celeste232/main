@@ -10,7 +10,7 @@ const TRAY_STRINGS = {
     layerNormal: '보통',
     layerBack: '맨 뒤',
     quit: '종료',
-    tooltip: 'Cat House',
+    tooltip: 'Meow Mode',
     tooltipPaused: '고양이 멈춤 (잠시 꺼둠)',
   },
   en: {
@@ -22,7 +22,7 @@ const TRAY_STRINGS = {
     layerNormal: 'Normal',
     layerBack: 'Back',
     quit: 'Quit',
-    tooltip: 'Cat House',
+    tooltip: 'Meow Mode',
     tooltipPaused: 'Cat paused',
   },
   ja: {
@@ -34,7 +34,7 @@ const TRAY_STRINGS = {
     layerNormal: 'ふつう',
     layerBack: '最背',
     quit: '終了',
-    tooltip: 'Cat House',
+    tooltip: 'Meow Mode',
     tooltipPaused: 'ねこ停止中',
   },
   zh: {
@@ -46,7 +46,7 @@ const TRAY_STRINGS = {
     layerNormal: '中间',
     layerBack: '最后',
     quit: '退出',
-    tooltip: 'Cat House',
+    tooltip: 'Meow Mode',
     tooltipPaused: '猫咪暂停中',
   },
 };

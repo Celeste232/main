@@ -45,7 +45,7 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 const store = new Store<Settings>({
-  name: 'cat-house-settings',
+  name: 'meow-mode-settings',
   defaults: DEFAULT_SETTINGS,
 });
 

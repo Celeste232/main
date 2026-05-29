@@ -14,7 +14,7 @@
 각 스킨팩은 zip 또는 폴더로 배포. 사용자는:
 1. 구매 → `.catpack` 파일 다운로드
 2. 앱에서 "스킨팩 추가" 버튼 클릭 → 파일 선택
-3. 자동으로 `~/Library/Application Support/CatHouse/skin-packs/<id>/` 에 풀림
+3. 자동으로 `~/Library/Application Support/MeowMode/skin-packs/<id>/` 에 풀림
 4. 설정 → 스킨 드롭다운에 추가됨
 
 ## `.catpack` 포맷 (계획)

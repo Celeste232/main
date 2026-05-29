@@ -3,8 +3,8 @@
   <rect x="64" y="64" width="896" height="896" rx="192"
         fill="#ffe9d6" stroke="#222" stroke-width="28" stroke-linejoin="round"/>
 
-  <!-- Doodle cat, sitting front-on, scaled to fill -->
-  <g transform="translate(512 540)">
+  <!-- Doodle cat, sitting front-on -->
+  <g transform="translate(512 500)">
     <!-- Ears -->
     <path d="M-180 -90 L-130 -240 L-70 -90 Z"
           fill="#fff" stroke="#222" stroke-width="28" stroke-linejoin="round"/>
@@ -19,11 +19,11 @@
     <ellipse cx="0" cy="240" rx="190" ry="140"
              fill="#fff" stroke="#222" stroke-width="28"/>
 
-    <!-- Eyes (dot pupils inside slightly wider rings) -->
+    <!-- Eyes -->
     <circle cx="-72" cy="-44" r="22" fill="#222"/>
     <circle cx="72" cy="-44" r="22" fill="#222"/>
 
-    <!-- Mouth — a tiny w with a pink nose dot -->
+    <!-- Mouth — pink nose + tiny w -->
     <ellipse cx="0" cy="30" rx="8" ry="6" fill="#f08aa6" stroke="#222" stroke-width="6"/>
     <path d="M-20 50 Q-10 70 0 50 Q10 70 20 50"
           stroke="#222" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -37,5 +37,40 @@
     <!-- Curled tail behind body -->
     <path d="M170 290 Q310 200 270 80"
           stroke="#222" stroke-width="28" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- "MEOW" in childish wobbly handwriting, hand-traced as stroke paths -->
+  <g stroke="#222" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- M -->
+    <path d="M 196 152
+             L 200 92
+             L 246 142
+             L 290 88
+             L 296 154"/>
+    <!-- E -->
+    <path d="M 388 96
+             L 348 100
+             L 354 152
+             L 392 148
+             M 350 124
+             L 380 122"/>
+    <!-- O (slightly egg-shaped, wobbly) -->
+    <path d="M 458 96
+             Q 432 100 434 130
+             Q 438 158 472 156
+             Q 504 152 502 122
+             Q 498 92 460 94
+             Z"/>
+    <!-- W -->
+    <path d="M 558 92
+             L 572 156
+             L 600 110
+             L 624 158
+             L 644 96"/>
+  </g>
+
+  <!-- Tiny sparkle next to MEOW -->
+  <g fill="#222">
+    <path d="M 692 96 L 700 110 L 716 112 L 702 122 L 706 138 L 692 130 L 678 138 L 682 122 L 668 112 L 684 110 Z"/>
   </g>
 </svg>

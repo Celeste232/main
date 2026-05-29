@@ -3,7 +3,7 @@ import { useAppStore } from '../state/useAppStore';
 const STRINGS = {
   ko: {
     // Settings panel
-    title: '반려 냥이 키우기',
+    title: '먀우 모드',
     name: '이름',
     skin: '스킨',
     skinDefault: '기본',
@@ -72,7 +72,7 @@ const STRINGS = {
     trayTooltipPaused: '고양이 멈춤 (잠시 꺼둠)',
   },
   en: {
-    title: 'My Doodle Cat',
+    title: 'Meow Mode',
     name: 'Name',
     skin: 'Skin',
     skinDefault: 'Default',
@@ -139,7 +139,7 @@ const STRINGS = {
     trayTooltipPaused: 'Cat paused',
   },
   ja: {
-    title: 'うちのらくがきねこ',
+    title: 'にゃうモード',
     name: 'なまえ',
     skin: 'スキン',
     skinDefault: 'デフォルト',
@@ -206,7 +206,7 @@ const STRINGS = {
     trayTooltipPaused: 'ねこ停止中',
   },
   zh: {
-    title: '养只小猫咪',
+    title: '喵喵模式',
     name: '名字',
     skin: '皮肤',
     skinDefault: '默认',

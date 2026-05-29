@@ -1,7 +1,7 @@
 {
-  "name": "cat-house",
+  "name": "meow-mode",
   "version": "0.1.0",
-  "description": "A desktop pet kitten that wanders your screen with its own little house, bowls, and toys.",
+  "description": "Meow Mode — 발그림 고양이가 데스크탑 위를 돌아다닙니다. A doodle kitten that wanders your desktop with its own little house, bowls, and chaotic charm.",
   "homepage": "https://github.com/Celeste232/main",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "author": {
-    "name": "Celeste232",
+    "name": "Celine Lee",
     "url": "https://github.com/Celeste232"
   },
   "main": "dist-electron/main.js",
@@ -44,9 +44,9 @@
     "vite-plugin-electron-renderer": "^0.14.6"
   },
   "build": {
-    "appId": "com.celeste232.cathouse",
-    "productName": "CatHouse",
-    "copyright": "Copyright © 2026 Celeste232",
+    "appId": "com.celinelee.meowmode",
+    "productName": "Meow Mode",
+    "copyright": "Copyright © 2026 Celine Lee",
     "directories": {
       "output": "release",
       "buildResources": "build"

@@ -1,4 +1,4 @@
-# Cat House 🐱
+# Meow Mode 🐱
 
 데스크탑 위에서 돌아다니는 고양이 펫 + 집 + 밥/물그릇.
 
@@ -12,8 +12,8 @@ License: [MIT](./LICENSE) · Docs: [HANDOFF](./docs/HANDOFF.md) ·
 ## 처음 한 번만
 
 ```bash
-git clone https://github.com/Celeste232/main.git cat-house
-cd cat-house
+git clone https://github.com/Celeste232/main.git meow-mode
+cd meow-mode
 npm install
 ```
 
@@ -21,7 +21,7 @@ npm install
 
 `update-and-install.command` 파일을 Finder에서 더블클릭하면 끝.
 
-내부 동작: `git pull` → `npm install` → `npm run build` → 기존 CatHouse 종료/제거 → 새 dmg 마운트 → `/Applications`로 복사 → quarantine 플래그 제거 → 앱 실행.
+내부 동작: `git pull` → `npm install` → `npm run build` → 기존 MeowMode 종료/제거 → 새 dmg 마운트 → `/Applications`로 복사 → quarantine 플래그 제거 → 앱 실행.
 
 > 처음 한 번만 권한 필요할 수 있음. Finder에서 `update-and-install.command` 우클릭 → 열기 → 열기.
 
@@ -39,9 +39,9 @@ npm run build
 
 `release/` 폴더에:
 
-- macOS: `CatHouse-x.x.x.dmg` (Apple Silicon + Intel 둘 다) — 더블클릭해서 Applications에 드래그
-- Windows: `CatHouse Setup x.x.x.exe`
-- Linux: `CatHouse-x.x.x.AppImage`
+- macOS: `MeowMode-x.x.x.dmg` (Apple Silicon + Intel 둘 다) — 더블클릭해서 Applications에 드래그
+- Windows: `MeowMode Setup x.x.x.exe`
+- Linux: `MeowMode-x.x.x.AppImage`
 
 > **macOS에서만 dmg 빌드 가능**. Linux/Windows에선 zip이나 AppImage만 만들어짐. 본인 OS에서 빌드해야 함.
 >
