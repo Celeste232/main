@@ -45,10 +45,11 @@ html, body, #root {
 
 .house-roof-button {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 30px;
-  height: 30px;
+  /* Floats above the roof so it never overlaps the silhouette. */
+  top: -26px;
+  right: -8px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.95);
   border: 1.5px solid #333;
