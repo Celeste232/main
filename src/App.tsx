@@ -25,12 +25,15 @@ export function App() {
     void window.api.getDisplayBounds().then((b) => setBounds({ width: b.width, height: b.height }));
   }, [setSettings]);
 
-  const { callToHouse, startle, putInHouse, releaseFromHouse } = useCatBehavior(bounds);
+  const { callToHouse, startle, putInHouse, releaseFromHouse, findCat } = useCatBehavior(bounds);
 
   // Expose house actions to the settings menu via the store.
   useEffect(() => {
-    useAppStore.setState({ catActions: { callToHouse, putInHouse, releaseFromHouse } });
-  }, [callToHouse, putInHouse, releaseFromHouse]);
+    useAppStore.setState({ catActions: { callToHouse, putInHouse, releaseFromHouse, findCat } });
+  }, [callToHouse, putInHouse, releaseFromHouse, findCat]);
+
+  // Tray menu "고양이 찾기" → run the same handler here.
+  useEffect(() => window.api.onFindCat(() => findCat()), [findCat]);
 
   const onHouseDragStart = () => {
     if (cat.locked === 'in-house') return;

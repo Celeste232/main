@@ -60,6 +60,7 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
         >
           <option value="full">전체 화면</option>
           <option value="near-house">집 근처만</option>
+          <option value="at-house">집에만 있기</option>
         </select>
       </div>
       <div className="settings-row">
@@ -79,12 +80,15 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
         />
       </div>
       <div className="settings-actions">
+        <button onClick={() => catActions?.findCat()}>고양이 찾기</button>
+        <button onClick={() => catActions?.callToHouse()}>집으로 부르기</button>
+      </div>
+      <div className="settings-actions">
         {cat.locked === 'in-house' ? (
           <button onClick={() => catActions?.releaseFromHouse()}>집에서 꺼내기</button>
         ) : (
           <button onClick={() => catActions?.putInHouse()}>집에 넣기</button>
         )}
-        <button onClick={() => catActions?.callToHouse()}>부르기</button>
       </div>
 
       <h3>프로그램</h3>

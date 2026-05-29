@@ -24,7 +24,11 @@ export type CatAction =
   | 'meow'
   | 'flop'
   | 'sparkle'
-  | 'caught';
+  | 'caught'
+  | 'sneeze'
+  | 'pounce'
+  | 'roll'
+  | 'shake';
 
 export interface CatState {
   action: CatAction;
@@ -40,6 +44,7 @@ export interface CatActionHandles {
   callToHouse: () => void;
   putInHouse: () => void;
   releaseFromHouse: () => void;
+  findCat: () => void;
 }
 
 interface AppState {

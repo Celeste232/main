@@ -35,6 +35,10 @@ export const FRAME_SPECS: Record<CatAction, FrameSpec> = {
   flop: { count: 2, intervalMs: 1200 },
   sparkle: { count: 3, intervalMs: 200 },
   caught: { count: 2, intervalMs: 250 },
+  sneeze: { count: 3, intervalMs: 120 },
+  pounce: { count: 3, intervalMs: 150 },
+  roll: { count: 4, intervalMs: 180 },
+  shake: { count: 4, intervalMs: 100 },
 };
 
 /**

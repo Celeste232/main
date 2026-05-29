@@ -285,6 +285,34 @@
       "viewBox": [0, 0, 100, 100],
       "view": "front",
       "elements": "Sitting body with wide-eyed surprise (eye ring 3.5–4 radius), pink mouth, '!' mark"
+    },
+    "sneeze": {
+      "frameCount": 3,
+      "intervalMs": 120,
+      "viewBox": [0, 0, 110, 110],
+      "view": "front",
+      "elements": "Head tilts back (-3) → forward sneeze (6) with wide-open mouth + droplets + '에취!' → recover. Eyes blink on frame 1."
+    },
+    "pounce": {
+      "frameCount": 3,
+      "intervalMs": 150,
+      "viewBox": [0, 0, 120, 90],
+      "view": "side",
+      "elements": "Crouch (lean -4, dy +6) → spring (lean +6, dy -10, ground shadow) → land (dy +2). Pink nose triangle."
+    },
+    "roll": {
+      "frameCount": 4,
+      "intervalMs": 180,
+      "viewBox": [0, 0, 100, 100],
+      "view": "front-rotating",
+      "elements": "Sitting body rotates 0/90/180/270deg around (50,60). Motion dashes under."
+    },
+    "shake": {
+      "frameCount": 4,
+      "intervalMs": 100,
+      "viewBox": [0, 0, 110, 100],
+      "view": "front",
+      "elements": "Body tilts -6/+6/-4/+4 deg with eyes closed and motion squiggles on both sides"
     }
   },
   "supportingAssets": {

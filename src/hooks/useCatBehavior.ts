@@ -25,6 +25,10 @@ const ACTION_DURATIONS: Record<CatAction, [number, number]> = {
   flop: [8000, 25000],
   sparkle: [1500, 3000],
   caught: [1500, 2500],
+  sneeze: [800, 1400],
+  pounce: [800, 1500],
+  roll: [1500, 2500],
+  shake: [600, 1200],
 };
 
 // Activity-level → weighted action pool. Repeated entries = higher weight.
@@ -40,6 +44,8 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'walking',
     'meow',
     'sparkle',
+    'sneeze',
+    'shake',
   ],
   normal: [
     'walking', 'walking',
@@ -55,6 +61,10 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'meow',
     'sparkle',
     'caught',
+    'sneeze',
+    'pounce',
+    'roll',
+    'shake',
     'sleeping',
   ],
   energetic: [
@@ -69,6 +79,10 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'meow', 'meow',
     'caught',
     'sparkle',
+    'pounce', 'pounce',
+    'roll',
+    'sneeze',
+    'shake',
   ],
 };
 
@@ -95,6 +109,15 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
   // Pick a wandering target inside the configured roam area.
   const pickWanderTarget = (): { x: number; y: number } => {
     if (!displayBounds) return { x: housePos.x, y: housePos.y };
+    if (settings?.roamArea === 'at-house') {
+      // Tiny radius — cat hangs right by the door.
+      const radius = 80;
+      const cx = housePos.x + 60;
+      const cy = housePos.y + 90;
+      const angle = Math.random() * Math.PI * 2;
+      const r = Math.random() * radius;
+      return { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r };
+    }
     if (settings?.roamArea === 'near-house') {
       const radius = 350;
       const cx = housePos.x + 60;
@@ -304,5 +327,21 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     setCat({ action: 'idle', locked: null, x: housePos.x + 130, y: housePos.y + 60 });
   };
 
-  return { callToHouse, startle, putInHouse, releaseFromHouse };
+  // Make the cat jump in place to draw attention. If the window is hidden
+  // behind other apps, briefly bring it forward via the main process IPC.
+  const findCat = () => {
+    if (settings?.windowLayer === 'back') {
+      window.api.flashToFront();
+    }
+    const original = useAppStore.getState().cat.action;
+    setCat({ action: 'jumping', message: '여기야~!' });
+    setTimeout(() => setCat({ message: null }), 1500);
+    // Cycle through jumping 3 times for visibility, then resume.
+    setTimeout(() => {
+      const c = useAppStore.getState().cat;
+      if (c.action === 'jumping') setCat({ action: original });
+    }, 2200);
+  };
+
+  return { callToHouse, startle, putInHouse, releaseFromHouse, findCat };
 }

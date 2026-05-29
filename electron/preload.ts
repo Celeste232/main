@@ -15,6 +15,14 @@ const api = {
   quit: () => ipcRenderer.send('app:quit'),
   hide: () => ipcRenderer.send('window:hide'),
   show: () => ipcRenderer.send('window:show'),
+  flashToFront: () => ipcRenderer.send('window:flash-to-front'),
+  onFindCat: (cb: () => void): (() => void) => {
+    const handler = () => cb();
+    ipcRenderer.on('cat:find', handler);
+    return () => {
+      ipcRenderer.removeListener('cat:find', handler);
+    };
+  },
 };
 
 contextBridge.exposeInMainWorld('api', api);

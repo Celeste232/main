@@ -130,6 +130,23 @@ function refreshTray() {
         applyPaused(next);
       },
     },
+    {
+      label: '고양이 찾기',
+      enabled: !settings.paused,
+      click: () => {
+        if (!mainWindow) return;
+        if (settingsStore.get().windowLayer === 'back') {
+          mainWindow.setAlwaysOnTop(true, 'screen-saver');
+          mainWindow.show();
+          mainWindow.focus();
+          setTimeout(() => {
+            if (!mainWindow) return;
+            applyWindowLayer(settingsStore.get().windowLayer);
+          }, 2500);
+        }
+        mainWindow.webContents.send('cat:find');
+      },
+    },
     { type: 'separator' },
     {
       label: '화면 위치',
@@ -226,6 +243,20 @@ function registerIpc() {
   ipcMain.on('app:quit', () => app.quit());
   ipcMain.on('window:hide', () => mainWindow?.hide());
   ipcMain.on('window:show', () => mainWindow?.show());
+
+  // Briefly bring the window to the front so the user can spot the cat,
+  // then restore the previous layer.
+  ipcMain.on('window:flash-to-front', () => {
+    if (!mainWindow) return;
+    const layer = settingsStore.get().windowLayer;
+    mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    mainWindow.show();
+    mainWindow.focus();
+    setTimeout(() => {
+      if (!mainWindow) return;
+      applyWindowLayer(layer);
+    }, 2500);
+  });
 }
 
 app.whenReady().then(() => {

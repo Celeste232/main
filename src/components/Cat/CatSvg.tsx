@@ -35,7 +35,101 @@ export function CatSvg({ action, frame }: CatSvgProps) {
   if (action === 'flop') return <FlopCat frame={frame} />;
   if (action === 'sparkle') return <SparkleCat frame={frame} />;
   if (action === 'caught') return <CaughtCat frame={frame} />;
+  if (action === 'sneeze') return <SneezeCat frame={frame} />;
+  if (action === 'pounce') return <PounceCat frame={frame} />;
+  if (action === 'roll') return <RollCat frame={frame} />;
+  if (action === 'shake') return <ShakeCat frame={frame} />;
   return <SittingCat frame={frame} />;
+}
+
+function SneezeCat({ frame }: { frame: number }) {
+  // Build-up → SNEEZE → recover
+  const headBack = frame === 0 ? -3 : frame === 1 ? 6 : 0;
+  const open = frame === 1 ? 1 : 0;
+  return (
+    <svg viewBox="0 0 110 110" width="100%" height="100%">
+      <Ears />
+      <g transform={`translate(0 ${headBack})`}>
+        <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <Face mouthOpen={open} blink={frame === 1} />
+        <Whiskers />
+      </g>
+      <ellipse cx="50" cy="80" rx="22" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {frame === 1 && (
+        <>
+          <text x="80" y="22" fontSize="12" fill={stroke}>에취!</text>
+          {/* Droplets */}
+          <circle cx="84" cy="50" r="2" fill={stroke} />
+          <circle cx="92" cy="46" r="1.5" fill={stroke} />
+          <circle cx="96" cy="54" r="1.2" fill={stroke} />
+        </>
+      )}
+    </svg>
+  );
+}
+
+function PounceCat({ frame }: { frame: number }) {
+  // Crouch → spring forward → land
+  const dy = frame === 0 ? 6 : frame === 1 ? -10 : 2;
+  const lean = frame === 0 ? -4 : frame === 1 ? 6 : 0;
+  return (
+    <svg viewBox="0 0 120 90" width="100%" height="100%">
+      <g transform={`translate(${lean} ${dy})`}>
+        <path d="M22 36 L28 26 L36 36 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <path d="M40 36 L46 26 L54 36 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <ellipse cx="38" cy="46" rx="18" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <ellipse cx="74" cy="60" rx="32" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <circle cx="32" cy="46" r="2" fill={stroke} />
+        <circle cx="44" cy="46" r="2" fill={stroke} />
+        <ellipse cx="38" cy="54" rx="2" ry="1.5" fill="#f08aa6" />
+        <path d="M104 56 Q116 36 108 24" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      </g>
+      {frame === 1 && (
+        <ellipse cx="58" cy="84" rx="22" ry="3" fill="rgba(0,0,0,0.15)" />
+      )}
+    </svg>
+  );
+}
+
+function RollCat({ frame }: { frame: number }) {
+  // 4-frame roll: side → belly → other side → upright
+  const rot = frame * 90;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <g transform={`rotate(${rot} 50 60)`}>
+        <Ears />
+        <ellipse cx="50" cy="48" rx="26" ry="22" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <ellipse cx="50" cy="74" rx="22" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <path d="M44 48 Q46 50 48 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <path d="M52 48 Q54 50 56 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <path d="M48 56 Q50 58 52 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      </g>
+      {/* motion lines under */}
+      <path d="M20 92 L26 92 M34 92 L40 92 M48 92 L54 92 M62 92 L68 92 M76 92 L82 92"
+            stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ShakeCat({ frame }: { frame: number }) {
+  // Tilt left-right-left-right with motion lines
+  const tilt = [(-6), 6, (-4), 4][frame] ?? 0;
+  return (
+    <svg viewBox="0 0 110 100" width="100%" height="100%">
+      <g transform={`rotate(${tilt} 50 60)`}>
+        <Ears />
+        <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <Face blink />
+        <Whiskers />
+      </g>
+      {/* motion squiggles on both sides */}
+      <path d="M14 40 Q10 44 14 48" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+      <path d="M8 50 Q4 54 8 58" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+      <path d="M96 40 Q100 44 96 48" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+      <path d="M102 50 Q106 54 102 58" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+    </svg>
+  );
 }
 
 function HappyCat({ frame }: { frame: number }) {
