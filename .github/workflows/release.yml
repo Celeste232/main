@@ -1,11 +1,21 @@
 name: Release
 
-# Push a tag like v0.1.0 to trigger a Mac build + GitHub Release.
+# Push a tag like v0.1.1 to trigger a Mac build + GitHub Release.
+# OR: Actions tab → Release → Run workflow (choose branch + version).
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or tag to build (e.g. claude/cat-house-interactions-pFJxU)'
+        default: 'claude/cat-house-interactions-pFJxU'
+        required: true
+      version:
+        description: 'Version label for the release (e.g. v0.1.1)'
+        default: 'v0.1.1'
+        required: true
 
 permissions:
   contents: write
@@ -17,6 +27,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref }}
 
       - uses: actions/setup-node@v4
         with:
@@ -43,12 +55,13 @@ jobs:
             release/*.blockmap
             release/latest-mac.yml
           draft: true
-          name: Meow Mode ${{ github.ref_name }}
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+          name: Meow Mode ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
           body: |
             ## 다운로드 / Download
 
-            - **Apple Silicon Mac (M1/M2/M3/M4)**: `MeowMode-*-arm64.dmg`
-            - **Intel Mac**: `MeowMode-*.dmg`
+            - **Apple Silicon Mac (M1/M2/M3/M4)**: `Meow Mode-*-arm64.dmg`
+            - **Intel Mac**: `Meow Mode-*-x64.dmg`
 
             처음 실행 시: 우클릭 → "열기" → 다시 "열기" (macOS Sequoia는 시스템 설정 → 보안 → "그래도 열기")
 
