@@ -45,8 +45,8 @@ html, body, #root {
 
 .house-roof-button {
   position: absolute;
-  /* Floats above the roof so it never overlaps the silhouette. */
-  top: -26px;
+  /* Floats just above the roof — close enough to feel attached. */
+  top: -18px;
   right: -8px;
   width: 28px;
   height: 28px;
