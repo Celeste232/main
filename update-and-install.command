@@ -25,9 +25,20 @@ echo "─── Cat House: update + rebuild + install ────────�
 echo "    repo: $SCRIPT_DIR"
 echo ""
 
-# 1. Pull
+# 1. Pull (stash any local changes first so the pull never fails)
 echo "[1/7] git pull"
+STASH_MSG="auto-stash by update-and-install $(date +%s)"
+STASHED=0
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "    local changes detected — stashing them as '$STASH_MSG'"
+  git stash push -u -m "$STASH_MSG" >/dev/null
+  STASHED=1
+fi
 git pull --ff-only
+if [ "$STASHED" = "1" ]; then
+  echo "    your local changes are saved in 'git stash list'. Restore with:"
+  echo "    git stash pop"
+fi
 
 # 2. npm install (only if lockfile changed in this pull)
 echo ""
