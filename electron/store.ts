@@ -10,7 +10,7 @@ export interface Settings {
   soundEnabled: boolean;
   volume: number;
   hideCat: boolean;
-  roamArea: 'full' | 'near-house' | 'at-house';
+  roamArea: 'at-house' | 'near-house' | 'edges' | 'full';
   focusMode: boolean;
   /** front = always on top, back = pushed behind, normal = standard stacking. */
   windowLayer: 'front' | 'normal' | 'back';

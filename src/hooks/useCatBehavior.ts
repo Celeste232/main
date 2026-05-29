@@ -129,6 +129,21 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       const ty = Math.max(120, Math.min(displayBounds.height - 120, cy + Math.sin(angle) * r));
       return { x: tx, y: ty };
     }
+    if (settings?.roamArea === 'edges') {
+      // Pick a random point along one of the four screen edges
+      const margin = 60;
+      const side = Math.floor(Math.random() * 4);
+      switch (side) {
+        case 0: // top
+          return { x: Math.random() * (displayBounds.width - 100) + 50, y: margin };
+        case 1: // right
+          return { x: displayBounds.width - margin - 80, y: Math.random() * (displayBounds.height - 200) + 100 };
+        case 2: // bottom
+          return { x: Math.random() * (displayBounds.width - 100) + 50, y: displayBounds.height - margin - 80 };
+        default: // left
+          return { x: margin, y: Math.random() * (displayBounds.height - 200) + 100 };
+      }
+    }
     return {
       x: Math.random() * (displayBounds.width - 100) + 50,
       y: Math.random() * (displayBounds.height - 200) + 150,
