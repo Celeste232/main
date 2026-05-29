@@ -195,7 +195,7 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
 
       <div className="settings-row">
         <label>{t.language}</label>
-        <div className="doodle-toggle">
+        <div className="doodle-pills">
           <button
             className={settings.language === 'ko' ? 'active' : ''}
             onPointerUp={(e) => { stop(e); void patch({ language: 'ko' }); }}
@@ -203,7 +203,15 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
           <button
             className={settings.language === 'en' ? 'active' : ''}
             onPointerUp={(e) => { stop(e); void patch({ language: 'en' }); }}
-          >English</button>
+          >EN</button>
+          <button
+            className={settings.language === 'ja' ? 'active' : ''}
+            onPointerUp={(e) => { stop(e); void patch({ language: 'ja' }); }}
+          >日本</button>
+          <button
+            className={settings.language === 'zh' ? 'active' : ''}
+            onPointerUp={(e) => { stop(e); void patch({ language: 'zh' }); }}
+          >中文</button>
         </div>
       </div>
 

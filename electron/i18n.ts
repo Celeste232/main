@@ -12,8 +12,6 @@ const TRAY_STRINGS = {
     quit: '종료',
     tooltip: 'Cat House',
     tooltipPaused: '고양이 멈춤 (잠시 꺼둠)',
-    showCat: 'Show Cat',
-    hideCat: 'Hide Cat',
   },
   en: {
     pause: 'Pause',
@@ -26,10 +24,32 @@ const TRAY_STRINGS = {
     quit: 'Quit',
     tooltip: 'Cat House',
     tooltipPaused: 'Cat paused',
-    showCat: 'Show cat',
-    hideCat: 'Hide cat',
   },
-} as const;
+  ja: {
+    pause: 'ちょっと止める',
+    unpause: 'もう一度つける',
+    findCat: 'ねこをさがす',
+    layer: '画面位置',
+    layerFront: '最前',
+    layerNormal: 'ふつう',
+    layerBack: '最背',
+    quit: '終了',
+    tooltip: 'Cat House',
+    tooltipPaused: 'ねこ停止中',
+  },
+  zh: {
+    pause: '暂停',
+    unpause: '继续',
+    findCat: '找猫咪',
+    layer: '窗口层',
+    layerFront: '最前',
+    layerNormal: '中间',
+    layerBack: '最后',
+    quit: '退出',
+    tooltip: 'Cat House',
+    tooltipPaused: '猫咪暂停中',
+  },
+};
 
 export function getTrayStrings(language: Settings['language']) {
   return TRAY_STRINGS[language] ?? TRAY_STRINGS.ko;

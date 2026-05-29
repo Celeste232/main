@@ -3,7 +3,7 @@ import Store from 'electron-store';
 export interface Settings {
   catName: string;
   catSkin: 'png' | 'svg-doodle';
-  language: 'ko' | 'en';
+  language: 'ko' | 'en' | 'ja' | 'zh';
   activityLevel: 'calm' | 'normal' | 'energetic';
   showSpeechBubble: boolean;
   launchAtStartup: boolean;
