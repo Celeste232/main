@@ -85,14 +85,18 @@ html, body, #root {
 
 .speech-bubble {
   position: absolute;
-  background: white;
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 6px 10px;
-  font-size: 12px;
+  background: #fff;
+  border: 2px solid #222;
+  border-radius: 14px 18px 14px 16px / 16px 14px 18px 14px;
+  padding: 4px 12px;
+  font-family: 'Gaegu', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #222;
   white-space: nowrap;
-  transform: translateY(-100%);
+  transform: translateY(-110%);
   pointer-events: none;
+  box-shadow: 1.5px 1.5px 0 #222;
 }
 
 /* ─── Doodle settings panel ───────────────────────────────────────────── */

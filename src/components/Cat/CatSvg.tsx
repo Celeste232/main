@@ -51,20 +51,18 @@ function SlipCat({ frame }: { frame: number }) {
     <svg viewBox="0 0 140 90" width="100%" height="100%">
       <g transform="translate(140 0) scale(-1 1)">
         <g transform={`translate(${dx} 0) rotate(${tilt} 70 60)`}>
+          {/* Tail straight up in panic */}
+          <path d="M108 50 Q116 30 110 14" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+          {/* Body in back */}
+          <ellipse cx="78" cy="52" rx="32" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
           {/* Ears */}
           <path d="M22 28 L28 18 L36 28 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
           <path d="M40 28 L46 18 L54 28 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-          {/* Head */}
+          {/* Head on top of body so the face leads */}
           <ellipse cx="38" cy="38" rx="18" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
-          {/* Body */}
-          <ellipse cx="78" cy="52" rx="32" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
-          {/* Wide surprised eyes */}
           <circle cx="32" cy="38" r="2.5" fill={stroke} />
           <circle cx="44" cy="38" r="2.5" fill={stroke} />
-          {/* Open mouth */}
           <ellipse cx="38" cy="46" rx="3" ry="2.5" fill="#f08aa6" stroke={stroke} strokeWidth={1.4} />
-          {/* Tail straight up in panic */}
-          <path d="M108 50 Q116 30 110 14" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
           {/* Paws flailing — splayed legs */}
           <line x1="56" y1="64" x2={50 + frame * 2} y2={78 + frame * 2} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
           <line x1="68" y1="64" x2={64 - frame * 2} y2={80} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
@@ -112,14 +110,14 @@ function PounceCat({ frame }: { frame: number }) {
   return (
     <svg viewBox="0 0 120 90" width="100%" height="100%">
       <g transform={`translate(${lean} ${dy})`}>
+        <path d="M104 56 Q116 36 108 24" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <ellipse cx="74" cy="60" rx="32" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
         <path d="M22 36 L28 26 L36 36 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
         <path d="M40 36 L46 26 L54 36 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
         <ellipse cx="38" cy="46" rx="18" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
-        <ellipse cx="74" cy="60" rx="32" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
         <circle cx="32" cy="46" r="2" fill={stroke} />
         <circle cx="44" cy="46" r="2" fill={stroke} />
         <ellipse cx="38" cy="54" rx="2" ry="1.5" fill="#f08aa6" />
-        <path d="M104 56 Q116 36 108 24" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       </g>
       {frame === 1 && (
         <ellipse cx="58" cy="84" rx="22" ry="3" fill="rgba(0,0,0,0.15)" />
@@ -420,15 +418,19 @@ function WalkingCat({ frame }: { frame: number }) {
       {/* Default-facing-right: mirror the side profile so head ends up on the right. */}
       <g transform="translate(120 0) scale(-1 1)">
         <g transform={`translate(0 ${bob})`}>
+          {/* Tail at the back */}
+          <path d="M100 40 Q112 30 108 18" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+          {/* Body */}
+          <ellipse cx="72" cy="46" rx="32" ry="18" fill={fill} stroke={stroke} strokeWidth={sw} />
+          {/* Ears (head will cover their base) */}
           <path d="M22 22 L28 12 L36 22 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
           <path d="M40 22 L46 12 L54 22 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          {/* Head on top of body so the face stays visible */}
           <ellipse cx="38" cy="32" rx="18" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
-          <ellipse cx="72" cy="46" rx="32" ry="18" fill={fill} stroke={stroke} strokeWidth={sw} />
           <circle cx="32" cy="32" r="2" fill={stroke} />
           <circle cx="44" cy="32" r="2" fill={stroke} />
           <path d="M36 38 Q38 40 40 38" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
           <path d="M22 32 L14 30 M22 36 L14 38" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
-          <path d="M100 40 Q112 30 108 18" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
         </g>
         <line x1="52" y1={60} x2="52" y2={70 - legA} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
         <line x1="62" y1={60} x2="62" y2={70 - legB} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
@@ -447,13 +449,13 @@ function JumpingCat({ frame }: { frame: number }) {
     <svg viewBox="0 0 120 90" width="100%" height="100%">
       <g transform="translate(120 0) scale(-1 1)">
         <g transform={`translate(0 ${dy}) scale(1 ${stretch})`}>
+          <path d="M104 56 Q116 36 108 24" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+          <ellipse cx="72" cy="62" rx="32" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
           <path d="M22 38 L28 28 L36 38 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
           <path d="M40 38 L46 28 L54 38 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
           <ellipse cx="38" cy="48" rx="18" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
-          <ellipse cx="72" cy="62" rx="32" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
           <circle cx="32" cy="48" r="2" fill={stroke} />
           <circle cx="44" cy="48" r="2" fill={stroke} />
-          <path d="M104 56 Q116 36 108 24" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
         </g>
         {frame === 1 && (
           <ellipse cx="60" cy="84" rx="22" ry="3" fill="rgba(0,0,0,0.15)" />
@@ -552,15 +554,18 @@ function StretchingCat({ frame }: { frame: number }) {
   return (
     <svg viewBox="0 0 140 70" width="100%" height="100%">
       <g transform="translate(140 0) scale(-1 1)">
-        <path d="M14 30 L20 20 L28 30 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-        <path d="M30 30 L36 20 L42 30 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-        <ellipse cx="28" cy="40" rx="20" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+        {/* Tail curling up at the back */}
+        <path d="M118 38 Q128 18 122 6" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        {/* Body stretches out */}
         <g transform={`translate(80 44) scale(${stretchX} 1) translate(-80 -44)`}>
           <ellipse cx="80" cy="44" rx="36" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
         </g>
+        {/* Ears + head on top so the face is always visible */}
+        <path d="M14 30 L20 20 L28 30 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <path d="M30 30 L36 20 L42 30 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <ellipse cx="28" cy="40" rx="20" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
         <circle cx="22" cy="40" r="2" fill={stroke} />
         <circle cx="34" cy="40" r="2" fill={stroke} />
-        <path d="M118 38 Q128 18 122 6" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       </g>
     </svg>
   );

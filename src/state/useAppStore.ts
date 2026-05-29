@@ -81,9 +81,12 @@ export const useAppStore = create<AppState>((set, get) => ({
   setSettings: (s) => set({ settings: s, housePos: s.housePosition }),
 
   patchSettings: async (p) => {
+    // Optimistic update so clicks feel instant (no IPC round-trip wait).
+    const current = get().settings;
+    if (current) set({ settings: { ...current, ...p } });
+    if (p.housePosition) set({ housePos: p.housePosition });
     const next = await window.api.setSettings(p);
     set({ settings: next });
-    if (p.housePosition) set({ housePos: p.housePosition });
   },
 
   setCat: (patch) => set({ cat: { ...get().cat, ...patch } }),

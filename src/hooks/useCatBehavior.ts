@@ -337,6 +337,68 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     };
   }, [cat.action, cat.locked, setCat]);
 
+  // Random chatter — every 20-50 seconds the cat blurts something cute.
+  useEffect(() => {
+    if (!settings?.showSpeechBubble) return;
+    if (settings?.hideCat || settings?.paused) return;
+
+    const tick = () => {
+      const c = useAppStore.getState().cat;
+      const s = useAppStore.getState().settings;
+      if (!s || c.locked === 'held' || c.message) return;
+      const name = s.catName || '나비';
+      const phrases = [
+        `${name}랑 놀자!`,
+        '흥',
+        '싫음 말고',
+        '갈게',
+        '야옹',
+        '심심해',
+        '낮잠 잘래',
+        '쳐다보지 마',
+      ];
+      const phrase = phrases[Math.floor(Math.random() * phrases.length)];
+      setCat({ message: phrase });
+      setTimeout(() => {
+        const cur = useAppStore.getState().cat;
+        if (cur.message === phrase) setCat({ message: null });
+      }, 2200);
+    };
+
+    const id = setInterval(() => {
+      if (Math.random() < 0.35) tick();
+    }, 18000);
+    return () => clearInterval(id);
+  }, [settings?.showSpeechBubble, settings?.hideCat, settings?.paused, setCat]);
+
+  // Hunger / thirst alerts — when a bowl is empty, periodically nag.
+  useEffect(() => {
+    if (!settings?.showSpeechBubble) return;
+    if (settings?.hideCat || settings?.paused) return;
+
+    const id = setInterval(() => {
+      const s = useAppStore.getState().settings;
+      const c = useAppStore.getState().cat;
+      if (!s || c.message || c.locked === 'held') return;
+      if ((s.foodLevel ?? 1) <= 0.05 && Math.random() < 0.6) {
+        setCat({ message: '밥줘!' });
+        setTimeout(() => {
+          const cur = useAppStore.getState().cat;
+          if (cur.message === '밥줘!') setCat({ message: null });
+        }, 2200);
+        return;
+      }
+      if ((s.waterLevel ?? 1) <= 0.05 && Math.random() < 0.6) {
+        setCat({ message: '물 없어!' });
+        setTimeout(() => {
+          const cur = useAppStore.getState().cat;
+          if (cur.message === '물 없어!') setCat({ message: null });
+        }, 2200);
+      }
+    }, 12000);
+    return () => clearInterval(id);
+  }, [settings?.showSpeechBubble, settings?.hideCat, settings?.paused, setCat]);
+
   const callToHouse = () => {
     target.current = { x: housePos.x + 20, y: housePos.y + 40 };
     setCat({ action: 'walking', message: '갈게~', locked: null });
