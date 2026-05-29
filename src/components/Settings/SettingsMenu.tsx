@@ -13,7 +13,8 @@ const ACTIVITY_LEVELS: { value: Settings['activityLevel']; label: string }[] = [
 ];
 
 const ROAM_AREAS: { value: Settings['roamArea']; label: string }[] = [
-  { value: 'at-house', label: '집안' },
+  // '집안' is covered by the dedicated 집에 넣기 button below; the area
+  // picker is for where the cat wanders when it's NOT locked indoors.
   { value: 'near-house', label: '집근처' },
   { value: 'edges', label: '가장자리' },
   { value: 'full', label: '전체' },
@@ -189,35 +190,6 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
             className={settings.launchAtStartup ? 'active' : ''}
             onPointerUp={(e) => { stop(e); void patch({ launchAtStartup: true }); }}
           >켬</button>
-        </div>
-      </div>
-
-      <div className="settings-row">
-        <label>사운드</label>
-        <div className="doodle-toggle">
-          <button
-            className={!settings.soundEnabled ? 'active' : ''}
-            onPointerUp={(e) => { stop(e); void patch({ soundEnabled: false }); }}
-          >끔</button>
-          <button
-            className={settings.soundEnabled ? 'active' : ''}
-            onPointerUp={(e) => { stop(e); void patch({ soundEnabled: true }); }}
-          >켬</button>
-        </div>
-      </div>
-
-      <div className="settings-row">
-        <label>볼륨</label>
-        <div className="doodle-slider">
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={settings.volume}
-            onChange={(e) => void patch({ volume: Number(e.target.value) })}
-            onPointerDown={stop}
-          />
         </div>
       </div>
 

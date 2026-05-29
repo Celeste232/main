@@ -40,6 +40,9 @@ export const FRAME_SPECS: Record<CatAction, FrameSpec> = {
   roll: { count: 4, intervalMs: 180 },
   shake: { count: 4, intervalMs: 100 },
   slip: { count: 3, intervalMs: 160 },
+  superman: { count: 2, intervalMs: 1500 },
+  dangle: { count: 3, intervalMs: 280 },
+  climb: { count: 3, intervalMs: 200 },
 };
 
 /**

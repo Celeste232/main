@@ -29,7 +29,10 @@ export type CatAction =
   | 'pounce'
   | 'roll'
   | 'shake'
-  | 'slip';
+  | 'slip'
+  | 'superman'
+  | 'dangle'
+  | 'climb';
 
 export interface CatState {
   action: CatAction;

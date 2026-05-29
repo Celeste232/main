@@ -30,6 +30,9 @@ const ACTION_DURATIONS: Record<CatAction, [number, number]> = {
   roll: [1500, 2500],
   shake: [600, 1200],
   slip: [900, 1500],
+  superman: [10000, 30000],
+  dangle: [1500, 2500],
+  climb: [1500, 2200],
 };
 
 // Activity-level → weighted action pool. Repeated entries = higher weight.
@@ -47,6 +50,7 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'sparkle',
     'sneeze',
     'shake',
+    'superman', 'superman',
   ],
   normal: [
     'walking', 'walking',
@@ -66,6 +70,7 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'pounce',
     'roll',
     'shake',
+    'superman',
     'sleeping',
   ],
   energetic: [
@@ -195,16 +200,36 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     };
   }, [settings, displayBounds, setCat, eatSpot.x, eatSpot.y, drinkSpot.x, drinkSpot.y, cat.locked]);
 
-  // Random slip while walking on top of windows — fakes a near-fall at the
-  // edge of an invisible app window. Only triggers in 'front' mode since the
-  // cat is logically on top of other apps then.
+  // Random window-edge mishap while walking in 'front' mode. Fakes the cat
+  // running off the edge of an invisible app window: slip → dangle → climb.
   useEffect(() => {
     if (cat.action !== 'walking') return;
     if (settings?.windowLayer !== 'front') return;
     if (cat.locked) return;
     const id = setTimeout(() => {
-      if (useAppStore.getState().cat.action !== 'walking') return;
-      if (Math.random() < 0.18) {
+      const c = useAppStore.getState().cat;
+      if (c.action !== 'walking') return;
+      const roll = Math.random();
+      if (roll < 0.12) {
+        // Full near-fall sequence
+        target.current = null;
+        setCat({ action: 'slip', message: '어어!' });
+        setTimeout(() => {
+          if (useAppStore.getState().cat.action === 'slip') {
+            setCat({ action: 'dangle', message: '!?' });
+          }
+        }, 900);
+        setTimeout(() => {
+          if (useAppStore.getState().cat.action === 'dangle') {
+            setCat({ action: 'climb', message: '으샤!' });
+          }
+        }, 2800);
+        setTimeout(() => {
+          const cur = useAppStore.getState().cat;
+          if (cur.action === 'climb') setCat({ message: null });
+        }, 4400);
+      } else if (roll < 0.22) {
+        // Just a slip
         target.current = null;
         setCat({ action: 'slip', message: '어어!' });
         setTimeout(() => setCat({ message: null }), 1200);
@@ -411,10 +436,13 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
   };
 
   const putInHouse = () => {
+    // Cat sprite is 80×80, house door arch sits around (x=44..76, y=90..114)
+    // of the 120×120 house viewBox. Center the cat horizontally and slide it
+    // down so the head + paws appear within the door silhouette.
     setCat({
       action: 'in-house',
-      x: housePos.x + 30,
-      y: housePos.y + 30,
+      x: housePos.x + 20,
+      y: housePos.y + 55,
       locked: 'in-house',
     });
   };
