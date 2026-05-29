@@ -25,10 +25,8 @@ const LAYERS: { value: Settings['windowLayer']; label: string }[] = [
   { value: 'back', label: '맨뒤' },
 ];
 
-const SKINS: { value: Settings['catSkin']; label: string }[] = [
-  { value: 'svg-doodle', label: '발그림 (기본)' },
-  { value: 'png', label: 'PNG' },
-];
+// Future paid skin packs land here. For now only the default doodle exists.
+const PURCHASED_SKINS: { value: Settings['catSkin']; label: string }[] = [];
 
 export function SettingsMenu({ x, y }: SettingsMenuProps) {
   const settings = useAppStore((s) => s.settings);
@@ -86,17 +84,16 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
 
       <div className="settings-row">
         <label>스킨</label>
-        <div className="doodle-pills">
-          {SKINS.map((s) => (
-            <button
-              key={s.value}
-              className={settings.catSkin === s.value ? 'active' : ''}
-              onPointerUp={(e) => { stop(e); void patch({ catSkin: s.value }); }}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
+        <button
+          className={`doodle-dropdown${PURCHASED_SKINS.length === 0 ? ' empty' : ''}`}
+          onPointerUp={(e) => {
+            stop(e);
+            // Future: open a menu of PURCHASED_SKINS
+          }}
+          disabled={PURCHASED_SKINS.length === 0}
+        >
+          기본
+        </button>
       </div>
 
       <div className="settings-row">

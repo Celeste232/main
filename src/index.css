@@ -134,8 +134,10 @@ html, body, #root {
 }
 
 .settings-row > label {
-  flex: 0 0 92px;
+  flex: 0 0 auto;
+  min-width: 72px;
   font-size: 17px;
+  white-space: nowrap;
 }
 
 .settings-close {
@@ -152,8 +154,11 @@ html, body, #root {
 }
 
 /* Text input drawn as a hand-sketched box */
-.doodle-input {
+.doodle-input,
+.doodle-dropdown {
   flex: 1;
+  min-width: 0;
+  width: 100%;
   font-family: inherit;
   font-size: 17px;
   font-weight: 700;
@@ -163,9 +168,33 @@ html, body, #root {
   border-radius: 10px 12px 10px 14px / 12px 10px 14px 10px;
   outline: none;
   color: #222;
+  box-sizing: border-box;
 }
 .doodle-input:focus {
   background: #fff8e0;
+}
+
+/* Dropdown-style field — same shape as text input, with a caret. Future
+   skin packs would open a menu; for now it's a static label saying 기본. */
+.doodle-dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+}
+.doodle-dropdown::after {
+  content: '▼';
+  font-size: 11px;
+  color: #888;
+  margin-left: 8px;
+}
+.doodle-dropdown:hover {
+  background: #fff8e0;
+}
+.doodle-dropdown.empty:hover {
+  background: #fff;
+  cursor: default;
 }
 
 /* Pill-button group used for 활동량 / 활동영역 / 화면위치 / 말풍선 */
@@ -197,22 +226,22 @@ html, body, #root {
   background: #fff5e0;
 }
 
-/* Fish-on-line track for 활동량 / 활동영역.
-   Labels themselves are the click targets; a white fish floats above the
-   active label, swimming along the horizontal line. No dot stops. */
+/* 윷놀이판 track for 활동량 / 활동영역.
+   Each label has a dot above it sitting on the line; the active label
+   gets a white fish overlay that hides the dot underneath. */
 .doodle-track {
   flex: 1;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   position: relative;
-  padding-top: 22px;
+  padding-top: 26px;
 }
 .doodle-track .line {
   position: absolute;
   left: 12px;
   right: 12px;
-  top: 22px;
+  top: 16px;
   height: 2px;
   background: #222;
   border-radius: 1px;
@@ -224,7 +253,7 @@ html, body, #root {
   font-weight: 700;
   background: transparent;
   border: none;
-  padding: 6px 4px 0;
+  padding: 4px 6px 0;
   cursor: pointer;
   color: #888;
   flex: 0 1 auto;
@@ -235,18 +264,34 @@ html, body, #root {
 .doodle-track .stop.active {
   color: #222;
 }
-.doodle-track .stop.active::before {
+/* Dot sitting on the line above the label */
+.doodle-track .stop::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #222;
+  left: 50%;
+  top: -10px;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+/* White fish covering the dot at the active position */
+.doodle-track .stop.active::after {
   content: '';
   position: absolute;
   width: 40px;
   height: 22px;
   left: 50%;
-  bottom: calc(100% + 0px);
-  transform: translateX(-50%);
+  top: -10px;
+  transform: translate(-50%, -50%);
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 18'><path d='M2 9 Q6 1 16 1 Q26 1 28 9 Q26 17 16 17 Q6 17 2 9 Z' fill='white' stroke='%23222' stroke-width='1.8' stroke-linejoin='round'/><path d='M28 9 L32 3 L32 15 Z' fill='white' stroke='%23222' stroke-width='1.8' stroke-linejoin='round'/><circle cx='10' cy='7' r='1.7' fill='%23222'/><path d='M5 11 Q7 13 9 11' stroke='%23222' stroke-width='1' fill='none' stroke-linecap='round'/></svg>");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  z-index: 2;
 }
 
 /* Toggle: 있기/없기, On/Off, 숨김/안숨김 */
