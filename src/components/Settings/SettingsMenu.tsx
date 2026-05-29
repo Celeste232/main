@@ -14,11 +14,6 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
 
   if (!settings) return null;
 
-  const toggleFocus = (enabled: boolean) => {
-    void patch({ focusMode: enabled });
-    window.api.setFocusMode(enabled);
-  };
-
   return (
     <div
       className="settings-panel interactive"
@@ -94,12 +89,20 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
 
       <h3>프로그램</h3>
       <div className="settings-row">
-        <label>집중 모드 (뒤로 보내기)</label>
-        <input
-          type="checkbox"
-          checked={settings.focusMode}
-          onChange={(e) => toggleFocus(e.target.checked)}
-        />
+        <label>화면 위치</label>
+        <select
+          value={settings.windowLayer}
+          onChange={(e) => void patch({ windowLayer: e.target.value as typeof settings.windowLayer })}
+        >
+          <option value="front">맨 앞 (항상 위)</option>
+          <option value="normal">보통</option>
+          <option value="back">맨 뒤 (작업할 때)</option>
+        </select>
+      </div>
+      <div className="settings-actions">
+        <button onClick={() => void patch({ paused: !settings.paused })}>
+          {settings.paused ? '다시 켜기' : '잠깐 끄기'}
+        </button>
       </div>
       <div className="settings-row">
         <label>시작 시 자동 실행</label>
@@ -107,14 +110,6 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
           type="checkbox"
           checked={settings.launchAtStartup}
           onChange={(e) => void patch({ launchAtStartup: e.target.checked })}
-        />
-      </div>
-      <div className="settings-row">
-        <label>항상 위에 표시</label>
-        <input
-          type="checkbox"
-          checked={settings.alwaysOnTop}
-          onChange={(e) => void patch({ alwaysOnTop: e.target.checked })}
         />
       </div>
       <div className="settings-row">

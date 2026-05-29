@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } from 'electron';
+import type { NativeImage } from 'electron';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { settingsStore, DEFAULT_SETTINGS, type Settings } from './store.js';
@@ -9,13 +10,12 @@ process.env.APP_ROOT = path.join(__dirname, '..');
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
 const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 
-// Icons live in build/ at the repo root. In dev they're at APP_ROOT/build,
-// in a packaged app they're bundled inside the app resources.
 const ICON_DIR = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'build')
   : path.join(process.resourcesPath, 'build');
 const APP_ICON = path.join(ICON_DIR, process.platform === 'win32' ? 'icon.ico' : 'icon.png');
 const TRAY_ICON = path.join(ICON_DIR, 'tray-icon.png');
+const TRAY_ICON_PAUSED = path.join(ICON_DIR, 'tray-icon-paused.png');
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
@@ -25,6 +25,35 @@ function getLeftmostDisplay() {
   return displays.reduce((leftmost, d) =>
     d.bounds.x < leftmost.bounds.x ? d : leftmost,
   displays[0]);
+}
+
+function applyWindowLayer(layer: Settings['windowLayer']) {
+  if (!mainWindow) return;
+  switch (layer) {
+    case 'front':
+      mainWindow.setAlwaysOnTop(true, 'screen-saver');
+      break;
+    case 'normal':
+      mainWindow.setAlwaysOnTop(false);
+      break;
+    case 'back':
+      mainWindow.setAlwaysOnTop(false);
+      mainWindow.blur();
+      if (process.platform === 'darwin') {
+        mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: false });
+      }
+      break;
+  }
+}
+
+function applyPaused(paused: boolean) {
+  if (!mainWindow) return;
+  if (paused) {
+    mainWindow.hide();
+  } else {
+    mainWindow.show();
+  }
+  refreshTray();
 }
 
 function createWindow() {
@@ -39,7 +68,7 @@ function createWindow() {
     icon: APP_ICON,
     frame: false,
     transparent: true,
-    alwaysOnTop: settings.alwaysOnTop,
+    alwaysOnTop: settings.windowLayer === 'front',
     skipTaskbar: true,
     resizable: false,
     movable: false,
@@ -55,11 +84,8 @@ function createWindow() {
   });
 
   mainWindow.setIgnoreMouseEvents(true, { forward: true });
-  if (settings.alwaysOnTop) {
-    mainWindow.setAlwaysOnTop(true, 'screen-saver');
-  }
+  applyWindowLayer(settings.windowLayer);
 
-  // For local Xvfb testing: skip click-through if env var is set.
   if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') {
     mainWindow.setIgnoreMouseEvents(false);
   }
@@ -71,7 +97,7 @@ function createWindow() {
   }
 
   mainWindow.once('ready-to-show', () => {
-    mainWindow?.show();
+    if (!settingsStore.get().paused) mainWindow?.show();
   });
 
   mainWindow.on('closed', () => {
@@ -79,22 +105,75 @@ function createWindow() {
   });
 }
 
-function createTray() {
-  let icon = nativeImage.createFromPath(TRAY_ICON);
-  if (icon.isEmpty()) {
-    icon = nativeImage.createEmpty();
-  } else if (process.platform === 'darwin') {
-    // 16px is the standard menu-bar size on macOS.
-    icon = icon.resize({ width: 16, height: 16 });
-  }
-  tray = new Tray(icon);
-  tray.setToolTip('Cat House');
+function loadTrayIcon(paused: boolean): NativeImage {
+  const file = paused ? TRAY_ICON_PAUSED : TRAY_ICON;
+  let icon = nativeImage.createFromPath(file);
+  if (icon.isEmpty()) icon = nativeImage.createFromPath(TRAY_ICON);
+  if (icon.isEmpty()) return nativeImage.createEmpty();
+  if (process.platform === 'darwin') icon = icon.resize({ width: 16, height: 16 });
+  return icon;
+}
+
+function refreshTray() {
+  if (!tray) return;
+  const settings = settingsStore.get();
+  tray.setImage(loadTrayIcon(settings.paused));
+  tray.setToolTip(settings.paused ? '고양이 멈춤 (잠시 꺼둠)' : 'Cat House');
+
+  const checked = (value: string, current: string) => value === current;
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Show Cat', click: () => mainWindow?.show() },
-    { label: 'Hide Cat', click: () => mainWindow?.hide() },
+    {
+      label: settings.paused ? '다시 켜기' : '잠깐 끄기',
+      click: () => {
+        const next = !settingsStore.get().paused;
+        settingsStore.update({ paused: next });
+        applyPaused(next);
+      },
+    },
     { type: 'separator' },
-    { label: 'Quit', click: () => app.quit() },
+    {
+      label: '화면 위치',
+      submenu: [
+        {
+          label: '맨 앞',
+          type: 'radio',
+          checked: checked('front', settings.windowLayer),
+          click: () => updateLayer('front'),
+        },
+        {
+          label: '보통',
+          type: 'radio',
+          checked: checked('normal', settings.windowLayer),
+          click: () => updateLayer('normal'),
+        },
+        {
+          label: '맨 뒤',
+          type: 'radio',
+          checked: checked('back', settings.windowLayer),
+          click: () => updateLayer('back'),
+        },
+      ],
+    },
+    { type: 'separator' },
+    { label: '종료', click: () => app.quit() },
   ]));
+}
+
+function updateLayer(layer: Settings['windowLayer']) {
+  settingsStore.update({ windowLayer: layer });
+  applyWindowLayer(layer);
+  refreshTray();
+}
+
+function createTray() {
+  tray = new Tray(loadTrayIcon(settingsStore.get().paused));
+  // Left-click toggles pause on macOS/linux; on win32 left-click shows menu by default.
+  tray.on('click', () => {
+    const next = !settingsStore.get().paused;
+    settingsStore.update({ paused: next });
+    applyPaused(next);
+  });
+  refreshTray();
 }
 
 function setDockIcon() {
@@ -109,14 +188,17 @@ function registerIpc() {
 
   ipcMain.handle('settings:set', (_e, partial: Partial<Settings>) => {
     const next = settingsStore.update(partial);
-    if ('alwaysOnTop' in partial && mainWindow) {
-      mainWindow.setAlwaysOnTop(next.alwaysOnTop, next.alwaysOnTop ? 'screen-saver' : 'normal');
-    }
+    if ('windowLayer' in partial) applyWindowLayer(next.windowLayer);
+    if ('paused' in partial) applyPaused(next.paused);
+    refreshTray();
     return next;
   });
 
   ipcMain.handle('settings:reset', () => {
     settingsStore.set(DEFAULT_SETTINGS);
+    applyWindowLayer(DEFAULT_SETTINGS.windowLayer);
+    applyPaused(DEFAULT_SETTINGS.paused);
+    refreshTray();
     return DEFAULT_SETTINGS;
   });
 
@@ -144,20 +226,6 @@ function registerIpc() {
   ipcMain.on('app:quit', () => app.quit());
   ipcMain.on('window:hide', () => mainWindow?.hide());
   ipcMain.on('window:show', () => mainWindow?.show());
-
-  ipcMain.on('window:focus-mode', (_e, enabled: boolean) => {
-    if (!mainWindow) return;
-    if (enabled) {
-      mainWindow.setAlwaysOnTop(false);
-      mainWindow.blur();
-      if (process.platform === 'darwin') {
-        mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: false });
-      }
-    } else {
-      const aot = settingsStore.get().alwaysOnTop;
-      mainWindow.setAlwaysOnTop(aot, aot ? 'screen-saver' : 'normal');
-    }
-  });
 }
 
 app.whenReady().then(() => {
