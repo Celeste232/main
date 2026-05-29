@@ -94,18 +94,27 @@ export function Cat() {
       style={{
         left: cat.x,
         top: cat.y,
-        transform: `scaleX(${cat.facing === 'left' ? -1 : 1})`,
         cursor: 'grab',
       }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
-      {frameUrl ? (
-        <img src={frameUrl} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
-      ) : (
-        <CatSvg action={cat.action} frame={frame} />
-      )}
+      {/* Only the sprite itself flips with facing — the speech bubble
+          must stay readable. */}
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          transform: `scaleX(${cat.facing === 'left' ? -1 : 1})`,
+        }}
+      >
+        {frameUrl ? (
+          <img src={frameUrl} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
+        ) : (
+          <CatSvg action={cat.action} frame={frame} />
+        )}
+      </div>
       {settings?.showSpeechBubble && cat.message && (
         <div className="speech-bubble">{cat.message}</div>
       )}
