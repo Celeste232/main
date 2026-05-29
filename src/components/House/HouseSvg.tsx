@@ -45,11 +45,30 @@ export function HouseSvg() {
         strokeWidth={sw}
         strokeLinejoin="round"
       />
-      {/* Cat icon above door (paw print style) */}
+      {/* Doodle fish nameplate above the door */}
       <g transform="translate(60 64)">
-        <ellipse cx="0" cy="0" rx="9" ry="7" fill={fill} stroke={stroke} strokeWidth={sw} />
-        <path d="M-7 -6 L-9 -10 L-5 -10 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-        <path d="M7 -6 L9 -10 L5 -10 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        {/* Body */}
+        <path
+          d="M-10 0 Q-6 -6 2 -6 Q10 -6 12 0 Q10 6 2 6 Q-6 6 -10 0 Z"
+          fill={fill}
+          stroke={stroke}
+          strokeWidth={sw}
+          strokeLinejoin="round"
+        />
+        {/* Tail */}
+        <path
+          d="M12 0 L18 -5 L18 5 Z"
+          fill={fill}
+          stroke={stroke}
+          strokeWidth={sw}
+          strokeLinejoin="round"
+        />
+        {/* Eye */}
+        <circle cx="-3" cy="-1" r="1.2" fill={stroke} />
+        {/* Smile */}
+        <path d="M-7 2 Q-5 4 -3 2" stroke={stroke} strokeWidth={1.2} fill="none" strokeLinecap="round" />
+        {/* Gill */}
+        <path d="M5 -3 Q3 0 5 3" stroke={stroke} strokeWidth={1.2} fill="none" strokeLinecap="round" />
       </g>
     </svg>
   );

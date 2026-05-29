@@ -31,8 +31,10 @@ export function House({ onCall, onDragStart, onDragStep }: HouseProps) {
       <HouseSvg />
       <button
         className="house-roof-button interactive"
-        onPointerDown={(e) => e.stopPropagation()}
-        onClick={(e) => {
+        onPointerDown={(e) => {
+          e.stopPropagation();
+        }}
+        onPointerUp={(e) => {
           e.stopPropagation();
           toggleSettings();
         }}
