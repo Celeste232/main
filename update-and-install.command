@@ -80,15 +80,27 @@ if [ -d "/Applications/CatHouse.app" ]; then
   rm -rf "/Applications/CatHouse.app"
 fi
 
-# 6. Mount, copy, unmount
+# 6. Mount, copy, unmount.
+#    hdiutil's tabular output uses TAB separators; the last field of a row
+#    that contains a /Volumes/ path is the mount point. We drop -quiet so we
+#    can actually parse the output.
 echo ""
 echo "[6/7] Mounting dmg and copying app"
-MOUNT_OUTPUT="$(hdiutil attach -nobrowse -quiet "$DMG_PATH")"
-MOUNT_POINT="$(echo "$MOUNT_OUTPUT" | tail -n1 | awk '{ for (i=3; i<=NF; i++) printf "%s ", $i; print "" }' | sed 's/ *$//')"
-if [ ! -d "$MOUNT_POINT" ]; then
-  echo "Failed to mount $DMG_PATH"
+MOUNT_LOG="$(mktemp)"
+if ! hdiutil attach -nobrowse -readonly "$DMG_PATH" > "$MOUNT_LOG" 2>&1; then
+  echo "hdiutil attach failed:"
+  cat "$MOUNT_LOG"
+  rm -f "$MOUNT_LOG"
   exit 1
 fi
+MOUNT_POINT="$(awk -F'\t' '/\/Volumes\// { gsub(/[[:space:]]+$/, "", $NF); print $NF }' "$MOUNT_LOG" | tail -n1)"
+rm -f "$MOUNT_LOG"
+if [ -z "$MOUNT_POINT" ] || [ ! -d "$MOUNT_POINT" ]; then
+  echo "Could not find /Volumes mount point in hdiutil output."
+  hdiutil info
+  exit 1
+fi
+echo "    mounted at: $MOUNT_POINT"
 APP_IN_DMG="$(ls -d "$MOUNT_POINT"/*.app 2>/dev/null | head -n1)"
 if [ -z "$APP_IN_DMG" ]; then
   hdiutil detach "$MOUNT_POINT" -quiet || true
