@@ -71,14 +71,20 @@ if [ -z "$DMG_PATH" ]; then
 fi
 echo "    using: $DMG_PATH"
 
-# 5. Quit any running MeowMode and remove existing install
+# 5. Quit any running app and remove existing install.
+#    productName has a space ("Meow Mode") so the .app gets the space too.
 echo ""
 echo "[5/7] Quitting and removing old install"
+osascript -e 'tell application "Meow Mode" to quit' 2>/dev/null || true
+# Also try the old name, in case the user is upgrading from CatHouse
+osascript -e 'tell application "CatHouse" to quit' 2>/dev/null || true
 osascript -e 'tell application "MeowMode" to quit' 2>/dev/null || true
 sleep 1
-if [ -d "/Applications/MeowMode.app" ]; then
-  rm -rf "/Applications/MeowMode.app"
-fi
+for OLD in "/Applications/Meow Mode.app" "/Applications/MeowMode.app" "/Applications/CatHouse.app"; do
+  if [ -d "$OLD" ]; then
+    rm -rf "$OLD"
+  fi
+done
 
 # 6. Mount, copy, unmount.
 #    hdiutil's tabular output uses TAB separators; the last field of a row
@@ -110,16 +116,24 @@ fi
 cp -R "$APP_IN_DMG" /Applications/
 hdiutil detach "$MOUNT_POINT" -quiet
 
+# Resolve the actual installed app path (handles space in productName).
+INSTALLED_APP="$(ls -td /Applications/*.app 2>/dev/null | grep -Ei '/(Meow Mode|MeowMode|CatHouse)\.app$' | head -n1)"
+if [ -z "$INSTALLED_APP" ] || [ ! -d "$INSTALLED_APP" ]; then
+  echo "Couldn't find the installed .app inside /Applications. Open it manually."
+  exit 1
+fi
+echo "    installed at: $INSTALLED_APP"
+
 # 7. Strip quarantine, refresh icon cache, launch
 echo ""
 echo "[7/7] Stripping quarantine, refreshing icon cache, launching"
-xattr -dr com.apple.quarantine /Applications/MeowMode.app 2>/dev/null || true
+xattr -dr com.apple.quarantine "$INSTALLED_APP" 2>/dev/null || true
 # Force Finder/Dock to drop their cached old icon so the new one shows up.
-touch /Applications/MeowMode.app
+touch "$INSTALLED_APP"
 killall Dock 2>/dev/null || true
 killall Finder 2>/dev/null || true
 sleep 1
-open /Applications/MeowMode.app
+open "$INSTALLED_APP"
 
 echo ""
 echo "─── Done. Meow Mode is running. ─────────────────────────────────"
