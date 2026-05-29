@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAppStore, type CatAction } from '../state/useAppStore';
+import { getT } from '../i18n/strings';
 
 const ACTION_DURATIONS: Record<CatAction, [number, number]> = {
   idle: [3000, 6000],
@@ -210,18 +211,19 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       const c = useAppStore.getState().cat;
       if (c.action !== 'walking') return;
       const roll = Math.random();
+      const t = getT(settings?.language ?? 'ko');
       if (roll < 0.12) {
         // Full near-fall sequence
         target.current = null;
-        setCat({ action: 'slip', message: '어어!' });
+        setCat({ action: 'slip', message: t.msgUhOh });
         setTimeout(() => {
           if (useAppStore.getState().cat.action === 'slip') {
-            setCat({ action: 'dangle', message: '!?' });
+            setCat({ action: 'dangle', message: t.msgWhat });
           }
         }, 900);
         setTimeout(() => {
           if (useAppStore.getState().cat.action === 'dangle') {
-            setCat({ action: 'climb', message: '으샤!' });
+            setCat({ action: 'climb', message: t.msgHeave });
           }
         }, 2800);
         setTimeout(() => {
@@ -231,7 +233,7 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       } else if (roll < 0.22) {
         // Just a slip
         target.current = null;
-        setCat({ action: 'slip', message: '어어!' });
+        setCat({ action: 'slip', message: t.msgUhOh });
         setTimeout(() => setCat({ message: null }), 1200);
       }
     }, 1500 + Math.random() * 2500);
@@ -289,7 +291,8 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
         isEating ? { foodLevel: next, affinity } : { waterLevel: next, affinity },
       );
       if (next <= 0) {
-        setCat({ action: 'happy', message: '맛있어!' });
+        const t = getT(useAppStore.getState().settings?.language ?? 'ko');
+        setCat({ action: 'happy', message: t.msgYum });
         setTimeout(() => setCat({ message: null }), 1200);
       }
     }, 600);
@@ -371,16 +374,17 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       const c = useAppStore.getState().cat;
       const s = useAppStore.getState().settings;
       if (!s || c.locked === 'held' || c.message) return;
+      const t = getT(s.language ?? 'ko');
       const name = s.catName || '나비';
       const phrases = [
-        `${name}랑 놀자!`,
-        '흥',
-        '싫음 말고',
-        '갈게',
-        '야옹',
-        '심심해',
-        '낮잠 잘래',
-        '쳐다보지 마',
+        t.msgPlayWith(name),
+        t.msgHmph,
+        t.msgWhatever,
+        t.msgGoing,
+        t.msgMeow,
+        t.msgBored,
+        t.msgNap,
+        t.msgDontStare,
       ];
       const phrase = phrases[Math.floor(Math.random() * phrases.length)];
       setCat({ message: phrase });
@@ -405,19 +409,20 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       const s = useAppStore.getState().settings;
       const c = useAppStore.getState().cat;
       if (!s || c.message || c.locked === 'held') return;
+      const t = getT(s.language ?? 'ko');
       if ((s.foodLevel ?? 1) <= 0.05 && Math.random() < 0.6) {
-        setCat({ message: '밥줘!' });
+        setCat({ message: t.msgFeedMe });
         setTimeout(() => {
           const cur = useAppStore.getState().cat;
-          if (cur.message === '밥줘!') setCat({ message: null });
+          if (cur.message === t.msgFeedMe) setCat({ message: null });
         }, 2200);
         return;
       }
       if ((s.waterLevel ?? 1) <= 0.05 && Math.random() < 0.6) {
-        setCat({ message: '물 없어!' });
+        setCat({ message: t.msgNoWater });
         setTimeout(() => {
           const cur = useAppStore.getState().cat;
-          if (cur.message === '물 없어!') setCat({ message: null });
+          if (cur.message === t.msgNoWater) setCat({ message: null });
         }, 2200);
       }
     }, 12000);
@@ -425,13 +430,15 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
   }, [settings?.showSpeechBubble, settings?.hideCat, settings?.paused, setCat]);
 
   const callToHouse = () => {
+    const t = getT(settings?.language ?? 'ko');
     target.current = { x: housePos.x + 20, y: housePos.y + 40 };
-    setCat({ action: 'walking', message: '갈게~', locked: null });
+    setCat({ action: 'walking', message: t.msgComing, locked: null });
     setTimeout(() => setCat({ message: null }), 1500);
   };
 
   const startle = () => {
-    setCat({ action: 'startled', message: '엇!' });
+    const t = getT(settings?.language ?? 'ko');
+    setCat({ action: 'startled', message: t.msgWhoops });
     setTimeout(() => setCat({ message: null }), 1200);
   };
 
@@ -458,7 +465,8 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       window.api.flashToFront();
     }
     const original = useAppStore.getState().cat.action;
-    setCat({ action: 'jumping', message: '여기야~!' });
+    const t = getT(settings?.language ?? 'ko');
+    setCat({ action: 'jumping', message: t.msgFoundMe });
     setTimeout(() => setCat({ message: null }), 1500);
     // Cycle through jumping 3 times for visibility, then resume.
     setTimeout(() => {

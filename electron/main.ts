@@ -3,6 +3,7 @@ import type { NativeImage } from 'electron';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { settingsStore, DEFAULT_SETTINGS, type Settings } from './store.js';
+import { getTrayStrings } from './i18n.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -117,13 +118,14 @@ function loadTrayIcon(paused: boolean): NativeImage {
 function refreshTray() {
   if (!tray) return;
   const settings = settingsStore.get();
+  const t = getTrayStrings(settings.language);
   tray.setImage(loadTrayIcon(settings.paused));
-  tray.setToolTip(settings.paused ? '고양이 멈춤 (잠시 꺼둠)' : 'Cat House');
+  tray.setToolTip(settings.paused ? t.tooltipPaused : t.tooltip);
 
   const checked = (value: string, current: string) => value === current;
   tray.setContextMenu(Menu.buildFromTemplate([
     {
-      label: settings.paused ? '다시 켜기' : '잠깐 끄기',
+      label: settings.paused ? t.unpause : t.pause,
       click: () => {
         const next = !settingsStore.get().paused;
         settingsStore.update({ paused: next });
@@ -131,7 +133,7 @@ function refreshTray() {
       },
     },
     {
-      label: '고양이 찾기',
+      label: t.findCat,
       enabled: !settings.paused,
       click: () => {
         if (!mainWindow) return;
@@ -149,22 +151,22 @@ function refreshTray() {
     },
     { type: 'separator' },
     {
-      label: '화면 위치',
+      label: t.layer,
       submenu: [
         {
-          label: '맨 앞',
+          label: t.layerFront,
           type: 'radio',
           checked: checked('front', settings.windowLayer),
           click: () => updateLayer('front'),
         },
         {
-          label: '보통',
+          label: t.layerNormal,
           type: 'radio',
           checked: checked('normal', settings.windowLayer),
           click: () => updateLayer('normal'),
         },
         {
-          label: '맨 뒤',
+          label: t.layerBack,
           type: 'radio',
           checked: checked('back', settings.windowLayer),
           click: () => updateLayer('back'),
@@ -172,7 +174,7 @@ function refreshTray() {
       ],
     },
     { type: 'separator' },
-    { label: '종료', click: () => app.quit() },
+    { label: t.quit, click: () => app.quit() },
   ]));
 }
 

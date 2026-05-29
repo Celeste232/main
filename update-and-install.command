@@ -110,10 +110,15 @@ fi
 cp -R "$APP_IN_DMG" /Applications/
 hdiutil detach "$MOUNT_POINT" -quiet
 
-# 7. Strip quarantine + launch
+# 7. Strip quarantine, refresh icon cache, launch
 echo ""
-echo "[7/7] Stripping quarantine and launching"
+echo "[7/7] Stripping quarantine, refreshing icon cache, launching"
 xattr -dr com.apple.quarantine /Applications/CatHouse.app 2>/dev/null || true
+# Force Finder/Dock to drop their cached old icon so the new one shows up.
+touch /Applications/CatHouse.app
+killall Dock 2>/dev/null || true
+killall Finder 2>/dev/null || true
+sleep 1
 open /Applications/CatHouse.app
 
 echo ""

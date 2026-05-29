@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../../state/useAppStore';
 import { FRAME_SPECS, getFrames } from './catFrames';
 import { CatSvg } from './CatSvg';
+import { useT } from '../../i18n/strings';
 
 export function Cat() {
   const cat = useAppStore((s) => s.cat);
   const settings = useAppStore((s) => s.settings);
   const setCat = useAppStore((s) => s.setCat);
+  const t = useT();
   const [frame, setFrame] = useState(0);
   const dragState = useRef<{
     startX: number;
@@ -70,7 +72,7 @@ export function Cat() {
       } catch {
         // capture may have already been released
       }
-      setCat({ action: 'startled', locked: null, message: '내려놔!' });
+      setCat({ action: 'startled', locked: null, message: t.msgPutDown });
       setTimeout(() => setCat({ message: null }), 1200);
       return;
     }
