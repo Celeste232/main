@@ -24,7 +24,7 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   catName: '나비',
-  catSkin: 'png',
+  catSkin: 'svg-doodle',
   activityLevel: 'normal',
   showSpeechBubble: true,
   launchAtStartup: false,

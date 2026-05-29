@@ -17,7 +17,14 @@ export function FoodBowl({ x, y }: FoodBowlProps) {
     <div
       className="bowl bowl-sprite interactive"
       style={{ left: x, top: y }}
-      onClick={refill}
+      onPointerUp={(e) => {
+        e.stopPropagation();
+        refill();
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        refill();
+      }}
       title="밥 채우기"
     >
       <BowlSvg level={level} variant="food" />

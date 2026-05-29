@@ -29,6 +29,7 @@ const ACTION_DURATIONS: Record<CatAction, [number, number]> = {
   pounce: [800, 1500],
   roll: [1500, 2500],
   shake: [600, 1200],
+  slip: [900, 1500],
 };
 
 // Activity-level → weighted action pool. Repeated entries = higher weight.
@@ -178,6 +179,24 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
       if (timer.current) clearTimeout(timer.current);
     };
   }, [settings, displayBounds, setCat, eatSpot.x, eatSpot.y, drinkSpot.x, drinkSpot.y, cat.locked]);
+
+  // Random slip while walking on top of windows — fakes a near-fall at the
+  // edge of an invisible app window. Only triggers in 'front' mode since the
+  // cat is logically on top of other apps then.
+  useEffect(() => {
+    if (cat.action !== 'walking') return;
+    if (settings?.windowLayer !== 'front') return;
+    if (cat.locked) return;
+    const id = setTimeout(() => {
+      if (useAppStore.getState().cat.action !== 'walking') return;
+      if (Math.random() < 0.18) {
+        target.current = null;
+        setCat({ action: 'slip', message: '어어!' });
+        setTimeout(() => setCat({ message: null }), 1200);
+      }
+    }, 1500 + Math.random() * 2500);
+    return () => clearTimeout(id);
+  }, [cat.action, cat.locked, settings?.windowLayer, setCat]);
 
   // Walking — move toward current target, then trigger eat/drink if at a bowl.
   useEffect(() => {

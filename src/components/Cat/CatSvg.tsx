@@ -39,7 +39,44 @@ export function CatSvg({ action, frame }: CatSvgProps) {
   if (action === 'pounce') return <PounceCat frame={frame} />;
   if (action === 'roll') return <RollCat frame={frame} />;
   if (action === 'shake') return <ShakeCat frame={frame} />;
+  if (action === 'slip') return <SlipCat frame={frame} />;
   return <SittingCat frame={frame} />;
+}
+
+function SlipCat({ frame }: { frame: number }) {
+  // 어어어! — body sliding, paws flailing, recover. Mirrored so it faces right.
+  const tilt = [12, -8, 0][frame] ?? 0;
+  const dx = [0, 6, 2][frame] ?? 0;
+  return (
+    <svg viewBox="0 0 140 90" width="100%" height="100%">
+      <g transform="translate(140 0) scale(-1 1)">
+        <g transform={`translate(${dx} 0) rotate(${tilt} 70 60)`}>
+          {/* Ears */}
+          <path d="M22 28 L28 18 L36 28 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          <path d="M40 28 L46 18 L54 28 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          {/* Head */}
+          <ellipse cx="38" cy="38" rx="18" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
+          {/* Body */}
+          <ellipse cx="78" cy="52" rx="32" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+          {/* Wide surprised eyes */}
+          <circle cx="32" cy="38" r="2.5" fill={stroke} />
+          <circle cx="44" cy="38" r="2.5" fill={stroke} />
+          {/* Open mouth */}
+          <ellipse cx="38" cy="46" rx="3" ry="2.5" fill="#f08aa6" stroke={stroke} strokeWidth={1.4} />
+          {/* Tail straight up in panic */}
+          <path d="M108 50 Q116 30 110 14" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+          {/* Paws flailing — splayed legs */}
+          <line x1="56" y1="64" x2={50 + frame * 2} y2={78 + frame * 2} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+          <line x1="68" y1="64" x2={64 - frame * 2} y2={80} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+          <line x1="88" y1="64" x2={92 + frame} y2={80} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+          <line x1="100" y1="64" x2={106} y2={78 - frame} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+        </g>
+      </g>
+      {/* Skid lines under the back foot */}
+      <path d="M30 84 L50 84 M58 86 L78 86" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+      <text x="86" y="20" fontSize="11" fill={stroke}>어어!</text>
+    </svg>
+  );
 }
 
 function SneezeCat({ frame }: { frame: number }) {
