@@ -1,341 +1,358 @@
-# Meow Mode — 인수인계서 (로컬 Claude용)
+# Meow Mode — 인수인계서
 
-이 문서는 클라우드에서 작업하던 Claude가 본인 Mac에서 돌아가는 로컬 Claude에게 프로젝트를 넘기는 인수인계서. 처음 보는 사람도 이거 하나만 읽으면 바로 이어갈 수 있게 작성됨.
+이 문서를 처음 보는 Claude(또는 사람)가 **이거 하나만 읽고도 실수 없이** 작업을 이어갈 수 있게 작성됨.
 
-마지막 업데이트: 판매 준비 시작 시점 (브랜치 `claude/meow-mode-interactions-pFJxU`)
-
----
-
-## ⚡ 최근 변경 (이전 인수인계 이후 추가됨)
-
-- 그릇 클릭이 안 채워지던 버그 fix — 고양이 위에 그릇이 있을 때 클릭 흡수되던 문제 (Cat.tsx에서 클릭은 forward, 드래그만 capture)
-- `windowLayer` 설정 추가 (`front` / `normal` / `back`) — `alwaysOnTop`, `focusMode` 둘 다 deprecated. windowLayer로 통합
-- `paused` 설정 추가 — 잠깐 끄기. 윈도우 hide. 트레이 아이콘은 유지
-- 트레이 메뉴 개편: 잠깐 끄기/다시 켜기 + 화면 위치 라디오 (맨 앞/보통/맨 뒤) + 종료. 좌클릭으로 pause 토글
-- `build/tray-icon-paused.png` — Pause 상태에서 보여지는 'z' 마크 트레이 아이콘
-- 새 액션 5개: `happy`, `meow`, `flop`, `sparkle`, `caught`. ACTIVITY_BIAS 가중치 다 들어감. 먹기 끝나면 `happy` 자세로 잠깐 전환
-- 라이선스(MIT) + `LICENSE` 파일 + `package.json` 메타데이터 정돈 (`author`, `homepage`, `repository`, `bugs`, electron-builder `publish: github`)
-- `docs/SKIN_PACKS.md` — 추가 판매용 스킨팩 시스템 설계도 (구현은 미정)
-
-**사용자 컨텍스트 업데이트**:
-- 사용자가 **GitHub에 올려서 판매할 계획**. 발그림 SVG 컨셉을 메인 셀링 포인트로 봄
-- 다음 우선순위:
-  1. (실행 중) 발그림 다양성 늘리기 ← 진행 중. 5개 추가됨, 더 필요할 수 있음
-  2. 스킨팩 시스템 실제 구현 (지금은 docs/SKIN_PACKS.md 로 설계만)
-  3. 메타/마케팅 자료 (#4 — 다 만들고 나서)
-  4. 캐릭터 시트 통합 (사용자가 시트 PNG 푸시하면 슬라이서 돌리기)
+**마지막 업데이트**: 2026-05-30. 브랜치 `claude/cat-house-interactions-pFJxU`, 버전 0.1.2 (빌드 트리거 대기 중).
 
 ---
 
----
+## 0. TL;DR — 5분에 파악하기
 
-## 0. 빨리 파악해야 할 것
-
-- **프로젝트**: 데스크탑 위에 떠있는 투명 오버레이 윈도우에 고양이 펫 + 집 + 밥/물그릇이 떠있는 macOS 앱 (Electron + React + TypeScript)
-- **사용자**: "wony" / GitHub `Celeste232`. Mac mini (M-series 추정). **한국어 반말** 사용. 직설적·짧은 메시지 선호. 농담 섞임. ㅋㅋ 같은 문구 자연스럽게 사용함
-- **저장소**: `https://github.com/Celeste232/main` 의 `claude/meow-mode-interactions-pFJxU` 브랜치만 사용. main에는 절대 직접 푸시 금지
-- **사용자가 터미널 싫어함**: 가능한 모든 작업을 더블클릭 가능한 `.command` 파일로 자동화. 새 기능 추가하면 빌드 흐름이 깨지지 않게 신경 써야 함
-- **사용자 의사 결정 패턴**: 빠르게 결정함. "둘 중 뭐 할까요?"보단 "A 추천하는데 ~한 트레이드오프 있음. 이걸로 가요?" 식이 잘 맞음
-
----
-
-## 1. 사용자 컨텍스트 & 말투
-
-### 사용자가 자주 쓰는 표현
-- "야" — 호칭. 화난 거 아님, 그냥 시작 단어
-- "병맛" — 어정쩡하게 웃긴 것. 의도치 않게 웃긴 결과물을 좋아함
-- "식빵 굽기" — 고양이가 발 접고 앉은 자세 (loaf)
-- "퍼져있기" — 누워서 늘어진 자세 (sprawl)
-- "지맘대로" — 패턴 없는 자유로운 행동
-
-### 사용자 톤에 맞춰 응답하기
-- **답은 짧게.** 헤더, 표, 긴 설명 X. 한 두 문장으로 끝낼 것
-- **이모지 X.** 사용자가 명시적으로 요청 안 하면 쓰지 마
-- **반말로.** "~할게요", "~됐어요" 정도 톤. 너무 어색한 존댓말은 안 맞음
-- **에러나 한계 솔직하게.** "이건 못함" 하고 대안 제시. 변명·둘러대기 싫어함
-- **결과물 먼저, 설명은 나중.** 길게 설명하다 결과 보여주면 짜증냄
-
-### 절대 하지 말 것
-- 병맛 SVG 고양이를 "더 예쁘게" 다시 그리거나 삭제하기 → 보존이 의도됨 (`docs/cat-svg-blueprint.json`에 명세 박혀있음)
-- main 브랜치에 푸시
-- 사용자가 명시적으로 시키지 않은 큰 리팩터링
-- 간단한 작업도 거대한 todo로 부풀리기
-
----
-
-## 2. 현재 상태 (작동/미작동/대기)
-
-### ✅ 작동하는 것
-
-| 기능 | 어디서 |
+| 항목 | 값 |
 |---|---|
-| 투명 오버레이 윈도우 (왼쪽 메인 모니터 자동 선택) | `electron/main.ts` |
-| 집 드래그 = 위치 이동 / 단순 클릭 = 고양이 부르기 | `src/components/House/House.tsx` |
-| 지붕 톱니 = 설정 메뉴 | 같은 파일 |
-| 밥/물그릇 클릭 = 채우기 | `src/components/Bowls/` |
-| 그릇이 비면 0레벨 → 가득 1레벨 시각화 | `BowlSvg.tsx` |
-| 고양이 행동 상태머신 (15+ 액션) | `src/hooks/useCatBehavior.ts` |
-| 활동량 (조용함/보통/활발함) 가중치 | 같은 파일의 `ACTIVITY_BIAS` |
-| 같은 행동 연속 안 뽑음 (`lastAction.current`) | 같은 파일 |
-| 식빵 굽기 + 퍼져있기 자세 추가 + 긴 휴식 시간 | 같은 파일 + `CatSvg.tsx` |
-| 돌아다닐 영역 설정 (전체 / 집 근처 350px) | 같은 파일의 `pickWanderTarget` |
-| 집중 모드 (Cmd 윈도우 뒤로 보내기 + alwaysOnTop 해제) | `electron/main.ts` IPC `window:focus-mode` |
-| 집에 넣기 / 집에서 꺼내기 (cat.locked) | `useCatBehavior.ts` |
-| 마우스 가까이 오면 고양이가 쳐다봄 (200px 안), 80px 안에 오래면 호기심 자세 | 같은 파일 |
-| 고양이 직접 드래그 (held 자세) | `src/components/Cat/Cat.tsx` |
-| 자거나 집안에 있을 때만 집 따라 이동 | `src/App.tsx` `onHouseDragStep` |
-| 호버 패스스루 (마우스가 인터랙티브 위에만 클릭 활성화) | `src/hooks/useHoverPassthrough.ts` |
-| 위치/설정/친밀도 영속화 | `electron/store.ts` (electron-store) |
-| Oneko 픽셀 고양이 아이콘 (앱/Dock/트레이) | `build/icon.icns` + main.ts |
-| `npm run slice` — 시트 PNG → 액션별 프레임 분배 | `scripts/slice-frames.mjs` (sharp) |
-| 더블클릭 빌드+설치 스크립트 | `update-and-install.command` |
-| `catSkin` 토글 — PNG 우선 / 병맛 SVG 강제 | 설정 메뉴 |
-
-### ⚠️ 알려진 한계
-
-- **클라우드 환경 한계로 검증 못한 것들** — 이 항목들은 사용자 Mac에서 실제로 안 되면 우선순위:
-  - 진짜 macOS dmg 빌드 (Linux에선 dmg-license 못 깔아서 zip만 검증됨, dmg 자체는 macOS에선 정상 작동해야 함)
-  - macOS의 `app.dock.setIcon()` 실제 표시 여부
-  - 트레이 아이콘 메뉴바 표시 (linux Xvfb엔 트레이 없음)
-  - 마우스로 진짜 드래그 (xdotool 환경에서 클릭통과 토글 타이밍 문제로 검증 어려움. 코드는 맞음)
-- **Xvfb 환경 한정 시각 잔상**: 화면 우측에 흐릿한 그림자 보임. 실제 Mac엔 안 나타남 (컴포지터 문제)
-- **사이닝 안 함**: macOS 첫 실행 시 "확인되지 않은 개발자" 경고 → 우클릭 → 열기 한 번만
-
-### ⏳ 대기 중인 작업 (사용자가 원함)
-
-1. **캐릭터 시트 PNG 통합** — 가장 큰 미완료. 사용자가 ChatGPT로 만든 시트들을 갖고 있음 (대화창에 처음에 붙여줬지만 클라우드 환경엔 파일로 들어오지 않음). 사용자가 시트 PNG들을 `src/assets/reference/` 에 넣어야 진행 가능. 넣은 뒤:
-   - `src/assets/reference/layout.json` 작성 (좌표) — `layout.example.json` 참고
-   - `npm run slice` 실행 → `src/assets/cat/<액션>/<n>.png` 자동 생성
-   - 앱 자동 인식 (PNG가 있으면 SVG보다 우선)
-
-   **로컬 Claude는 본인 파일시스템 접근 가능하니까, 사용자 Downloads/Desktop에 시트가 있으면 본인이 슬라이서 돌려서 적용 가능.** Claude가 시트의 그리드 분석해서 layout.json까지 자동 작성하면 사용자 노력 ↓
-
-2. **Mac Dock 아이콘 검증** — 패키징된 .app 실행 시 Dock에 Oneko 아이콘 제대로 뜨는지
-
-3. **첫 실행 시 macOS 경고 우회** — 현재 `update-and-install.command` 가 `xattr -dr com.apple.quarantine` 으로 quarantine 플래그는 제거함. 그래도 첫 실행 시 우클릭 필요할 수 있음
-
-4. **소소한 UX 개선 후보 (사용자가 명시 요청한 건 아니지만 자연스러운 다음 스텝)**:
-   - 친밀도 시각화 (지금은 숫자만)
-   - 집 클릭(부르기) 했을 때 진행 표시
-   - 사운드 (config는 있는데 실제 재생 코드 없음)
+| 프로젝트 | Meow Mode — macOS 데스크탑 펫 (발그림 고양이) |
+| 사용자 | wony / GitHub `Celeste232` / 이메일 victoriayoon22@gmail.com |
+| 본 레포 | `https://github.com/Celeste232/main` |
+| 작업 브랜치 | `claude/cat-house-interactions-pFJxU` ← 여기에만 푸시. main 금지 |
+| 에셋 레포 | `https://github.com/Celeste232/meow-mode-assets` (사용자 직접 관리) |
+| 현재 릴리즈 | **v0.1.1 공개됨**. v0.1.2는 푸시됐고 빌드 트리거만 남음 |
+| 가격 | $3.49 USD, 평생 무료 업데이트 |
+| 작가명 | Celine Lee |
+| SNS 핸들 | @meowmode_app (계정 생성 전) |
+| 판매 채널 결정 | **옵션 B**: 깃허브 비공개로 + Gumroad 단독 |
+| 기술 스택 | Electron 33 + React 18 + TypeScript 5 + Vite 6 + zustand + electron-store |
+| 노드 버전 | 22 (CI 기준) |
+| productName | `Meow Mode` (공백 있음 → 설치 시 `Meow Mode.app`) |
+| appId | `com.celinelee.meowmode` |
 
 ---
 
-## 3. 아키텍처
+## 1. 사용자 컨텍스트 (절대 까먹지 말 것)
 
-### 파일 트리 (핵심만)
+### 말투
+- **한국어 반말**. 영어는 가급적 쓰지 마. 코드/UI 텍스트만 영어 OK
+- 답변은 **짧게**. 5줄 넘으면 거의 다 길어. 구체적인 step만 나열
+- "야" 로 시작하는 거 = 호칭. 화난 거 아님
+- "ㅋㅋ" / "ㅎㅎ" 자연스럽게 씀. 답변할 때 가끔 받아쳐도 됨
+
+### 기술 수준
+- **터미널 싫어함**. 모든 작업은 더블클릭 가능한 `.command` 파일로 자동화하거나, 깃허브 웹 UI 클릭 안내로 풀어야 함
+- 코드 못 읽음. "여기 이거 고치면 돼" 같은 설명 무의미. **그냥 고치고 결과 알려줘**
+- 깃허브 UI는 친숙. Run workflow 같은 건 클릭 가능. CLI(`git push`, `gh`)는 못 함
+- **레포 자동 푸시 권한 있음**. 깃에 푸시할 때 사용자에게 묻지 말고 그냥 push 해. Stop hook이 미커밋 변경사항 있으면 강제로 알려줌
+
+### 의사 결정 패턴
+- **빠르게 결정함**. "둘 중 뭐 할까요?" 보단 "A 추천. 이걸로 가요?" 식이 잘 맞음
+- 디테일 의사결정(폰트, 정확한 색, 픽셀 위치)은 사용자에게 묻기보다 **그냥 결정하고 결과 보여주기**. 별로면 사용자가 "별로야" 라고 함
+- 사용자가 "오케" / "오케이" / "고고" 하면 진행하라는 뜻
+- **사용자가 코드 도구를 들고 다른 Claude도 가끔 부른다**. 컨텍스트 충돌 가능 → 작업 시작 전 `git log`로 외부 커밋 확인
+
+### 자주 쓰는 표현
+- "병맛" — 어정쩡하게 웃긴 거. 의도하지 않게 웃긴 결과물을 좋아함. **이게 이 앱의 핵심 정체성**
+- "발그림" — 발로 그린 듯한 어설픈 그림체. **앱의 메인 셀링 포인트**
+- "식빵 굽기" = loaf 자세, "퍼져있기" = sprawl, "지맘대로" = 패턴 없는 자유로운 행동
+
+---
+
+## 2. 레포 구조
 
 ```
-electron/
-  main.ts                 메인 프로세스. 윈도우 생성, IPC 등록, 트레이, Dock 아이콘.
-                          왼쪽 메인 모니터 자동 선택 (`getLeftmostDisplay()`).
-                          CAT_HOUSE_DEBUG_NO_PASSTHROUGH=1 환경변수로 클릭통과 비활성화 (Xvfb 테스트용)
-  preload.ts              window.api 브리지 — IPC 호출 래퍼들
-  store.ts                electron-store 래퍼. Settings 타입 정의
-
-src/
-  main.tsx                React 진입점
-  App.tsx                 스테이지 조립. 집/그릇/고양이/설정 마운트.
-                          onHouseDragStart / onHouseDragStep — 드래그 시 고양이 반응 결정
-  index.css               전역 스타일. .stage는 pointer-events: none, .interactive만 auto
-  global.d.ts             window.api 타입
-
-  state/useAppStore.ts    zustand 글로벌 상태:
-                          - settings (영속화됨, electron-store에 저장)
-                          - cat (action, x/y, facing, message, locked)
-                          - housePos
-                          - settingsOpen
-                          - catActions (Cat 핸들 — putInHouse 등)
-
-  hooks/
-    useDraggable.ts       범용 드래그 훅. setPointerCapture를 e.currentTarget에 거는 게 중요
-                          (e.target은 SVG 자식이라 capture 끊김)
-    useHoverPassthrough.ts mousemove 마다 elementFromPoint로 .interactive 검사 →
-                          window.api.setIgnoreMouse(true/false) IPC
-    useCatBehavior.ts     고양이 행동 상태머신 (가장 큰 훅).
-                          - 행동 스케줄러 (lastAction 기억해서 같은 거 연속 안 뽑음)
-                          - 걷기 (target 향해 이동, dx>=0 → facing='right')
-                          - 먹기/마시기 (밥/물 그릇 위치까지 걸은 뒤 600ms마다 -0.05)
-                          - 마우스 추적 (play-cursor 액션, IPC로 cursor 위치 폴링)
-                          - 마우스 쳐다보기 (sitting/idle/loaf 등 정적 액션 중 200px 이내면 facing 변경)
-                          - callToHouse / putInHouse / releaseFromHouse 핸들 export
-
-  components/
-    Cat/Cat.tsx           cat 스프라이트 + 드래그 핸들러 (held 자세로 전환)
-    Cat/CatSvg.tsx        15+ 액션의 SVG 포즈. 측면 포즈는 mirror group으로 default-facing-right 보장
-    Cat/catFrames.ts      FRAME_SPECS 테이블 + import.meta.glob로 PNG 자동 로드
-    House/House.tsx       드래그 = 이동, 단순 클릭 = 부르기, 지붕 톱니 = 설정
-    House/HouseSvg.tsx    SVG 집
-    Bowls/FoodBowl.tsx    클릭 = 채우기. level state는 settings.foodLevel
-    Bowls/WaterBowl.tsx   동일 패턴
-    Bowls/BowlSvg.tsx     level에 따라 음식 알 개수 / 물 높이 변경
-    Settings/SettingsMenu.tsx  드롭다운/체크박스 UI
-
-build/
-  icon.icns               macOS 앱 아이콘 (Oneko 픽셀 고양이)
-  icon.png                Win/Linux + 런타임 BrowserWindow 아이콘 (512px)
-  tray-icon.png           트레이용 (32px → main.ts에서 16px로 다운사이즈)
-
-docs/
-  cat-svg-blueprint.json  병맛 SVG 명세서. 보존용
-  HANDOFF.md              이 문서
-
-scripts/
-  slice-frames.mjs        sharp 기반 시트 슬라이서
-
-update-and-install.command  Mac에서 더블클릭으로 git pull + build + 설치 + 실행
+/home/user/main/                      ← 본 작업 디렉토리 (Linux 환경)
+├── electron/                         메인 프로세스 (Node)
+│   ├── main.ts                       BrowserWindow, 트레이, IPC, 윈도우 레이어
+│   ├── preload.mjs.ts                contextBridge로 window.api 노출
+│   ├── store.ts                      electron-store 래퍼 + Settings 타입
+│   ├── i18n.ts                       트레이 메뉴 한/영/일/중
+│   └── tsconfig.json
+├── src/
+│   ├── components/
+│   │   ├── Cat/
+│   │   │   ├── Cat.tsx               드래그 + 스피치버블 + 스프라이트 렌더
+│   │   │   ├── CatSvg.tsx            손코딩 SVG (액션별 컴포넌트 ~25개)
+│   │   │   ├── catAssets.ts          ★ 외부 SVG 12개 매핑 (NEW)
+│   │   │   └── catFrames.ts          PNG 프레임 시트 슬라이스 (사용 안 함)
+│   │   ├── House/                    HouseSvg.tsx, House.tsx (드래그)
+│   │   ├── Bowl/                     FoodBowl.tsx, WaterBowl.tsx
+│   │   └── Settings/                 SettingsMenu.tsx (윷놀이판 UI)
+│   ├── hooks/
+│   │   ├── useCatBehavior.ts         ★ 상태머신 + 새로 추가된 playMeow
+│   │   ├── useDraggable.ts           e.currentTarget 사용 (e.target 금지)
+│   │   └── useHoverPassthrough.ts    ★ click-through 토글 (mousedown/focus 추가됨)
+│   ├── i18n/strings.ts               UI 텍스트 + 말풍선 문구 ko/en/ja/zh
+│   ├── state/useAppStore.ts          zustand store + CatAction 유니온 타입
+│   └── App.tsx
+├── public/sprites/svg/               ★ 외부 SVG 12개 (NEW)
+│   └── 01_tail_wag.svg ~ 12_love.svg
+├── build/                            아이콘 에셋 (전부 git tracked)
+│   ├── icon.png                      1024×1024 (실제 cat-icon.png 리사이즈)
+│   ├── icon.icns                     mac용 multi-size icns
+│   ├── icon-source.svg               (구버전, 더 이상 안 씀)
+│   ├── tray-icon.png
+│   └── tray-icon-paused.png
+├── docs/
+│   ├── HANDOFF.md                    ★ 지금 보고 있는 이 문서
+│   ├── manual-ko.md                  한국어 사용자 매뉴얼 (12섹션)
+│   ├── sales-copy.md                 한/영/일/중 판매 카피
+│   ├── social-copy.md                트위터/인스타/Discord 카피
+│   ├── SALES_CHECKLIST.md            ★ 사용자용 판매 등록 step-by-step
+│   ├── SKIN_PACKS.md                 향후 스킨팩 시스템 설계 (미구현)
+│   └── cat-svg-blueprint.json        SVG 청사진 (참고용)
+├── .github/workflows/release.yml     ★ macos-14 빌드 + draft release
+├── update-and-install.command        ★ 사용자가 더블클릭하는 업데이트 스크립트
+├── scripts/make-demo.sh              데모 GIF 녹화 스크립트 (사용자 실행)
+├── package.json                      productName "Meow Mode", appId 등
+└── package-lock.json                 ← 버전 bump 때마다 같이 업데이트 필수
 ```
 
-### IPC 채널 (`electron/main.ts` ↔ `electron/preload.ts`)
+---
 
-| Channel | 방향 | 용도 |
+## 3. 핵심 코드 흐름
+
+### 3.1 윈도우 / 입력
+- `electron/main.ts`: 투명 BrowserWindow, 가장 왼쪽 디스플레이에 full screen, `setIgnoreMouseEvents(true, { forward: true })`로 기본 click-through.
+- 렌더러의 `useHoverPassthrough` 훅이 `mousemove` + `mousedown` + window `focus` 들으면서 `.interactive` 요소 위에 있으면 IPC `window:set-ignore-mouse`로 click-through 끔. **mousedown/focus 추가는 최근 픽스. 다른 앱 갔다 와서 마우스가 버튼 위에 정지해 있어도 클릭 통하게 함.**
+- 메인 프로세스도 `mainWindow.on('focus')` / `on('show')` 에서 setIgnoreMouseEvents 재적용 (macOS Electron 버그 대응).
+- 디버깅 시 click-through 끄려면 `CAT_HOUSE_DEBUG_NO_PASSTHROUGH=1` 환경변수 (Xvfb + xdotool 테스트용).
+
+### 3.2 고양이 렌더 우선순위 (Cat.tsx)
+```
+1. settings.catSkin === 'svg-doodle' 이고 catAssets.ts에 매핑된 action 이면
+   → /sprites/svg/NN_xxx.svg 외부 SVG 로드 (자체 @keyframes 애니메이션)
+2. catSkin이 'png' 이면 → catFrames.ts의 PNG 시트
+3. 폴백 → CatSvg.tsx의 손코딩 SVG (액션별 함수)
+```
+
+**중요**: catAssets.ts에 매핑된 12개 액션은 외부 SVG로 자동 애니메이션. 매핑 안 된 액션(meow, sneeze, slip, dangle, climb, superman, pounce, roll, shake, grooming, stretching, yawning, caught, in-house, startled, held)은 CatSvg.tsx 사용.
+
+### 3.3 행동 상태 머신 (useCatBehavior.ts)
+- `ACTIVITY_BIAS`: calm/normal/energetic 별 가중치 액션 풀
+- `ACTION_DURATIONS`: 액션별 [min, max] ms
+- 매 cycle: 다음 액션 pick → 같은 액션 반복 회피 → walking이면 wander target 설정
+- **slip → dangle → climb** 시퀀스: windowLayer=front + walking 중에만 무작위 발동 (창 가장자리에서 미끄러지는 페이크)
+- 배고픔/목마름 nag (showSpeechBubble 켜져있을 때만)
+- **Random chatter**: 28초마다 22% 확률 (최근 18s→28s, 35%→22%로 줄임 — 사용자가 빈도 더 낮춰달라고 함)
+- **playMeow()**: 새로 추가. Web Audio API로 합성한 meow 소리. 액션이 `meow`로 바뀔 때 재생. 사운드 파일 없음. 볼륨은 settings.volume(0~1) 따라감
+
+### 3.4 IPC 채널 (electron/main.ts → preload → window.api)
+| 채널 | 방향 | 용도 |
 |---|---|---|
-| `settings:get` / `set` / `reset` | invoke | 설정 CRUD |
-| `window:set-ignore-mouse` | send | 호버 패스스루 토글 |
-| `display:get-bounds` | invoke | 왼쪽 모니터 bounds |
-| `cursor:get` | invoke | 전역 커서 좌표 (왼쪽 모니터 기준) |
-| `app:quit` / `window:hide` / `window:show` | send | 트레이 메뉴용 |
-| `window:focus-mode` | send | 집중 모드 (alwaysOnTop 해제 + blur) |
-
-### 주요 설계 결정 (이유 같이)
-
-- **투명 클릭통과 윈도우** + 호버 시에만 활성화. 데스크탑 다른 앱 사용 방해 X
-- **왼쪽 모니터 자동 선택**: 사용자가 멀티모니터에서 메인이 왼쪽이라고 명시
-- **electron-store**: 설정 영속화. zustand는 휘발성, store만 영속
-- **cat.locked**: in-house나 held 상태일 때 행동 스케줄러가 액션 변경 금지
-- **mirror group으로 측면 SVG 처리**: 원래 그림이 head-on-left였는데 facing logic이 head-on-right 가정 → mirror로 통일. 고치다가 cat 뒤로 걷는 버그 났던 흔적
-- **PNG 우선, SVG fallback, 병맛 모드 강제 토글**: import.meta.glob로 PNG 자동 감지, 없으면 SVG. 사용자가 명시적으로 병맛 모드 키면 PNG 무시
-- **드래그 = e.currentTarget capture**: e.target은 SVG path/circle 같은 자식이라 capture가 흔들림. 항상 wrapper div에 capture
+| `settings:get` | invoke | electron-store 값 읽기 |
+| `settings:set` | invoke | 부분 업데이트, 변경 후 적용 |
+| `settings:reset` | invoke | 기본값 복귀 |
+| `window:set-ignore-mouse` | send | click-through 토글 |
+| `display:get-bounds` | invoke | 가장 왼쪽 디스플레이 좌표 |
+| `cursor:get` | invoke | OS 커서 위치 (Look-at-cursor용) |
+| `cat:find` | send→broadcast | 트레이 "고양이 찾기" |
 
 ---
 
-## 4. 빌드 / 실행 흐름
+## 4. 빌드 / 배포
 
-### 개발 (dev 서버 + Electron)
+### 4.1 사용자 PC 업데이트 (Mac)
+**더블클릭만** — `update-and-install.command`
+- git pull → npm install → npm run build → 기존 .app trash → dmg mount → /Applications에 복사
+- 아이콘 캐시 강제 비우기: touch + chflags 토글 + /Applications → /tmp 이동 후 복귀 + killall Dock/Finder. **4단 콤보로도 안 되면 macOS 버그 → 로그아웃/로그인 필요**
+
+### 4.2 GitHub 릴리즈 (판매용 dmg 생성)
+`.github/workflows/release.yml` 가 macos-14 runner에서 빌드.
+
+**트리거 두 가지**:
+1. **태그 푸시** (`v*` 패턴) — 자동
+2. **수동 dispatch** — github.com/Celeste232/main/actions/workflows/release.yml → Run workflow → ref/version 입력
+
+**수동 dispatch가 권장**. 이유:
+- 태그 푸시는 로컬 git의 사용자 인증 문제로 자주 실패함 (이 환경에서 `git push origin v*` → 403)
+- workflow_dispatch는 깃허브 UI만으로 가능
+
+**현재 셋업**:
+- `permissions: contents: write`
+- `softprops/action-gh-release@v2` 사용
+- `env: GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}` 필수 (없으면 업로드 실패 — v0.1.0 빌드가 이것 때문에 실패했었음)
+- `CSC_IDENTITY_AUTO_DISCOVERY: 'false'` — 코드사이닝 안 함
+- `draft: true` — 자동 publish 안 됨. 사용자가 Releases 페이지 가서 Publish release 클릭해야 함
+
+**산출물**:
+- `Meow Mode-0.1.X-arm64.dmg` (Apple Silicon)
+- `Meow Mode-0.1.X-x64.dmg` (Intel)
+- `.zip` 동일 두 개
+- `.blockmap` / `latest-mac.yml`
+
+### 4.3 버전 bump 절차
+```
+1. package.json version 필드 수정 (예: "0.1.2" → "0.1.3")
+2. npm install --package-lock-only  ← 안 하면 npm ci에서 실패함
+3. git add package.json package-lock.json
+4. git commit
+5. git push
+6. 깃허브에서 Run workflow (version 입력)
+```
+
+**시행착오**: package-lock.json 미동기화로 `npm ci` 실패 → v0.1.1 빌드 두 번 돌렸음. 항상 step 2 잊지 마.
+
+---
+
+## 5. 판매 전략 (사용자 결정 = 옵션 B)
+
+> 사용자 인용: "B 할게!"
+> - 깃허브 Releases 비공개 (또는 draft 유지)
+> - Gumroad에만 dmg 업로드 → $3.49 정가
+> - Itch.io는 보너스
+
+### 사용자가 직접 할 일 (docs/SALES_CHECKLIST.md 참고)
+1. update-and-install.command로 자기 PC 최신화
+2. 깃허브 Actions에서 v0.1.X 빌드 트리거 → dmg 다운로드
+3. Gumroad 가입 → New product → dmg 업로드 → 카피 복붙 (docs/sales-copy.md)
+4. (선택) Itch.io 동일하게
+5. 트위터 @meowmode_app 만들고 첫 트윗
+
+### 옵션 B 운영에 필요한 후속 작업
+- [ ] 깃허브 레포를 private로 전환 또는 Releases를 unlisted로 처리
+- [ ] README에서 "다운로드" 섹션 제거 (Gumroad 링크만 남기기)
+- [ ] 사용자가 Gumroad URL 보내주면 그걸 README에 박기
+
+---
+
+## 6. 알려진 이슈 / 디자인 결정
+
+### 이미 fix된 것 (절대 다시 풀지 마)
+| 이슈 | 원인 | 해결 |
+|---|---|---|
+| 그릇 클릭 안 채워짐 | 고양이가 위에 있으면 클릭 흡수 | Cat onPointerUp에서 임시 `pointer-events:none` 후 elementFromPoint → 합성 click dispatch |
+| 집 드래그 안 됨 | `setPointerCapture(e.target)` — SVG 자식이 캡처 잃음 | `e.currentTarget` 사용 |
+| 말풍선 거꾸로 나옴 | `.cat` 전체에 scaleX(-1) 걸려 텍스트도 뒤집힘 | sprite만 내부 div에 transform, 말풍선은 외부 div |
+| 걷는 고양이 뒤로 감 | 측면 포즈 SVG가 머리 왼쪽 → facing 로직과 반대 | `<g transform="translate(W 0) scale(-1 1)">`로 미러 |
+| 다른 앱 갔다 와서 버튼 죽음 | useHoverPassthrough가 mousemove만 들음 | mousedown + window focus 추가 |
+| 아이콘 캐시 안 비워짐 | macOS Dock/Finder가 끈질김 | touch + chflags + mv-out-and-back + killall 4단 콤보 |
+| v0.1.0 빌드 실패 | GH_TOKEN 환경변수 없어서 release 업로드 거부 | release step env에 GITHUB_TOKEN 명시 |
+| 말풍선 너무 자주 | 18s/0.35 → 평균 51s | 28s/0.22 → 평균 127s |
+
+### 의도된 디자인 (변경 요청 들어와도 한 번 확인하고 진행)
+- **발그림 SVG가 메인 정체성**. PNG 스프라이트는 폴백. settings.catSkin 기본값 = `'svg-doodle'`
+- **말풍선에 박스 없음** — 텍스트 + 하얀 halo만. 사용자 명시적 선호
+- **소리는 합성음**. 실제 고양이 wav 없음. 사용자가 안 들어봤다며 추가 요청한 거고, 합성음 결과 아직 피드백 안 받음
+- **사이닝 없음** — 사용자가 $99/년 안 내겠다고 함. 매뉴얼에 "우클릭 → 열기" 안내
+- **풀스크린 게임 위에는 안 뜸** — windowLayer=front여도 macOS 풀스크린은 의도적으로 양보
+- **활동영역에서 "집안"은 없앴음** — putInHouse 메뉴가 있으니까 중복
+
+### 알려진 미해결 (낮은 우선순위)
+- [ ] 데모 GIF 아직 안 만듦. 사용자가 `brew install ffmpeg` 하고 `./scripts/make-demo.sh` 돌려야 함
+- [ ] 영/일/중 사용자 매뉴얼 번역 미작성 (한국어만 있음)
+- [ ] SKIN_PACKS.md 설계만 있고 구현 안 됨
+- [ ] 합성 meow 소리 사용자 피드백 미수령 — 별로면 PCM 샘플 임베드 검토
+
+---
+
+## 7. 자주 만지는 파일 빨리 찾기
+
+| 하고 싶은 것 | 파일 |
+|---|---|
+| 새 액션 추가 | `src/state/useAppStore.ts` (타입) + `src/hooks/useCatBehavior.ts` (durations, bias) + `src/components/Cat/CatSvg.tsx` (그림) |
+| 새 액션을 외부 SVG로 연결 | `src/components/Cat/catAssets.ts` (매핑 추가) + `public/sprites/svg/NN_xxx.svg` |
+| 말풍선 문구 수정 | `src/i18n/strings.ts` (4언어 다 추가) |
+| 트레이 메뉴 텍스트 | `electron/i18n.ts` |
+| 설정 패널 UI | `src/components/Settings/SettingsMenu.tsx` + `src/index.css` (doodle-* 클래스) |
+| 빌드 워크플로 | `.github/workflows/release.yml` |
+| 아이콘 교체 | `build/icon.png` + `build/icon.icns` (둘 다 같이) |
+| 트레이 아이콘 | `build/tray-icon.png` + `build/tray-icon-paused.png` |
+
+### 아이콘 재생성 절차 (PNG 1024×1024 → icns)
 ```bash
-npm install        # 처음 한 번만
-npm run dev        # Vite + Electron 동시 시작
+mkdir -p /tmp/icns_work
+node -e "
+const sharp = require('sharp');
+const sizes = [16,32,64,128,256,512,1024];
+(async () => {
+  await sharp('SOURCE.png').resize(1024,1024).png().toFile('build/icon.png');
+  for (const s of sizes) {
+    await sharp('SOURCE.png').resize(s,s).png().toFile('/tmp/icns_work/icon_'+s+'.png');
+  }
+})();
+"
+cd /tmp/icns_work
+png2icns icon.icns icon_16.png icon_32.png icon_64.png icon_128.png icon_256.png icon_512.png icon_1024.png
+cp icon.icns /home/user/main/build/icon.icns
 ```
+sharp는 repo node_modules에 있음. png2icns는 시스템 도구.
 
-Vite HMR이 React 컴포넌트 변경 즉시 반영. Electron 메인 프로세스 변경은 재시작 필요.
+---
 
-### 빌드 (.dmg / .app)
+## 8. 환경 / 도구 제약
+
+### 이 작업 환경 (Linux container)
+- `git push`는 가능하지만 **태그 푸시는 403** (인증 한계). 그래서 workflow_dispatch 셋업해둠
+- 깃 remote: `http://local_proxy@127.0.0.1:PORT/git/Celeste232/main`
+- GitHub MCP 사용 가능 (`mcp__github__*`) — 단 `Celeste232/main` 레포만 접근 가능. **`Celeste232/meow-mode-assets`는 MCP로 접근 불가, raw.githubusercontent.com curl로 받아야 함**
+- Mac 빌드는 못 함 (Linux 환경). dmg는 GitHub Actions(macos-14)에서만 생김
+- 사용자 Mac에 직접 접근 불가. 모든 사용자 측 작업은 `.command` 파일이나 클릭 안내로 풀어야 함
+- MCP 서버가 자주 disconnect/reconnect 함. `<system-reminder>` 무시하고 진행. 필요한 도구는 ToolSearch로 다시 로드
+
+### 사용자 측 도구 가정
+- Mac (M-series로 추정. Intel 사용자는 본인 외에 없을 듯)
+- Finder + TextEdit 사용 가능
+- 다른 Claude 인스턴스를 데스크탑 앱에서 띄워서 병렬로 부탁하기도 함. 다른 Claude가 푸시한 커밋이 있을 수 있으니 `git log`로 외부 변경 확인
+
+---
+
+## 9. 다음에 할 일 (우선순위 순)
+
+1. **v0.1.2 빌드 트리거** — 사용자가 Run workflow 클릭하기 기다리는 중. 클릭 후 ~15분
+2. **사용자가 Gumroad에 dmg 올리기** — docs/SALES_CHECKLIST.md 따라가기. 막히면 도와줘
+3. **Gumroad URL 받으면 README에 추가** — 그 후 깃허브 Releases 페이지 unlist 처리 검토
+4. **합성 meow 소리 피드백 확인** — 별로다 하면 실제 고양이 PCM 샘플로 교체 (사용자가 줄 듯)
+5. **데모 GIF 녹화 도움** — 사용자가 brew install ffmpeg 안 했을 수도. 막히면 단계별 안내
+6. **영/일/중 사용자 매뉴얼** — 한국어 매뉴얼 docs/manual-ko.md 보고 번역
+7. **SKIN_PACKS.md 실제 구현** — 향후 추가 매출원
+
+---
+
+## 10. 자주 묻는 실수 (이런 거 하지 마)
+
+- ❌ main 브랜치에 직접 푸시
+- ❌ `--no-verify` / `--amend` / `--force` 같은 git 위험 옵션 (사용자가 직접 시키지 않는 한)
+- ❌ `package.json` version 올리고 `package-lock.json` 안 올림 → CI npm ci 실패
+- ❌ HouseSvg 같은 SVG 컴포넌트에서 `setPointerCapture(e.target)` — 자식 element라 캡처 잃음. **반드시 `e.currentTarget`**
+- ❌ Cat 컴포넌트 wrapper에 transform 걸기 — 말풍선이 같이 뒤집힘. sprite만 내부 div에 걸어야 함
+- ❌ 사용자한테 터미널 명령어 시키기 — 거의 다 거부함. .command 스크립트로 풀어
+- ❌ "이거 어떻게 할까요?" 미세 의사결정 질문 — 그냥 정하고 결과 보여줘
+- ❌ 합성음 변경 시 AudioContext close 잊기 → 메모리 누수. `osc.onended = () => ctx.close()` 패턴 유지
+- ❌ 이미지 파일을 그냥 Read tool로 읽고 "본 척" — 이미지는 *실제로* multimodal로 보임. SVG 다시 그릴 때는 보이는 대로 정확히 묘사 후 그리기
+- ❌ 사용자가 "어디 폴더에 다 있어" 라고 하면 Mac 로컬 경로 — 접근 불가. 깃에 푸시해달라거나 직접 복붙해달라고 부탁
+
+---
+
+## 11. 자주 쓰는 명령 한 줄 모음
+
 ```bash
-npm run build      # tsc → vite build → electron-builder
-```
+# 타입체크
+npx tsc -b --noEmit
 
-`release/` 안에:
-- `MeowMode-x.x.x-arm64.dmg` (Apple Silicon)
-- `MeowMode-x.x.x-x64.dmg` (Intel)
-- `MeowMode-x.x.x-arm64-mac.zip` / `-mac.zip`
+# 프로덕션 빌드 (Linux에서도 vite 부분만은 됨)
+npx vite build
 
-`build/icon.icns` 가 macOS 앱 번들 아이콘으로 자동 들어감 (electron-builder convention).
-`extraResources` 가 build/icon.png + tray-icon.png 를 `process.resourcesPath/build/` 로 복사.
+# 헤드리스 시각 확인 (Xvfb)
+Xvfb :99 -screen 0 1920x1080x24 &
+DISPLAY=:99 CAT_HOUSE_DEBUG_NO_PASSTHROUGH=1 npm run dev &
+import -window root /tmp/screenshot.png
 
-### 더블클릭 워크플로
-사용자는 터미널 거의 안 켜려 함. `~/meow-mode/update-and-install.command` 더블클릭 → git pull → npm install → npm run build → 기존 MeowMode 종료/제거 → 새 dmg 마운트 → /Applications에 복사 → quarantine 제거 → 실행.
+# 외부 SVG 가져오기 (메인 레포)
+curl -L -o public/sprites/svg/X.svg \
+  https://raw.githubusercontent.com/Celeste232/meow-mode-assets/main/meow_transparent_animated_svg/NN_xxx_transparent.svg
 
-스크립트 내용 자체가 진단용이기도 함 — 에러 시 Terminal 창 열린 채 멈추므로 사용자가 어디서 실패했는지 보고 가능.
-
-### Xvfb 디버깅 (로컬에선 불필요, 클라우드 환경에서 사용했던 트릭)
-```bash
-DISPLAY=:99 CAT_HOUSE_DEBUG_NO_PASSTHROUGH=1 npm run dev
-```
-환경변수가 클릭통과를 끄므로 xdotool로 자동화 테스트 가능. 본인 Mac에선 안 써도 됨.
-
----
-
-## 5. 작업 진행 시 체크리스트
-
-### 코드 변경 후 항상
-1. `npm run typecheck` — TS 에러 없는지
-2. `npx vite build` — 렌더러 + Electron main 번들 빌드 통과
-3. (변경이 UI라면) `npm run dev` 로 시각 확인
-
-### 새 액션 추가 시
-1. `src/state/useAppStore.ts` 의 `CatAction` 타입에 추가
-2. `src/components/Cat/catFrames.ts` 의 `FRAME_SPECS` 에 frame count + intervalMs
-3. `src/components/Cat/CatSvg.tsx` 의 메인 함수 분기 + 새 포즈 컴포넌트 작성
-4. `src/hooks/useCatBehavior.ts` 의 `ACTION_DURATIONS` + `ACTIVITY_BIAS` 가중치
-5. `docs/cat-svg-blueprint.json` 에 명세 추가 (보존용)
-
-### 새 설정 추가 시
-1. `electron/store.ts` 의 `Settings` 인터페이스 + `DEFAULT_SETTINGS`
-2. (필요시) IPC 핸들러 `electron/main.ts`
-3. `src/components/Settings/SettingsMenu.tsx` 에 UI
-
-### 커밋 컨벤션
-- 1줄 요약 (명령형, 짧게) + 빈 줄 + 본문 (왜 + 무엇)
-- 본문에 검증 결과 한 줄 ("Verified under Xvfb that...")
-- 영어로 작성 (이건 깃 히스토리는 영어로 통일됨)
-- 사용자에게 보고할 때만 한국어
-
-### 푸시
-브랜치 `claude/meow-mode-interactions-pFJxU` 만 사용. PR 생성/머지는 사용자 명시 지시 시에만.
-
----
-
-## 6. 로컬 Claude만 할 수 있는 것
-
-클라우드 Claude가 못 했던 것 → 본인은 가능:
-- 사용자 Mac의 `~/Downloads`, `~/Desktop` 등에서 캐릭터 시트 PNG **직접 읽기**
-- 시트 그리드 분석해서 `layout.json` 좌표 자동 추출
-- `npm run slice` 직접 실행해서 결과 즉시 확인
-- `npm run build` 로 진짜 dmg 만들고 설치 결과 검증
-- `osascript` 로 macOS UI 제어 (앱 종료/실행 등)
-- `defaults read` / `defaults write` 로 macOS 설정 확인
-- macOS 알림 발송 (`osascript -e 'display notification ...'`)
-- 사용자가 화면에서 보는 거 캡처해서 같이 보기 (`screencapture`)
-- 빌드 결과물의 실제 동작 확인 (Meow Mode 실행 → 스크린샷 → 검증)
-
-→ **시트 통합 작업 우선순위 높음.** 사용자 자료 어디 있는지 물어보고, 자동으로 처리.
-
----
-
-## 7. 환경 정보
-
-- Node 22.x
-- Electron 33.4.x
-- Vite 6.x
-- React 18.3.x
-- TypeScript 5.7
-- electron-builder 25.x
-- electron-store 10.x
-- zustand 5.x
-- sharp 0.34.x
-
-처음 풀하면 `npm install` 한 번 필요 (deprecated 경고 12개 + low/high 취약점은 모두 transitive deps라 무시).
-
----
-
-## 8. 최근 커밋 흐름 (역순)
-
-```
-2b0ecc5  Fix house/cat drag — capture pointer on the wrapper, not the SVG child
-a4532ec  Add update-and-install.command for double-click rebuild + reinstall
-9148417  Stop dragging the cat along with a nearby house
-1176783  Use Oneko pixel-cat icon for app, dock, and tray
-4f4bebf  Add reference-sheet slicer + multi-arch Mac packaging
-ebaa9b3  Add roam area, loaf/sprawl, focus mode, in-house lock, cursor look-at, drag
-6d504f1  Preserve doodle SVG cat behind a skin toggle + add JSON blueprint
-c1d54cd  Fix side-profile cats walking backward
-942c719  Position cat next to bowls instead of on top
-08065c5  Add per-frame SVG animation for every cat action
-b0dd99e  Add SVG visuals and richer cat behaviors
-1a11f4d  Scaffold Electron + React + TS desktop cat pet
+# git 푸시 (브랜치만, 태그는 워크플로 dispatch로)
+git push -u origin claude/cat-house-interactions-pFJxU
 ```
 
 ---
 
-## 9. 사용자에게 받을 즉시 물어볼 것
+## 12. 사용자가 다른 Claude한테 부탁한 흔적
 
-새 세션 시작하면 이 순서로 확인:
-1. 현재 앱 상태 — 잘 떠있나? 마지막 빌드 버전이 뭐고 어떤 게 안 되는지?
-2. 캐릭터 시트 어디에 있나? (Downloads? Desktop?) — 있으면 즉시 슬라이서로 처리
-3. 다음 우선순위가 뭐인지
+사용자는 가끔 다른 Claude(데스크탑 앱)한테 별도 작업 시킴.
+지금까지 알려진 외부 변경:
+- `Celeste232/meow-mode-assets` 레포 생성 + 폴더 정리 + 12개 SVG/PNG 업로드 — 다른 Claude가 함
+- 깃허브 워크플로의 `GH_TOKEN` 환경변수 추가 commit — 다른 Claude(Codex)가 했었음. 지금은 우리 코드에도 들어있음
 
-위 세 개만 빨리 확정하고 작업 들어가면 됨.
+작업 시작 전 `git log --oneline -20` 으로 외부 commit 확인하는 습관 들여.
 
 ---
 
-끝. 행운을.
+이 문서를 업데이트할 때마다 맨 위 "마지막 업데이트" 줄 갱신.
