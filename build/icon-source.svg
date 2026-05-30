@@ -1,76 +1,75 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <!-- Rounded square background in soft cream -->
-  <rect x="64" y="64" width="896" height="896" rx="192"
-        fill="#ffe9d6" stroke="#222" stroke-width="28" stroke-linejoin="round"/>
+  <!-- Rounded square background in soft lavender -->
+  <rect x="64" y="64" width="896" height="896" rx="180"
+        fill="#dcd5f5"/>
 
-  <!-- Doodle cat, sitting front-on -->
-  <g transform="translate(512 500)">
+  <!-- Doodle cat, side profile, walking pose -->
+  <g stroke="#1a1a1a" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff">
+
+    <!-- Body (long oval) -->
+    <ellipse cx="620" cy="510" rx="190" ry="115"/>
+
+    <!-- Head (smaller circle on the left) -->
+    <ellipse cx="400" cy="490" rx="110" ry="115"/>
+
     <!-- Ears -->
-    <path d="M-180 -90 L-130 -240 L-70 -90 Z"
-          fill="#fff" stroke="#222" stroke-width="28" stroke-linejoin="round"/>
-    <path d="M70 -90 L130 -240 L180 -90 Z"
-          fill="#fff" stroke="#222" stroke-width="28" stroke-linejoin="round"/>
+    <path d="M335 405 L320 340 L380 395 Z" fill="#ffffff"/>
+    <path d="M465 405 L480 340 L420 395 Z" fill="#ffffff"/>
 
-    <!-- Head -->
-    <ellipse cx="0" cy="-30" rx="220" ry="210"
-             fill="#fff" stroke="#222" stroke-width="28"/>
+    <!-- Tail, curved up to the right -->
+    <path d="M800 460 Q860 380 850 320" fill="none"/>
 
-    <!-- Body -->
-    <ellipse cx="0" cy="240" rx="190" ry="140"
-             fill="#fff" stroke="#222" stroke-width="28"/>
+    <!-- Front leg (under head) -->
+    <line x1="465" y1="610" x2="465" y2="700" />
+    <line x1="510" y1="610" x2="510" y2="700" />
+    <!-- Back leg (under body) -->
+    <line x1="700" y1="615" x2="700" y2="700" />
+    <line x1="745" y1="615" x2="745" y2="700" />
+  </g>
 
-    <!-- Eyes -->
-    <circle cx="-72" cy="-44" r="22" fill="#222"/>
-    <circle cx="72" cy="-44" r="22" fill="#222"/>
-
-    <!-- Mouth — pink nose + tiny w -->
-    <ellipse cx="0" cy="30" rx="8" ry="6" fill="#f08aa6" stroke="#222" stroke-width="6"/>
-    <path d="M-20 50 Q-10 70 0 50 Q10 70 20 50"
-          stroke="#222" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-
+  <!-- Face: eyes, whiskers, smile -->
+  <g stroke="#1a1a1a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none">
     <!-- Whiskers -->
-    <path d="M-220 -10 L-300 -30 M-220 25 L-310 30"
-          stroke="#222" stroke-width="10" stroke-linecap="round"/>
-    <path d="M220 -10 L300 -30 M220 25 L310 30"
-          stroke="#222" stroke-width="10" stroke-linecap="round"/>
-
-    <!-- Curled tail behind body -->
-    <path d="M170 290 Q310 200 270 80"
-          stroke="#222" stroke-width="28" fill="none" stroke-linecap="round"/>
+    <path d="M295 480 L355 488"/>
+    <path d="M295 510 L355 510"/>
+    <path d="M295 538 L355 532"/>
+  </g>
+  <g fill="#1a1a1a">
+    <!-- Eyes -->
+    <circle cx="380" cy="480" r="13"/>
+    <circle cx="440" cy="480" r="13"/>
+  </g>
+  <g stroke="#1a1a1a" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Smile -->
+    <path d="M395 525 Q410 545 425 525"/>
   </g>
 
-  <!-- "MEOW" in childish wobbly handwriting, hand-traced as stroke paths -->
-  <g stroke="#222" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none">
+  <!-- "Meow" in childish wobbly handwriting -->
+  <g stroke="#1a1a1a" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none">
     <!-- M -->
-    <path d="M 196 152
-             L 200 92
-             L 246 142
-             L 290 88
-             L 296 154"/>
-    <!-- E -->
-    <path d="M 388 96
-             L 348 100
-             L 354 152
-             L 392 148
-             M 350 124
-             L 380 122"/>
-    <!-- O (slightly egg-shaped, wobbly) -->
-    <path d="M 458 96
-             Q 432 100 434 130
-             Q 438 158 472 156
-             Q 504 152 502 122
-             Q 498 92 460 94
-             Z"/>
-    <!-- W -->
-    <path d="M 558 92
-             L 572 156
-             L 600 110
-             L 624 158
-             L 644 96"/>
-  </g>
-
-  <!-- Tiny sparkle next to MEOW -->
-  <g fill="#222">
-    <path d="M 692 96 L 700 110 L 716 112 L 702 122 L 706 138 L 692 130 L 678 138 L 682 122 L 668 112 L 684 110 Z"/>
+    <path d="M 360 820
+             L 370 770
+             L 410 815
+             L 450 770
+             L 462 822"/>
+    <!-- e -->
+    <path d="M 510 800
+             Q 510 778 530 778
+             Q 552 778 552 798
+             Q 552 808 508 808
+             Q 508 826 530 826
+             Q 545 826 555 818"/>
+    <!-- o -->
+    <path d="M 612 802
+             Q 612 778 590 778
+             Q 568 778 568 802
+             Q 568 826 590 826
+             Q 612 826 612 802 Z"/>
+    <!-- w -->
+    <path d="M 638 780
+             L 648 826
+             L 672 790
+             L 696 826
+             L 706 780"/>
   </g>
 </svg>
