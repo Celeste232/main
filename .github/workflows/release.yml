@@ -13,8 +13,8 @@ on:
         default: 'claude/cat-house-interactions-pFJxU'
         required: true
       version:
-        description: 'Version label for the release (e.g. v0.1.1)'
-        default: 'v0.1.1'
+        description: 'Version label for the release (e.g. v0.1.2)'
+        default: 'v0.1.2'
         required: true
 
 permissions:
