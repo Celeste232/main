@@ -1,75 +1,61 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <!-- Rounded square background in soft lavender -->
-  <rect x="64" y="64" width="896" height="896" rx="180"
-        fill="#dcd5f5"/>
 
-  <!-- Doodle cat, side profile, walking pose -->
-  <g stroke="#1a1a1a" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff">
+  <!-- Lavender background -->
+  <rect x="40" y="40" width="944" height="944" rx="190"
+        fill="#c9c5f0"/>
 
-    <!-- Body (long oval) -->
-    <ellipse cx="620" cy="510" rx="190" ry="115"/>
+  <g fill="#fff" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
 
-    <!-- Head (smaller circle on the left) -->
-    <ellipse cx="400" cy="490" rx="110" ry="115"/>
+    <!-- Body — wide elongated oval -->
+    <ellipse cx="620" cy="530" rx="205" ry="118" stroke-width="20"/>
 
-    <!-- Ears -->
-    <path d="M335 405 L320 340 L380 395 Z" fill="#ffffff"/>
-    <path d="M465 405 L480 340 L420 395 Z" fill="#ffffff"/>
+    <!-- Head — large round circle, overlapping left side of body -->
+    <ellipse cx="390" cy="460" rx="158" ry="158" stroke-width="20"/>
 
-    <!-- Tail, curved up to the right -->
-    <path d="M800 460 Q860 380 850 320" fill="none"/>
+    <!-- Left ear -->
+    <polygon points="318,345 340,258 408,338" stroke-width="18" fill="#fff"/>
+    <!-- Right ear -->
+    <polygon points="412,335 475,258 500,348" stroke-width="18" fill="#fff"/>
 
-    <!-- Front leg (under head) -->
-    <line x1="465" y1="610" x2="465" y2="700" />
-    <line x1="510" y1="610" x2="510" y2="700" />
-    <!-- Back leg (under body) -->
-    <line x1="700" y1="615" x2="700" y2="700" />
-    <line x1="745" y1="615" x2="745" y2="700" />
   </g>
 
-  <!-- Face: eyes, whiskers, smile -->
-  <g stroke="#1a1a1a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <!-- Whiskers -->
-    <path d="M295 480 L355 488"/>
-    <path d="M295 510 L355 510"/>
-    <path d="M295 538 L355 532"/>
-  </g>
-  <g fill="#1a1a1a">
-    <!-- Eyes -->
-    <circle cx="380" cy="480" r="13"/>
-    <circle cx="440" cy="480" r="13"/>
-  </g>
-  <g stroke="#1a1a1a" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <!-- Smile -->
-    <path d="M395 525 Q410 545 425 525"/>
+  <!-- Eyes -->
+  <circle cx="356" cy="438" r="14" fill="#111"/>
+  <circle cx="432" cy="438" r="14" fill="#111"/>
+
+  <!-- Smile -->
+  <path d="M364 488 Q392 515 424 488"
+        fill="none" stroke="#111" stroke-width="13" stroke-linecap="round"/>
+
+  <!-- Whiskers left -->
+  <g stroke="#111" stroke-width="11" stroke-linecap="round">
+    <line x1="232" y1="445" x2="340" y2="458"/>
+    <line x1="228" y1="472" x2="338" y2="475"/>
+    <line x1="232" y1="499" x2="340" y2="490"/>
   </g>
 
-  <!-- "Meow" in childish wobbly handwriting -->
-  <g stroke="#1a1a1a" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none">
+  <!-- Legs — 4 stick legs -->
+  <g stroke="#111" stroke-width="18" stroke-linecap="round">
+    <line x1="468" y1="640" x2="468" y2="740"/>
+    <line x1="516" y1="643" x2="516" y2="743"/>
+    <line x1="688" y1="643" x2="688" y2="743"/>
+    <line x1="736" y1="640" x2="736" y2="740"/>
+  </g>
+
+  <!-- Tail — curls up from right end of body -->
+  <path d="M815 500 Q870 420 848 330"
+        fill="none" stroke="#111" stroke-width="20" stroke-linecap="round"/>
+
+  <!-- "Meow" handwritten-style text -->
+  <g fill="none" stroke="#111" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
     <!-- M -->
-    <path d="M 360 820
-             L 370 770
-             L 410 815
-             L 450 770
-             L 462 822"/>
+    <path d="M312 828 L318 770 L366 820 L414 770 L420 830"/>
     <!-- e -->
-    <path d="M 510 800
-             Q 510 778 530 778
-             Q 552 778 552 798
-             Q 552 808 508 808
-             Q 508 826 530 826
-             Q 545 826 555 818"/>
+    <path d="M450 808 Q448 778 472 776 Q498 776 498 800 Q498 812 448 812 Q448 834 472 834 Q490 834 500 824"/>
     <!-- o -->
-    <path d="M 612 802
-             Q 612 778 590 778
-             Q 568 778 568 802
-             Q 568 826 590 826
-             Q 612 826 612 802 Z"/>
+    <path d="M558 804 Q558 776 534 776 Q510 776 510 804 Q510 832 534 832 Q558 832 558 804 Z"/>
     <!-- w -->
-    <path d="M 638 780
-             L 648 826
-             L 672 790
-             L 696 826
-             L 706 780"/>
+    <path d="M578 778 L590 832 L618 788 L646 832 L658 778"/>
   </g>
+
 </svg>
