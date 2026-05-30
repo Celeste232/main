@@ -44,7 +44,7 @@ jobs:
           # electron-builder still produces an unsigned .dmg/.zip; users
           # right-click → 열기 the first time per the manual.
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
-                    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
 
       - name: Upload artifacts to Release
