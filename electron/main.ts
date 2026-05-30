@@ -101,6 +101,17 @@ function createWindow() {
     if (!settingsStore.get().paused) mainWindow?.show();
   });
 
+  // macOS sometimes drops the click-through forwarding when the window
+  // loses and regains focus. Re-apply on every focus to be safe.
+  mainWindow.on('focus', () => {
+    if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
+    mainWindow?.setIgnoreMouseEvents(true, { forward: true });
+  });
+  mainWindow.on('show', () => {
+    if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
+    mainWindow?.setIgnoreMouseEvents(true, { forward: true });
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });

@@ -126,10 +126,26 @@ echo "    installed at: $INSTALLED_APP"
 
 # 7. Strip quarantine, refresh icon cache, launch
 echo ""
-echo "[7/7] Stripping quarantine, refreshing icon cache, launching"
+echo "[7/7] Stripping quarantine, busting icon cache, launching"
 xattr -dr com.apple.quarantine "$INSTALLED_APP" 2>/dev/null || true
-# Force Finder/Dock to drop their cached old icon so the new one shows up.
+
+# macOS aggressively caches app icons. touch + killall Dock is usually
+# enough, but sometimes the icon services cache wins. We layer multiple
+# tricks so at least one of them lands:
+#   1. touch bumps the mtime (Finder/Dock cue)
+#   2. chflags toggle pings the file system attributes
+#   3. mv-out-and-back forces Finder to re-register the bundle
+#   4. killall Dock + Finder reload their per-process icon caches
 touch "$INSTALLED_APP"
+chflags hidden "$INSTALLED_APP" 2>/dev/null && chflags nohidden "$INSTALLED_APP" 2>/dev/null
+PARENT_DIR="$(dirname "$INSTALLED_APP")"
+APP_NAME="$(basename "$INSTALLED_APP")"
+TMP_PATH="/tmp/_meowmode_iconbust_$$_$APP_NAME"
+if mv "$INSTALLED_APP" "$TMP_PATH" 2>/dev/null; then
+  sleep 0.3
+  mv "$TMP_PATH" "$PARENT_DIR/$APP_NAME"
+  INSTALLED_APP="$PARENT_DIR/$APP_NAME"
+fi
 killall Dock 2>/dev/null || true
 killall Finder 2>/dev/null || true
 sleep 1
