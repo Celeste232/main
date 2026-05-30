@@ -97,6 +97,35 @@ function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function playMeow(volume: number) {
+  try {
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 900;
+    filter.Q.value = 3;
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    const now = ctx.currentTime;
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(420, now);
+    osc.frequency.exponentialRampToValueAtTime(780, now + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(520, now + 0.45);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(volume * 0.18, now + 0.06);
+    gain.gain.setValueAtTime(volume * 0.18, now + 0.32);
+    gain.gain.linearRampToValueAtTime(0, now + 0.52);
+    osc.start(now);
+    osc.stop(now + 0.55);
+    osc.onended = () => ctx.close();
+  } catch {
+    // AudioContext not available (e.g. test env)
+  }
+}
+
 export function useCatBehavior(displayBounds: { width: number; height: number } | null) {
   const cat = useAppStore((s) => s.cat);
   const setCat = useAppStore((s) => s.setCat);
@@ -365,6 +394,14 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     };
   }, [cat.action, cat.locked, setCat]);
 
+  // Play synthesized meow when the cat does its meow action.
+  useEffect(() => {
+    if (cat.action !== 'meow') return;
+    const s = useAppStore.getState().settings;
+    if (!s?.soundEnabled) return;
+    playMeow(s.volume ?? 0.5);
+  }, [cat.action]);
+
   // Random chatter — every 20-50 seconds the cat blurts something cute.
   useEffect(() => {
     if (!settings?.showSpeechBubble) return;
@@ -395,8 +432,8 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     };
 
     const id = setInterval(() => {
-      if (Math.random() < 0.35) tick();
-    }, 18000);
+      if (Math.random() < 0.22) tick();
+    }, 28000);
     return () => clearInterval(id);
   }, [settings?.showSpeechBubble, settings?.hideCat, settings?.paused, setCat]);
 
