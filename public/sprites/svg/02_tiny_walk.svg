@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="140" viewBox="0 0 180 140">
+  <style>
+    .line { fill:white; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .ink { fill:#111111; stroke:none; }
+    .none { fill:none; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes tail { 0%,100%{transform:rotate(-7deg)} 50%{transform:rotate(9deg)} }
+    @keyframes blink { 0%,88%,100%{transform:scaleY(1)} 92%{transform:scaleY(.12)} }
+    @keyframes paw { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+    @keyframes jump { 0%,100%{transform:translateY(0)} 45%,55%{transform:translateY(-15px)} }
+    @keyframes zzz { 0%{opacity:0; transform:translate(0,0)} 30%{opacity:1} 100%{opacity:0; transform:translate(14px,-22px)} }
+    @keyframes wiggle { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+  </style>
+  <g style="animation:wiggle .8s ease-in-out infinite; transform-origin:90px 70px">
+    <circle class="line" cx="56" cy="58" r="17"/>
+    <ellipse class="line" cx="98" cy="66" rx="37" ry="17"/>
+    <path class="line" d="M44 45 L49 35 L55 46"/>
+    <path class="line" d="M63 44 L70 36 L72 48"/>
+    <circle class="ink" cx="51" cy="56" r="1.8"/>
+    <circle class="ink" cx="61" cy="56" r="1.8"/>
+    <path class="none" d="M54 63 Q57 66 61 63"/>
+    <path class="none" d="M35 55 L25 51"/>
+    <path class="none" d="M36 61 L25 62"/>
+    <path class="none" d="M37 66 L28 72"/>
+    <path class="none" style="animation:paw .5s ease-in-out infinite; transform-origin:76px 80px" d="M76 80 L70 98"/>
+    <path class="none" style="animation:paw .5s ease-in-out infinite reverse; transform-origin:92px 80px" d="M92 81 L92 99"/>
+    <path class="none" style="animation:paw .5s ease-in-out infinite reverse; transform-origin:116px 80px" d="M116 80 L122 97"/>
+    <path class="none" style="animation:paw .5s ease-in-out infinite; transform-origin:129px 77px" d="M129 77 L140 91"/>
+    <path class="none" d="M130 56 Q156 40 145 20"/>
+  </g>
+</svg>

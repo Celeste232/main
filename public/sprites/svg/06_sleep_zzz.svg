@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="140" viewBox="0 0 180 140">
+  <style>
+    .line { fill:white; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .ink { fill:#111111; stroke:none; }
+    .none { fill:none; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes tail { 0%,100%{transform:rotate(-7deg)} 50%{transform:rotate(9deg)} }
+    @keyframes blink { 0%,88%,100%{transform:scaleY(1)} 92%{transform:scaleY(.12)} }
+    @keyframes paw { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+    @keyframes jump { 0%,100%{transform:translateY(0)} 45%,55%{transform:translateY(-15px)} }
+    @keyframes zzz { 0%{opacity:0; transform:translate(0,0)} 30%{opacity:1} 100%{opacity:0; transform:translate(14px,-22px)} }
+    @keyframes wiggle { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+  </style>
+  <g>
+    <ellipse class="line" cx="85" cy="78" rx="45" ry="20"/>
+    <circle class="line" cx="51" cy="70" r="17"/>
+    <path class="line" d="M39 59 L45 48 L51 60"/>
+    <path class="line" d="M58 58 L66 49 L67 63"/>
+    <path class="none" d="M45 68 q4 4 8 0"/>
+    <path class="none" d="M57 68 q4 4 8 0"/>
+    <path class="none" d="M49 77 Q53 80 57 77"/>
+    <path class="none" d="M36 70 L25 67"/>
+    <path class="none" d="M37 75 L25 78"/>
+    <path class="none" d="M120 68 Q145 56 137 39"/>
+    <text x="118" y="43" font-family="Comic Sans MS, Marker Felt, sans-serif" font-size="16" fill="#111" style="animation:zzz 2s infinite">z</text>
+    <text x="132" y="35" font-family="Comic Sans MS, Marker Felt, sans-serif" font-size="20" fill="#111" style="animation:zzz 2s .5s infinite">z</text>
+  </g>
+</svg>

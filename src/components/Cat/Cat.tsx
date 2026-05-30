@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../../state/useAppStore';
 import { FRAME_SPECS, getFrames } from './catFrames';
 import { CatSvg } from './CatSvg';
+import { getAssetSvg } from './catAssets';
 import { useT } from '../../i18n/strings';
 
 export function Cat() {
@@ -32,6 +33,9 @@ export function Cat() {
   const useDoodle = settings?.catSkin === 'svg-doodle';
   const frames = useDoodle ? [] : getFrames(cat.action);
   const frameUrl = frames[frame % Math.max(frames.length, 1)];
+  // Prefer an external animated SVG asset when one exists for this action.
+  // These ship their own @keyframes so we don't need the frame counter.
+  const assetUrl = useDoodle ? getAssetSvg(cat.action) : null;
 
   const onPointerDown = (e: React.PointerEvent) => {
     // Don't capture pointer here — only capture if we actually start a drag.
@@ -111,7 +115,9 @@ export function Cat() {
           transform: `scaleX(${cat.facing === 'left' ? -1 : 1})`,
         }}
       >
-        {frameUrl ? (
+        {assetUrl ? (
+          <img src={assetUrl} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
+        ) : frameUrl ? (
           <img src={frameUrl} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
         ) : (
           <CatSvg action={cat.action} frame={frame} />

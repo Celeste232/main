@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="140" viewBox="0 0 180 140">
+  <style>
+    .line { fill:white; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .ink { fill:#111111; stroke:none; }
+    .none { fill:none; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes shake { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+    @keyframes tail { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(10deg)} }
+    @keyframes paw { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes heart { 0%,100%{opacity:.35; transform:scale(.9)} 50%{opacity:1; transform:scale(1.1)} }
+    @keyframes pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+    @keyframes roll { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
+    @keyframes zzz { 0%{opacity:0; transform:translate(0,0)} 35%{opacity:1} 100%{opacity:0; transform:translate(12px,-18px)} }
+  </style>
+  <g style="animation:bob 1.4s ease-in-out infinite; transform-origin:88px 70px">
+    <path class="line" d="M54 78 Q54 44 86 44 Q119 44 119 78"/>
+    <path class="line" d="M59 49 L68 32 L76 48"/>
+    <path class="line" d="M96 48 L107 33 L111 53"/>
+    <circle class="ink" cx="77" cy="62" r="2"/>
+    <circle class="ink" cx="95" cy="62" r="2"/>
+    <path class="none" d="M83 70 Q87 73 91 70"/>
+    <path class="none" d="M64 66 L49 62"/>
+    <path class="none" d="M64 72 L48 73"/>
+    <path class="none" d="M107 66 L122 62"/>
+    <path class="none" d="M107 72 L123 73"/>
+  </g>
+  <path class="none" d="M39 79 L133 79"/>
+  <path class="none" d="M45 100 L128 100"/>
+  <path class="none" d="M50 79 L50 100"/>
+  <path class="none" d="M122 79 L122 100"/>
+</svg>

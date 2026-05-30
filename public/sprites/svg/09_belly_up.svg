@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="140" viewBox="0 0 180 140">
+  <style>
+    .line { fill:white; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .ink { fill:#111111; stroke:none; }
+    .none { fill:none; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes shake { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+    @keyframes tail { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(10deg)} }
+    @keyframes paw { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes heart { 0%,100%{opacity:.35; transform:scale(.9)} 50%{opacity:1; transform:scale(1.1)} }
+    @keyframes pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+    @keyframes roll { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
+    @keyframes zzz { 0%{opacity:0; transform:translate(0,0)} 35%{opacity:1} 100%{opacity:0; transform:translate(12px,-18px)} }
+  </style>
+  <g style="animation:pop 1.3s ease-in-out infinite; transform-origin:87px 73px">
+    <ellipse class="line" cx="89" cy="75" rx="38" ry="25"/>
+    <circle class="line" cx="53" cy="66" r="17"/>
+    <path class="line" d="M42 54 L49 44 L53 57"/>
+    <path class="line" d="M60 54 L69 47 L68 61"/>
+    <circle class="ink" cx="49" cy="65" r="1.8"/>
+    <circle class="ink" cx="59" cy="65" r="1.8"/>
+    <path class="none" d="M51 72 Q55 75 59 72"/>
+    <path class="none" d="M39 67 L27 63"/>
+    <path class="none" d="M40 72 L28 76"/>
+    <path class="none" d="M77 55 L69 38"/>
+    <path class="none" d="M95 54 L100 37"/>
+    <path class="none" d="M82 96 L73 113"/>
+    <path class="none" d="M103 95 L113 111"/>
+    <path class="none" style="animation:tail .8s ease-in-out infinite; transform-origin:124px 73px" d="M124 73 Q151 65 143 42"/>
+  </g>
+</svg>

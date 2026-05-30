@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="140" viewBox="0 0 180 140">
+  <style>
+    .line { fill:white; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .ink { fill:#111111; stroke:none; }
+    .none { fill:none; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes tail { 0%,100%{transform:rotate(-7deg)} 50%{transform:rotate(9deg)} }
+    @keyframes blink { 0%,88%,100%{transform:scaleY(1)} 92%{transform:scaleY(.12)} }
+    @keyframes paw { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+    @keyframes jump { 0%,100%{transform:translateY(0)} 45%,55%{transform:translateY(-15px)} }
+    @keyframes zzz { 0%{opacity:0; transform:translate(0,0)} 30%{opacity:1} 100%{opacity:0; transform:translate(14px,-22px)} }
+    @keyframes wiggle { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+  </style>
+  <g>
+    <circle class="line" cx="86" cy="48" r="19"/>
+    <ellipse class="line" cx="86" cy="88" rx="29" ry="27"/>
+    <path class="line" d="M72 34 L78 21 L84 36"/>
+    <path class="line" d="M96 36 L105 23 L107 40"/>
+    <circle class="ink" style="animation:blink 2.2s infinite; transform-origin:80px 47px" cx="80" cy="47" r="2"/>
+    <circle class="ink" style="animation:blink 2.2s infinite; transform-origin:92px 47px" cx="92" cy="47" r="2"/>
+    <path class="none" d="M84 55 Q87 58 91 55"/>
+    <path class="none" d="M68 49 L55 44"/>
+    <path class="none" d="M68 55 L53 56"/>
+    <path class="none" d="M104 49 L119 44"/>
+    <path class="none" d="M104 55 L120 56"/>
+    <path class="none" d="M67 89 Q56 106 75 109"/>
+    <path class="none" d="M105 89 Q118 106 98 109"/>
+    <path class="none" style="animation:tail 1s ease-in-out infinite; transform-origin:108px 87px" d="M108 87 Q142 72 126 45"/>
+  </g>
+</svg>
