@@ -20,6 +20,16 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
+# Surface a Finder popup if we exit before finishing — the user doesn't read
+# Terminal logs, so a dialog is the only reliable way to flag a failure.
+INSTALL_OK=0
+on_exit() {
+  if [ "$INSTALL_OK" != "1" ]; then
+    osascript -e 'display dialog "Meow Mode 설치가 끝까지 못 갔어. 이 Terminal 창의 마지막 줄 메시지를 스크린샷 찍어서 보내주면 바로 고쳐줄게." with title "Meow Mode" buttons {"OK"} default button "OK" with icon caution' >/dev/null 2>&1 || true
+  fi
+}
+trap on_exit EXIT
+
 echo ""
 echo "─── Meow Mode: update + rebuild + install ──────────────────────"
 echo "    repo: $SCRIPT_DIR"
@@ -27,6 +37,7 @@ echo ""
 
 # 1. Pull (stash any local changes first so the pull never fails)
 echo "[1/7] git pull"
+SELF_HASH_BEFORE="$(shasum "$0" 2>/dev/null | awk '{print $1}')"
 STASH_MSG="auto-stash by update-and-install $(date +%s)"
 STASHED=0
 if ! git diff --quiet || ! git diff --cached --quiet; then
@@ -40,6 +51,15 @@ if [ "$STASHED" = "1" ]; then
   echo "    git stash pop"
 fi
 
+# If this script itself changed in the pull, relaunch the new version now so
+# the fix applies on the first double-click instead of the next one.
+SELF_HASH_AFTER="$(shasum "$0" 2>/dev/null | awk '{print $1}')"
+if [ -n "$SELF_HASH_BEFORE" ] && [ "$SELF_HASH_BEFORE" != "$SELF_HASH_AFTER" ]; then
+  echo "    update script changed — relaunching new version…"
+  trap - EXIT
+  exec "$0" "$@"
+fi
+
 # 2. npm install (only if lockfile changed in this pull)
 echo ""
 echo "[2/7] npm install (skipped if up to date)"
@@ -50,23 +70,25 @@ echo ""
 echo "[3/7] npm run build  (this takes 1–3 min)"
 npm run build
 
-# 4. Find the right dmg for this Mac
+# 4. Find the right dmg for this Mac.
+#    productName is "Meow Mode" (with a space), so electron-builder names the
+#    file "Meow Mode-<version>-<arch>.dmg". Match on the arch suffix only so the
+#    space never trips up globbing or word-splitting.
 echo ""
 echo "[4/7] Finding dmg for $(uname -m)"
 ARCH="$(uname -m)"
 case "$ARCH" in
-  arm64) DMG_PATTERN="release/MeowMode-*-arm64.dmg" ;;
-  x86_64) DMG_PATTERN="release/MeowMode-*-x64.dmg" ;;
+  arm64)  ARCH_SUFFIX="arm64" ;;
+  x86_64) ARCH_SUFFIX="x64" ;;
   *) echo "Unknown arch: $ARCH"; exit 1 ;;
 esac
-# shellcheck disable=SC2086
-DMG_PATH="$(ls -t $DMG_PATTERN 2>/dev/null | head -n1 || true)"
+DMG_PATH="$(ls -t release/*"$ARCH_SUFFIX".dmg 2>/dev/null | head -n1 || true)"
 if [ -z "$DMG_PATH" ]; then
-  # Fall back to any dmg
-  DMG_PATH="$(ls -t release/MeowMode-*.dmg 2>/dev/null | head -n1 || true)"
+  # Fall back to any dmg in release/
+  DMG_PATH="$(ls -t release/*.dmg 2>/dev/null | head -n1 || true)"
 fi
 if [ -z "$DMG_PATH" ]; then
-  echo "No dmg found in release/. Build may have failed."
+  echo "No dmg found in release/. The build step above probably failed."
   exit 1
 fi
 echo "    using: $DMG_PATH"
@@ -151,6 +173,7 @@ killall Finder 2>/dev/null || true
 sleep 1
 open "$INSTALLED_APP"
 
+INSTALL_OK=1
 echo ""
 echo "─── Done. Meow Mode is running. ─────────────────────────────────"
 echo "    You can close this Terminal window."
