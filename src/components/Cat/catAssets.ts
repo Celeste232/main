@@ -8,7 +8,8 @@ import type { CatAction } from '../../state/useAppStore';
  */
 const ASSET_MAP: Partial<Record<CatAction, string>> = {
   'tail-wag': '01_tail_wag.svg',
-  walking: '02_tiny_walk.svg',
+  // walking intentionally NOT mapped — use the hand-coded WalkingCat in
+  // CatSvg.tsx (4-frame leg cycle) instead of the external SVG.
   sitting: '03_sit_blink.svg',
   idle: '03_sit_blink.svg',
   loaf: '04_loaf_breathe.svg',
