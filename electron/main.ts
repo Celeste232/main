@@ -20,6 +20,7 @@ const TRAY_ICON_PAUSED = path.join(ICON_DIR, 'tray-icon-paused.png');
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
+let cursorTimer: ReturnType<typeof setInterval> | null = null;
 
 function getLeftmostDisplay() {
   const displays = screen.getAllDisplays();
@@ -123,7 +124,33 @@ function createWindow() {
     mainWindow?.setIgnoreMouseEvents(true, { forward: true });
   });
 
+  // Robust click-through: the MAIN process owns the sampling clock and pushes
+  // the live OS cursor position to the renderer ~60x/sec. The renderer hit-tests
+  // it against .interactive elements and toggles passthrough from that.
+  //
+  // Why this and not mousemove: while the window ignores the mouse, macOS only
+  // forwards move events unreliably, so a button could stay "dead" and the click
+  // leaked to the desktop behind us (the intermittent bug). A Node timer is never
+  // throttled the way a backgrounded renderer timer can be, and it keeps firing
+  // even when no mouse events flow — so passthrough is always correct. Pushing
+  // unconditionally (not only on change) also means a cat walking UNDER a
+  // stationary cursor is re-evaluated and stays clickable.
+  if (cursorTimer) clearInterval(cursorTimer);
+  cursorTimer = setInterval(() => {
+    if (!mainWindow || mainWindow.isDestroyed() || !mainWindow.isVisible()) return;
+    const display = getLeftmostDisplay();
+    const p = screen.getCursorScreenPoint();
+    mainWindow.webContents.send('cursor:move', {
+      x: p.x - display.bounds.x,
+      y: p.y - display.bounds.y,
+    });
+  }, 16);
+
   mainWindow.on('closed', () => {
+    if (cursorTimer) {
+      clearInterval(cursorTimer);
+      cursorTimer = null;
+    }
     mainWindow = null;
   });
 }

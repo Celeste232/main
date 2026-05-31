@@ -23,6 +23,13 @@ const api = {
       ipcRenderer.removeListener('cat:find', handler);
     };
   },
+  onCursorMove: (cb: (pos: { x: number; y: number }) => void): (() => void) => {
+    const handler = (_e: unknown, pos: { x: number; y: number }) => cb(pos);
+    ipcRenderer.on('cursor:move', handler);
+    return () => {
+      ipcRenderer.removeListener('cursor:move', handler);
+    };
+  },
 };
 
 contextBridge.exposeInMainWorld('api', api);

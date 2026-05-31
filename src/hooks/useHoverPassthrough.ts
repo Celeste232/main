@@ -5,18 +5,16 @@ import { useEffect } from 'react';
  * an interactive element. The window is transparent and ignores the mouse
  * everywhere else so clicks fall through to the desktop.
  *
- * Why polling instead of just mousemove: while the window ignores the mouse,
- * macOS only forwards move events unreliably, so relying on mousemove to turn
- * passthrough OFF means a button sometimes stays "dead" and the click leaks to
- * whatever is behind us. Instead we poll the real OS cursor position (via
- * getCursorPos, already used for look-at-cursor) on a short interval, which
- * keeps working regardless of event forwarding. mousemove is kept as a fast
- * path for snappier response while the window already has the mouse.
+ * The main process owns the sampling clock and pushes the live OS cursor
+ * position here (~60x/sec) via onCursorMove. We just hit-test each sample and
+ * toggle passthrough. This is reliable regardless of whether macOS is currently
+ * forwarding mousemove to an ignoring window — which is what made the old
+ * mousemove-only approach drop clicks intermittently. mousemove/pointermove are
+ * still wired as a fast path for when the window already owns the cursor.
  */
 export function useHoverPassthrough() {
   useEffect(() => {
     let ignoring = true;
-    let alive = true;
 
     // Treat anything within this many px of an .interactive element as
     // interactive, so the cursor crossing a thin transparent gap (house →
@@ -35,7 +33,7 @@ export function useHoverPassthrough() {
     };
 
     const apply = (x: number, y: number) => {
-      // Off-window / off-screen coords: make sure we're passing through.
+      // Off-window coords: make sure we're passing through.
       const inside = x >= 0 && y >= 0 && x <= window.innerWidth && y <= window.innerHeight;
       const interactive = inside && isInteractiveAt(x, y);
       if (interactive && ignoring) {
@@ -47,29 +45,17 @@ export function useHoverPassthrough() {
       }
     };
 
-    // Fast path: pointer moving while the window already receives events.
+    // Reliable path: main process pushes the OS cursor on its own clock.
+    const offCursor = window.api.onCursorMove(({ x, y }) => apply(x, y));
+
+    // Fast path: native move events while the window already receives the mouse.
     const onMove = (e: MouseEvent) => apply(e.clientX, e.clientY);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('pointermove', onMove as (e: Event) => void);
     window.addEventListener('mousedown', onMove, true);
 
-    // Reliable path: poll the OS cursor so passthrough stays correct even when
-    // macOS stops forwarding move events to an ignoring window.
-    const poll = async () => {
-      while (alive) {
-        try {
-          const p = await window.api.getCursorPos();
-          if (p) apply(p.x, p.y);
-        } catch {
-          /* ignore transient IPC errors */
-        }
-        await new Promise((r) => setTimeout(r, 40));
-      }
-    };
-    void poll();
-
     return () => {
-      alive = false;
+      offCursor();
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('pointermove', onMove as (e: Event) => void);
       window.removeEventListener('mousedown', onMove, true);
