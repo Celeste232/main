@@ -363,7 +363,8 @@ function FlopCat({ frame }: { frame: number }) {
   // Belly-up flop, paws in the air
   const wiggle = frame % 2 === 0 ? 0 : 2;
   return (
-    <svg viewBox="0 0 140 80" width="100%" height="100%">
+    // Cropped viewBox (was 140x80) so the cat fills the tile.
+    <svg viewBox="4 30 132 54" width="100%" height="100%">
       {/* Body — wider oval since cat is belly-up */}
       <ellipse cx="70" cy="56" rx="56" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
       {/* Head at left, facing up */}
@@ -455,7 +456,7 @@ function SprawlCat({ frame }: { frame: number }) {
   // 퍼져있음 — long horizontal blob, paws splayed
   const breathe = frame % 2 === 0 ? 1 : 1.05;
   return (
-    <svg viewBox="0 0 140 70" width="100%" height="100%">
+    <svg viewBox="6 22 126 52" width="100%" height="100%">
       {/* Body breathes vertically (not horizontally) so its left end never
           slides away from the head and opens a neck gap. */}
       <g transform={`translate(74 50) scale(1 ${breathe}) translate(-74 -50)`}>
@@ -703,7 +704,8 @@ function SleepingCat({ frame }: { frame: number }) {
 function StretchingCat({ frame }: { frame: number }) {
   const stretchX = 1 + frame * 0.05;
   return (
-    <svg viewBox="0 0 140 70" width="100%" height="100%">
+    // Cropped viewBox (was 140x70) so the long stretch fills the tile.
+    <svg viewBox="8 2 126 60" width="100%" height="100%">
       <g transform="translate(140 0) scale(-1 1)">
         {/* Tail curling up at the back */}
         <path d="M118 38 Q128 18 122 6" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
@@ -830,7 +832,8 @@ function BoxCat({ frame }: { frame: number }) {
 function ZoomiesCat({ frame }: { frame: number }) {
   const dash = frame % 2 === 0 ? 0 : 4;
   return (
-    <svg viewBox="0 0 140 80" width="100%" height="100%">
+    // Cropped viewBox (was 140x80) so the running cat fills the tile.
+    <svg viewBox="2 14 134 62" width="100%" height="100%">
       <g transform="translate(140 0) scale(-1 1)">
         {/* Tail streaming straight back */}
         <path d="M104 44 Q124 40 134 46" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
@@ -909,26 +912,28 @@ function PeekCat({ frame }: { frame: number }) {
 function NappingCat({ frame }: { frame: number }) {
   const breathe = frame % 2 === 0 ? 1 : 1.04;
   return (
-    <svg viewBox="0 0 140 80" width="100%" height="100%">
+    // Tight viewBox so the cat fills the tile instead of floating small in a
+    // wide 140-box.
+    <svg viewBox="0 0 128 72" width="100%" height="100%">
       {/* Body — long oval, belly up */}
-      <g transform={`translate(70 52) scale(1 ${breathe}) translate(-70 -52)`}>
-        <ellipse cx="70" cy="52" rx="52" ry="17" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <g transform={`translate(66 48) scale(1 ${breathe}) translate(-66 -48)`}>
+        <ellipse cx="66" cy="48" rx="50" ry="17" fill={fill} stroke={stroke} strokeWidth={sw} />
       </g>
       {/* Head at the left, tilted back asleep */}
-      <ellipse cx="24" cy="48" rx="16" ry="15" fill={fill} stroke={stroke} strokeWidth={sw} />
-      <path d="M12 40 L16 28 L22 40 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-      <path d="M24 40 L30 28 L34 40 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <ellipse cx="24" cy="44" rx="16" ry="15" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <path d="M12 36 L16 24 L22 36 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M24 36 L30 24 L34 36 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
       {/* closed eyes (happy arcs) */}
-      <path d="M16 48 Q19 51 22 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-      <path d="M27 48 Q30 51 33 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-      <ellipse cx="24" cy="55" rx="2.4" ry="1.8" fill="#f08aa6" stroke={stroke} strokeWidth={1.8} />
+      <path d="M16 44 Q19 47 22 44" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M27 44 Q30 47 33 44" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <ellipse cx="24" cy="51" rx="2.4" ry="1.8" fill="#f08aa6" stroke={stroke} strokeWidth={1.8} />
       {/* Front paws folded on the belly */}
-      <ellipse cx="68" cy="40" rx="7" ry="5" fill={fill} stroke={stroke} strokeWidth={sw} />
-      <ellipse cx="82" cy="40" rx="7" ry="5" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="64" cy="36" rx="7" ry="5" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="78" cy="36" rx="7" ry="5" fill={fill} stroke={stroke} strokeWidth={sw} />
       {/* Tail curling at the right */}
-      <path d="M120 52 Q134 44 128 30" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M114 48 Q126 40 120 28" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       {/* drifting zzz */}
-      <text x="40" y="18" fontSize="12" fill={stroke}>{frame === 0 ? 'z' : frame === 1 ? 'Z' : 'z'}</text>
+      <text x="42" y="16" fontSize="12" fill={stroke}>{frame === 0 ? 'z' : frame === 1 ? 'Z' : 'z'}</text>
     </svg>
   );
 }
