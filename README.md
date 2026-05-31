@@ -23,7 +23,7 @@ Meow Mode is a tiny hand-drawn cat that lives on top of your desktop. It strolls
 
 ## Download & Install
 
-> Get it on **[Gumroad](#)** *(link coming soon)*.
+> Get it on **[Gumroad](https://celesteyoon.gumroad.com/l/meowmode)** — $2.99.
 
 1. Download the right `.dmg` for your Mac:
    - **Apple Silicon (M1/M2/M3/M4):** `Meow Mode-x.x.x-arm64.dmg`
