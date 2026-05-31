@@ -30,7 +30,7 @@
 3. 폼 채우기:
    - **Type**: Digital product
    - **Name**: `Meow Mode`
-   - **Price**: `3.49 USD`
+   - **Price**: `2.99 USD`
 4. **Content** 탭 → 두 dmg 파일 업로드 (`Meow Mode-0.2.0-arm64.dmg`, `-x64.dmg`)
 5. **Description** 탭 → `docs/sales-copy.md` 의 영문 또는 한국어 긴 글 복붙
 6. **Cover image**: `build/icon.png` 업로드 (또는 프리뷰 영상 썸네일)
@@ -53,7 +53,7 @@
    - **Title**: `Meow Mode`
    - **Project URL**: `meow-mode`
    - **Classification**: Other → **Other (creative tool)**
-   - **Pricing**: Paid, Minimum price `$3.49`
+   - **Pricing**: Paid, Minimum price `$2.99`
 4. **Uploads**: dmg 두 개 업로드 (각 파일에 "macOS" 플랫폼 태그)
 5. **Details/cover/screenshots**: `docs/sales-copy.md` 영문 긴 글, cover는 icon.png
 6. **Genre**: Visual novel ❌ → **Simulation** 또는 **Other**

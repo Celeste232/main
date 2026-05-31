@@ -8,7 +8,7 @@
 먀우 모드 (Meow Mode). 가끔 식빵을 굽고, 갑자기 "심심해"라고 외치고,
 화면 끝에서 발톱자국 남기면서 미끄러져요. 진지함 0%, 카오스 25%.
 
-🐱 $3.49 / 평생 무료 업데이트
+🐱 $2.99 / 평생 무료 업데이트
 
 [GIF 첨부]
 
@@ -19,7 +19,7 @@
 ```
 데스크탑이 너무 깨끗했어서 발그림 고양이 한 마리 풀었습니다.
 
-먀우 모드 $3.49.
+먀우 모드 $2.99.
 
 [GIF]
 ```
@@ -31,7 +31,7 @@
 ```
 my desktop was too clean so i let a doodle cat live on it.
 
-meow mode 🐈 $3.49 — macOS
+meow mode 🐈 $2.99 — macOS
 
 it loafs, naps, suddenly meows "i'm bored", and slips off invisible
 window edges leaving claw marks.
@@ -50,7 +50,7 @@ window edges leaving claw marks.
 이번에 새로 낸 앱이에요 🐈
 
 먀우 모드 (Meow Mode)
-$3.49 / macOS
+$2.99 / macOS
 
 #먀우모드 #indieapp #macOS #발그림고양이 #catlovers
 ```
@@ -120,7 +120,7 @@ $3.49 / macOS
 - 20+ 자세 (걷기/식빵/슈퍼맨/미끄러지기/매달리기/...)
 - macOS 12+ / Apple Silicon + Intel
 - 한국어 / English / 일본어 / 중국어
-- $3.49 / 평생 무료 업데이트
+- $2.99 / 평생 무료 업데이트
 
 자세한 건 [링크]
 

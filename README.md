@@ -19,7 +19,7 @@ Meow Mode is a tiny hand-drawn cat that lives on top of your desktop. It strolls
 - 🎨 **30+ behaviors** (loaf, zoomies, grooming, knead, headbonk, sulk…)
 - 🔊 **3 synthesized meow sounds** to choose from
 - 🌏 **4 languages**: 한국어 / English / 日本語 / 中文
-- 💵 **$3.49**, lifetime free updates
+- 💵 **$2.99**, lifetime free updates
 
 ## Download & Install
 

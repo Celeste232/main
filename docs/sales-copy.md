@@ -7,7 +7,7 @@
 ## 🇰🇷 한국어
 
 ### 한 줄 (SNS 헤드라인)
-> 데스크탑에 발그림 고양이 한 마리. **먀우 모드** — $3.49
+> 데스크탑에 발그림 고양이 한 마리. **먀우 모드** — $2.99
 
 ### 중간 (상품 카드 / 부제목)
 > 진지하게 그릴 줄 알면서도 일부러 못 그린 고양이가 화면 위를 돌아다닙니다. 집도 있고, 밥도 줘야 합니다. 가끔 발톱자국 남기면서 미끄러져요.
@@ -37,7 +37,7 @@
 - Apple Silicon + Intel Mac 모두 지원
 - 가벼움 (약 50~80MB RAM, CPU 1% 미만)
 
-**가격 $3.49** — 평생 무료 업데이트 포함.
+**가격 $2.99** — 평생 무료 업데이트 포함.
 
 > ⚠️ 첫 실행 시 macOS가 "확인되지 않은 개발자" 경고를 띄웁니다. 사이닝 비용($99/년)을 안 들인 소규모 개인 제작이라 그렇습니다. **우클릭 → 열기** 한 번만 해주세요. 자세한 안내는 매뉴얼에 있습니다.
 
@@ -46,7 +46,7 @@
 ## 🇬🇧 English
 
 ### One-liner (social headline)
-> A doodle cat on your desktop. **Meow Mode** — $3.49
+> A doodle cat on your desktop. **Meow Mode** — $2.99
 
 ### Medium (card subtitle)
 > A scribble kitten wanders your screen with its own house, bowls, and the occasional near-fall from invisible window edges.
@@ -76,7 +76,7 @@ It loafs, stretches, naps, suddenly meows "I'm bored," and slides off invisible 
 - Apple Silicon and Intel both supported
 - Light: ~50-80MB RAM, <1% CPU
 
-**$3.49** — lifetime free updates included.
+**$2.99** — lifetime free updates included.
 
 > ⚠️ Not Apple-signed (the small studio fee saves you the developer-program cost passed through to the price). macOS will show "unverified developer" the first time. Right-click → Open → Open. Once per install.
 
@@ -85,7 +85,7 @@ It loafs, stretches, naps, suddenly meows "I'm bored," and slides off invisible 
 ## 🇯🇵 日本語
 
 ### 一行 (SNS見出し)
-> デスクトップに、らくがきねこ。**にゃうモード** — $3.49
+> デスクトップに、らくがきねこ。**にゃうモード** — $2.99
 
 ### 中文字 (商品カード)
 > ちょっとへたうまな手描きのねこが、画面の上をうろついています。家とごはん、たまに見えない窓のはじっこで滑り落ちます。
@@ -115,7 +115,7 @@ It loafs, stretches, naps, suddenly meows "I'm bored," and slides off invisible 
 - Apple Silicon と Intel の両対応
 - 軽量 (RAM 50–80MB / CPU 1% 未満)
 
-**$3.49** — 永久無料アップデート込み。
+**$2.99** — 永久無料アップデート込み。
 
 > ⚠️ Apple署名なし (個人制作のため)。初回起動時に「開発元を検証できない」警告が出ます。**右クリック → 開く → 開く** で一度通せばOKです。
 
@@ -124,7 +124,7 @@ It loafs, stretches, naps, suddenly meows "I'm bored," and slides off invisible 
 ## 🇨🇳 简体中文
 
 ### 一句话 (社交媒体)
-> 桌面上的涂鸦小猫。**喵喵模式** — $3.49
+> 桌面上的涂鸦小猫。**喵喵模式** — $2.99
 
 ### 短描述 (商品卡片)
 > 一只手绘风格的小猫在你的屏幕上闲逛,有自己的小屋和食盆,偶尔在看不见的窗口边缘留下爪印滑下来。
@@ -154,7 +154,7 @@ It loafs, stretches, naps, suddenly meows "I'm bored," and slides off invisible 
 - 同时支持 Apple Silicon 和 Intel
 - 轻量 (内存 50–80MB / CPU 1% 以下)
 
-**$3.49** — 终身免费更新。
+**$2.99** — 终身免费更新。
 
 > ⚠️ 未经 Apple 签名 (个人制作)。首次打开时 macOS 会提示"未识别的开发者"。**右键 → 打开 → 打开** 一次即可。
 

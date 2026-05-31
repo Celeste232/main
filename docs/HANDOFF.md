@@ -16,7 +16,7 @@
 | 작업 브랜치 | `claude/cat-house-interactions-pFJxU` ← 여기에만 푸시. main 금지 |
 | 에셋 레포 | `https://github.com/Celeste232/meow-mode-assets` (사용자 직접 관리) |
 | 현재 릴리즈 | **v0.1.1 공개됨**. v0.1.2는 푸시됐고 빌드 트리거만 남음 |
-| 가격 | $3.49 USD, 평생 무료 업데이트 |
+| 가격 | $2.99 USD, 평생 무료 업데이트 |
 | 작가명 | Celine Lee |
 | SNS 핸들 | @meowmode_app (계정 생성 전) |
 | 판매 채널 결정 | **옵션 B**: 깃허브 비공개로 + Gumroad 단독 |
@@ -195,7 +195,7 @@
 
 > 사용자 인용: "B 할게!"
 > - 깃허브 Releases 비공개 (또는 draft 유지)
-> - Gumroad에만 dmg 업로드 → $3.49 정가
+> - Gumroad에만 dmg 업로드 → $2.99 정가
 > - Itch.io는 보너스
 
 ### 사용자가 직접 할 일 (docs/SALES_CHECKLIST.md 참고)
