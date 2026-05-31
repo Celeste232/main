@@ -1,32 +1,21 @@
-# 판매 체크리스트 — Meow Mode v0.1.2
+# 판매 체크리스트 — Meow Mode v0.2.0
 
 너가 직접 해야 할 것들 순서대로. **체크하면서 진행해.**
 
 ---
 
-## 1단계 — 네 PC 업데이트 (5분)
-
-맥에서:
-
-```
-Finder → cat-house 폴더 → update-and-install.command 더블클릭
-```
-
-자동으로 git pull → 빌드 → MeowMode.app 재설치까지 다 함. 끝나면 새 아이콘 + 새 SVG 고양이로 켜져 있을 거야.
-
----
-
-## 2단계 — 판매용 dmg 빌드 (Actions, 20분)
+## 1단계 — 판매용 dmg 빌드 (Actions, 약 15분)
 
 🔗 https://github.com/Celeste232/main/actions/workflows/release.yml
 
-→ Run workflow → 그대로 `v0.1.2` 클릭
+→ **Run workflow** 클릭 (브랜치 아무거나 OK, 입력칸 없음).
+워크플로가 항상 최신 개발 브랜치를 빌드하고, 버전은 `package.json`에서 자동으로 읽어 태그를 붙여.
 
-20분 후 https://github.com/Celeste232/main/releases 에 Draft 생김. 안 들어가서 **Publish release** 누르기.
+약 15분 후 https://github.com/Celeste232/main/releases 에 **v0.2.0** 릴리즈가 생김.
 
 → 그 페이지에서 dmg 두 개 다운로드:
-- `Meow Mode-0.1.2-arm64.dmg` (Apple Silicon)
-- `Meow Mode-0.1.2-x64.dmg` (Intel)
+- `Meow Mode-0.2.0-arm64.dmg` (Apple Silicon)
+- `Meow Mode-0.2.0-x64.dmg` (Intel)
 
 이 두 파일이 **판매 파일**이야.
 
@@ -42,9 +31,9 @@ Finder → cat-house 폴더 → update-and-install.command 더블클릭
    - **Type**: Digital product
    - **Name**: `Meow Mode`
    - **Price**: `3.49 USD`
-4. **Content** 탭 → 두 dmg 파일 업로드
+4. **Content** 탭 → 두 dmg 파일 업로드 (`Meow Mode-0.2.0-arm64.dmg`, `-x64.dmg`)
 5. **Description** 탭 → `docs/sales-copy.md` 의 영문 또는 한국어 긴 글 복붙
-6. **Cover image**: `build/icon.png` 업로드
+6. **Cover image**: `build/icon.png` 업로드 (또는 프리뷰 영상 썸네일)
 7. **Settings**:
    - URL: `meowmode` (사용자 본인 이름 + 슬러그)
    - Tags: `mac, desktop pet, doodle, indie, cute, productivity`
