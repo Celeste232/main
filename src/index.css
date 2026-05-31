@@ -35,8 +35,9 @@ html, body, #root {
 }
 
 .house {
-  width: 120px;
-  height: 120px;
+  /* Bumped ~1cm each way (120 → 158) so the house isn't dwarfed by the cat. */
+  width: 158px;
+  height: 158px;
   cursor: grab;
   touch-action: none;
 }

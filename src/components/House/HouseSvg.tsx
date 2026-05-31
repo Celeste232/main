@@ -3,7 +3,8 @@
  */
 export function HouseSvg() {
   const stroke = '#222';
-  const sw = 2.5;
+  // 50% thicker than before (2.5 → 3.75) to match the bolder cat lines.
+  const sw = 3.75;
   const fill = '#fff';
 
   return (
@@ -67,9 +68,9 @@ export function HouseSvg() {
         {/* Eye */}
         <circle cx="-5" cy="-1.5" r="1.6" fill={stroke} />
         {/* Smile */}
-        <path d="M-10 3 Q-7 6 -4 3" stroke={stroke} strokeWidth={1.4} fill="none" strokeLinecap="round" />
+        <path d="M-10 3 Q-7 6 -4 3" stroke={stroke} strokeWidth={2.1} fill="none" strokeLinecap="round" />
         {/* Gill */}
-        <path d="M7 -4 Q5 0 7 4" stroke={stroke} strokeWidth={1.4} fill="none" strokeLinecap="round" />
+        <path d="M7 -4 Q5 0 7 4" stroke={stroke} strokeWidth={2.1} fill="none" strokeLinecap="round" />
       </g>
     </svg>
   );
