@@ -50,6 +50,7 @@ export const FRAME_SPECS: Record<CatAction, FrameSpec> = {
   napping: { count: 3, intervalMs: 700 },
   knead: { count: 2, intervalMs: 280 },
   sulk: { count: 4, intervalMs: 260 },
+  curl: { count: 2, intervalMs: 1400 },
 };
 
 /**

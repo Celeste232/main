@@ -39,7 +39,8 @@ export type CatAction =
   | 'peek'
   | 'napping'
   | 'knead'
-  | 'sulk';
+  | 'sulk'
+  | 'curl';
 
 export interface CatState {
   action: CatAction;

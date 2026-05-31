@@ -41,6 +41,7 @@ const ACTION_DURATIONS: Record<CatAction, [number, number]> = {
   napping: [15000, 45000],
   knead: [3000, 6000],
   sulk: [3000, 6000],
+  curl: [12000, 40000],
 };
 
 // Activity-level → weighted action pool. Repeated entries = higher weight.
@@ -64,6 +65,7 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'napping', 'napping',
     'knead', 'knead',
     'sulk',
+    'curl', 'curl',
   ],
   normal: [
     'walking', 'walking',
@@ -91,6 +93,7 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'napping',
     'knead',
     'sulk',
+    'curl',
   ],
   energetic: [
     'walking', 'walking', 'walking',

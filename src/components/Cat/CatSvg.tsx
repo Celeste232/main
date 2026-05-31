@@ -51,7 +51,39 @@ export function CatSvg({ action, frame }: CatSvgProps) {
   if (action === 'napping') return <NappingCat frame={frame} />;
   if (action === 'knead') return <KneadCat frame={frame} />;
   if (action === 'sulk') return <SulkCat frame={frame} />;
+  if (action === 'curl') return <CurlCat frame={frame} />;
   return <SittingCat frame={frame} />;
+}
+
+/* 둥글게 누움 — a plump curled-up cat, big head resting on the body, content
+   ^^ eyes, tail sweeping up. (The original icon concept.) */
+function CurlCat({ frame }: { frame: number }) {
+  const breathe = frame % 2 === 0 ? 1 : 1.03;
+  const tail = frame % 2 === 0 ? 0 : -6;
+  return (
+    <svg viewBox="0 0 140 110" width="100%" height="100%">
+      {/* Plump rounded body */}
+      <g transform={`translate(74 66) scale(1 ${breathe}) translate(-74 -66)`}>
+        <ellipse cx="74" cy="66" rx="50" ry="33" fill={fill} stroke={stroke} strokeWidth={sw} />
+      </g>
+      {/* Tail sweeping up on the right */}
+      <g transform={`rotate(${tail} 120 56)`}>
+        <path d="M120 56 Q140 44 130 26 Q124 16 112 22" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      </g>
+      {/* Ears */}
+      <path d="M20 40 L24 22 L38 38 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M44 36 L52 20 L60 38 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      {/* Big head overlapping the body (no neck gap) */}
+      <circle cx="40" cy="58" r="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* Content ^^ eyes */}
+      <path d="M27 56 Q33 50 39 56" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <path d="M43 56 Q49 50 55 56" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      {/* ω mouth */}
+      <path d="M37 64 Q41 68 45 64" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      {/* whiskers */}
+      <path d="M16 58 L4 56 M16 63 L5 66" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
+    </svg>
+  );
 }
 
 /* Cat peeking out of the house door — head + paws over an invisible sill.
