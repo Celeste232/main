@@ -69,7 +69,12 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
       style={{ left: x, top: y }}
       onPointerDown={stop}
     >
-      <button className="settings-close" onPointerUp={(e) => { stop(e); setOpen(false); }}>×</button>
+      <button
+        className="settings-close"
+        onPointerDown={stop}
+        onPointerUp={(e) => { stop(e); setOpen(false); }}
+        onClick={(e) => { stop(e); setOpen(false); }}
+      >×</button>
 
       <h2>{t.title}</h2>
 
