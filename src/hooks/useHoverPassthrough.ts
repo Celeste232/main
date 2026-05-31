@@ -5,47 +5,39 @@ import { useEffect } from 'react';
  * an interactive element. The window is transparent and ignores the mouse
  * everywhere else so clicks fall through to the desktop.
  *
- * Key subtlety: while the window is ignoring the mouse, the renderer does NOT
- * receive mousedown/click events at all — the OS routes them straight to
- * whatever is behind us. So we can't rely on a click to "wake up" the window;
- * passthrough has to already be OFF by the time the user presses down. We
- * achieve that by:
- *   - syncing on every mousemove AND pointermove (cheap, fires constantly), and
- *   - treating a small margin AROUND each .interactive element as interactive,
- *     so brief trips across transparent gaps (house → settings panel) don't
- *     flip passthrough back on mid-gesture and swallow the next click.
+ * Why polling instead of just mousemove: while the window ignores the mouse,
+ * macOS only forwards move events unreliably, so relying on mousemove to turn
+ * passthrough OFF means a button sometimes stays "dead" and the click leaks to
+ * whatever is behind us. Instead we poll the real OS cursor position (via
+ * getCursorPos, already used for look-at-cursor) on a short interval, which
+ * keeps working regardless of event forwarding. mousemove is kept as a fast
+ * path for snappier response while the window already has the mouse.
  */
 export function useHoverPassthrough() {
   useEffect(() => {
     let ignoring = true;
-    let lastX = 0;
-    let lastY = 0;
+    let alive = true;
 
     // Treat anything within this many px of an .interactive element as
-    // interactive, so the cursor crossing a transparent gap between the house
-    // and the settings panel doesn't briefly re-enable passthrough.
-    const MARGIN = 24;
+    // interactive, so the cursor crossing a thin transparent gap (house →
+    // settings panel) doesn't flip passthrough back on mid-gesture.
+    const MARGIN = 20;
 
     const isInteractiveAt = (x: number, y: number): boolean => {
-      const el = document.elementFromPoint(x, y);
-      if (el?.closest('.interactive')) return true;
-      // Probe a ring of points around the cursor; if any lands on an
-      // interactive element we keep passthrough off. Cheap and robust against
-      // thin gaps and sub-pixel edges.
+      if (document.elementFromPoint(x, y)?.closest('.interactive')) return true;
       for (const [dx, dy] of [
         [MARGIN, 0], [-MARGIN, 0], [0, MARGIN], [0, -MARGIN],
         [MARGIN, MARGIN], [-MARGIN, -MARGIN], [MARGIN, -MARGIN], [-MARGIN, MARGIN],
       ]) {
-        const probe = document.elementFromPoint(x + dx, y + dy);
-        if (probe?.closest('.interactive')) return true;
+        if (document.elementFromPoint(x + dx, y + dy)?.closest('.interactive')) return true;
       }
       return false;
     };
 
-    const sync = (x: number, y: number) => {
-      lastX = x;
-      lastY = y;
-      const interactive = isInteractiveAt(x, y);
+    const apply = (x: number, y: number) => {
+      // Off-window / off-screen coords: make sure we're passing through.
+      const inside = x >= 0 && y >= 0 && x <= window.innerWidth && y <= window.innerHeight;
+      const interactive = inside && isInteractiveAt(x, y);
       if (interactive && ignoring) {
         ignoring = false;
         window.api.setIgnoreMouse(false);
@@ -55,19 +47,32 @@ export function useHoverPassthrough() {
       }
     };
 
-    const onMove = (e: MouseEvent) => sync(e.clientX, e.clientY);
-    const onPointerMove = (e: PointerEvent) => sync(e.clientX, e.clientY);
-    const onFocus = () => sync(lastX, lastY);
-
+    // Fast path: pointer moving while the window already receives events.
+    const onMove = (e: MouseEvent) => apply(e.clientX, e.clientY);
     window.addEventListener('mousemove', onMove);
-    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointermove', onMove as (e: Event) => void);
     window.addEventListener('mousedown', onMove, true);
-    window.addEventListener('focus', onFocus);
+
+    // Reliable path: poll the OS cursor so passthrough stays correct even when
+    // macOS stops forwarding move events to an ignoring window.
+    const poll = async () => {
+      while (alive) {
+        try {
+          const p = await window.api.getCursorPos();
+          if (p) apply(p.x, p.y);
+        } catch {
+          /* ignore transient IPC errors */
+        }
+        await new Promise((r) => setTimeout(r, 40));
+      }
+    };
+    void poll();
+
     return () => {
+      alive = false;
       window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointermove', onMove as (e: Event) => void);
       window.removeEventListener('mousedown', onMove, true);
-      window.removeEventListener('focus', onFocus);
     };
   }, []);
 }
