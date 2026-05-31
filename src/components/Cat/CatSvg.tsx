@@ -319,7 +319,7 @@ function HappyCat({ frame }: { frame: number }) {
   // ^_^ eyes, slight tail swish, hearts
   const tail = frame % 2 === 0 ? -16 : 16;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-7 5 127.9 100.6" width="100%" height="100%">
       <Ears />
       <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
       <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -343,7 +343,7 @@ function MeowCat({ frame }: { frame: number }) {
   const open = frame === 0 ? 0.3 : frame === 1 ? 1 : 0.6;
   const wave = frame === 1 ? 1 : 0;
   return (
-    <svg viewBox="0 0 110 100" width="100%" height="100%">
+    <svg viewBox="-3.9 5.6 127.9 100.6" width="100%" height="100%">
       <Ears />
       <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
       <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -364,7 +364,7 @@ function FlopCat({ frame }: { frame: number }) {
   const wiggle = frame % 2 === 0 ? 0 : 2;
   return (
     // Cropped viewBox (was 140x80) so the cat fills the tile.
-    <svg viewBox="4 30 132 54" width="100%" height="100%">
+    <svg viewBox="-1.6 26.8 142.9 54.2" width="100%" height="100%">
       {/* Body — wider oval since cat is belly-up */}
       <ellipse cx="70" cy="56" rx="56" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
       {/* Head at left, facing up */}
@@ -456,7 +456,7 @@ function SprawlCat({ frame }: { frame: number }) {
   // 퍼져있음 — long horizontal blob, paws splayed
   const breathe = frame % 2 === 0 ? 1 : 1.05;
   return (
-    <svg viewBox="6 22 126 52" width="100%" height="100%">
+    <svg viewBox="8 15.5 129.8 61.9" width="100%" height="100%">
       {/* Body breathes vertically (not horizontally) so its left end never
           slides away from the head and opens a neck gap. */}
       <g transform={`translate(74 50) scale(1 ${breathe}) translate(-74 -50)`}>
@@ -545,7 +545,7 @@ function SittingCat({ frame }: { frame: number }) {
   const scale = 1 + (frame % 3 === 1 ? 0.02 : 0);
   const tailRot = frame % 2 === 0 ? -10 : 10;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-9.4 6 127.9 100.6" width="100%" height="100%">
       <Ears />
       <g transform={`translate(50 50) scale(${scale}) translate(-50 -50)`}>
         <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -566,7 +566,7 @@ function WalkingCat({ frame }: { frame: number }) {
   const legA = frame % 4 < 2 ? 0 : 8;
   const legB = frame % 4 < 2 ? 8 : 0;
   return (
-    <svg viewBox="0 0 120 80" width="100%" height="100%">
+    <svg viewBox="3.2 2.8 109.6 74.8" width="100%" height="100%">
       {/* Default-facing-right: mirror the side profile so head ends up on the right. */}
       <g transform="translate(120 0) scale(-1 1)">
         <g transform={`translate(0 ${bob})`}>
@@ -598,7 +598,7 @@ function JumpingCat({ frame }: { frame: number }) {
   const dy = frame === 1 ? -16 : frame === 2 ? -2 : 4;
   const stretch = frame === 1 ? 1.15 : 1;
   return (
-    <svg viewBox="0 0 120 90" width="100%" height="100%">
+    <svg viewBox="1 3.6 106.6 75.6" width="100%" height="100%">
       <g transform="translate(120 0) scale(-1 1)">
         <g transform={`translate(0 ${dy}) scale(1 ${stretch})`}>
           <path d="M104 56 Q116 36 108 24" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
@@ -622,7 +622,7 @@ function PlayCursorCat({ frame }: { frame: number }) {
   const lean = (frame % 4) * 2;
   const paw = frame % 2 === 0 ? 0 : -8;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-12 4.6 127.9 100.6" width="100%" height="100%">
       <g transform={`translate(${lean} 0)`}>
         <Ears />
         <ellipse cx="50" cy="50" rx="26" ry="24" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -650,7 +650,7 @@ function DrinkingCat({ frame }: { frame: number }) {
 
 function SideHunchedCat({ dip, drip = false }: { dip: number; drip?: boolean }) {
   return (
-    <svg viewBox="0 0 120 80" width="100%" height="100%">
+    <svg viewBox="-0.8 18.2 102.8 65.4" width="100%" height="100%">
       {/* Body */}
       <ellipse cx="50" cy="56" rx="34" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
       {/* Head dipped toward the right (the bowl side) */}
@@ -678,7 +678,7 @@ function SideHunchedCat({ dip, drip = false }: { dip: number; drip?: boolean }) 
 function SleepingCat({ frame }: { frame: number }) {
   const breathe = frame % 3 === 1 ? 1.04 : 1;
   return (
-    <svg viewBox="0 0 120 70" width="100%" height="100%">
+    <svg viewBox="-2.4 1.7 122 77.4" width="100%" height="100%">
       <g transform="translate(120 0) scale(-1 1)">
         <g transform={`translate(60 42) scale(1 ${breathe}) translate(-60 -42)`}>
           <ellipse cx="70" cy="42" rx="42" ry="22" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -705,7 +705,7 @@ function StretchingCat({ frame }: { frame: number }) {
   const stretchX = 1 + frame * 0.05;
   return (
     // Cropped viewBox (was 140x70) so the long stretch fills the tile.
-    <svg viewBox="8 2 126 60" width="100%" height="100%">
+    <svg viewBox="4.1 -8.7 122.5 81.2" width="100%" height="100%">
       <g transform="translate(140 0) scale(-1 1)">
         {/* Tail curling up at the back */}
         <path d="M118 38 Q128 18 122 6" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
@@ -728,7 +728,7 @@ function StretchingCat({ frame }: { frame: number }) {
 function YawningCat({ frame }: { frame: number }) {
   const open = frame === 0 ? 1 : 0;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-14 5.6 127.9 100.6" width="100%" height="100%">
       <Ears />
       <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
       <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -742,7 +742,7 @@ function GroomingCat({ frame }: { frame: number }) {
   // Lick paw — paw to mouth
   const pawY = 56 - frame * 2;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-14 5.6 127.9 100.6" width="100%" height="100%">
       <Ears />
       <ellipse cx="50" cy="50" rx="26" ry="24" fill={fill} stroke={stroke} strokeWidth={sw} />
       <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -756,7 +756,7 @@ function GroomingCat({ frame }: { frame: number }) {
 function TailWagCat({ frame }: { frame: number }) {
   const tail = (frame - 1) * 14;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-9.5 5.6 127.9 100.6" width="100%" height="100%">
       <Ears />
       <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
       <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -772,7 +772,7 @@ function TailWagCat({ frame }: { frame: number }) {
 function CuriousCat({ frame }: { frame: number }) {
   const tilt = frame === 0 ? -8 : 8;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-12.1 3.9 127.9 100.6" width="100%" height="100%">
       <g transform={`rotate(${tilt} 50 50)`}>
         <Ears />
         <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -806,7 +806,7 @@ function StartledCat({ frame }: { frame: number }) {
 function BoxCat({ frame }: { frame: number }) {
   const peek = frame % 2 === 0 ? 0 : -2;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="0.2 27.2 99.5 77.4" width="100%" height="100%">
       {/* Head poking up behind the box */}
       <g transform={`translate(0 ${peek})`}>
         <path d="M34 50 L40 38 L46 50 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
@@ -833,7 +833,7 @@ function ZoomiesCat({ frame }: { frame: number }) {
   const dash = frame % 2 === 0 ? 0 : 4;
   return (
     // Cropped viewBox (was 140x80) so the running cat fills the tile.
-    <svg viewBox="2 14 134 62" width="100%" height="100%">
+    <svg viewBox="-4 10.2 132.6 67.3" width="100%" height="100%">
       <g transform="translate(140 0) scale(-1 1)">
         {/* Tail streaming straight back */}
         <path d="M104 44 Q124 40 134 46" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
@@ -862,7 +862,7 @@ function ZoomiesCat({ frame }: { frame: number }) {
 function HeadbonkCat({ frame }: { frame: number }) {
   const lean = frame === 0 ? -10 : frame === 1 ? -16 : -10;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-18.4 5.8 123 98.8" width="100%" height="100%">
       <ellipse cx="50" cy="82" rx="22" ry="15" fill={fill} stroke={stroke} strokeWidth={sw} />
       <g transform={`rotate(${lean} 50 66) translate(0 6)`}>
         <Ears />
@@ -888,7 +888,7 @@ function HeadbonkCat({ frame }: { frame: number }) {
 function PeekCat({ frame }: { frame: number }) {
   const out = frame === 0 ? -6 : frame === 1 ? 0 : -3;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-12.3 0 98.4 97.8" width="100%" height="100%">
       {/* Vertical edge the cat peeks around */}
       <line x1="14" y1="6" x2="14" y2="94" stroke={stroke} strokeWidth={2.3} strokeDasharray="5 4" />
       <g transform={`translate(${out} 0)`}>
@@ -914,7 +914,7 @@ function NappingCat({ frame }: { frame: number }) {
   return (
     // Tight viewBox so the cat fills the tile instead of floating small in a
     // wide 140-box.
-    <svg viewBox="0 0 128 72" width="100%" height="100%">
+    <svg viewBox="0 2.1 129.5 71.2" width="100%" height="100%">
       {/* Body — long oval, belly up */}
       <g transform={`translate(66 48) scale(1 ${breathe}) translate(-66 -48)`}>
         <ellipse cx="66" cy="48" rx="50" ry="17" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -945,7 +945,7 @@ function KneadCat({ frame }: { frame: number }) {
   const leftY = frame % 2 === 0 ? 0 : 6;
   const rightY = frame % 2 === 0 ? 6 : 0;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-14 6.1 127.9 100.6" width="100%" height="100%">
       <Ears />
       <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
       <ellipse cx="50" cy="78" rx="24" ry="17" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -970,7 +970,7 @@ function KneadCat({ frame }: { frame: number }) {
 function SulkCat({ frame }: { frame: number }) {
   const tail = [(-18), 0, 18, 0][frame] ?? 0;
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
+    <svg viewBox="-3 7.5 118 92.9" width="100%" height="100%">
       {/* Ears seen from behind */}
       <path d="M30 34 L36 22 L44 34 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
       <path d="M56 34 L64 22 L70 34 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
