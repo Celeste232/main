@@ -456,14 +456,17 @@ function SprawlCat({ frame }: { frame: number }) {
   const breathe = frame % 2 === 0 ? 1 : 1.05;
   return (
     <svg viewBox="0 0 140 70" width="100%" height="100%">
-      <g transform={`translate(70 50) scale(${breathe} 1) translate(-70 -50)`}>
-        <ellipse cx="70" cy="50" rx="56" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* Body breathes vertically (not horizontally) so its left end never
+          slides away from the head and opens a neck gap. */}
+      <g transform={`translate(74 50) scale(1 ${breathe}) translate(-74 -50)`}>
+        <ellipse cx="74" cy="50" rx="52" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
       </g>
-      <ellipse cx="20" cy="42" rx="14" ry="12" fill={fill} stroke={stroke} strokeWidth={sw} />
-      <path d="M10 32 L14 22 L20 32 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-      <path d="M22 32 L28 22 L32 32 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-      <path d="M16 42 Q18 44 20 42" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-      <path d="M24 42 Q26 44 28 42" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      {/* Head overlapping the body's left bulk, vertically aligned with it */}
+      <ellipse cx="32" cy="48" rx="16" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <path d="M20 36 L26 25 L33 37 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M33 37 L40 25 L45 37 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M27 48 Q30 51 33 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M37 48 Q40 51 43 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       <path d="M124 50 Q138 42 132 30" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       {/* splayed back legs */}
       <line x1="100" y1="60" x2="106" y2="68" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
@@ -704,16 +707,17 @@ function StretchingCat({ frame }: { frame: number }) {
       <g transform="translate(140 0) scale(-1 1)">
         {/* Tail curling up at the back */}
         <path d="M118 38 Q128 18 122 6" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-        {/* Body stretches out */}
-        <g transform={`translate(80 44) scale(${stretchX} 1) translate(-80 -44)`}>
-          <ellipse cx="80" cy="44" rx="36" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
+        {/* Body stretches out — anchored on its left edge so stretching never
+            pulls it away from the head and opens a neck gap. */}
+        <g transform={`translate(48 44) scale(${stretchX} 1) translate(-48 -44)`}>
+          <ellipse cx="84" cy="44" rx="40" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
         </g>
-        {/* Ears + head on top so the face is always visible */}
-        <path d="M14 30 L20 20 L28 30 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-        <path d="M30 30 L36 20 L42 30 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-        <ellipse cx="28" cy="40" rx="20" ry="14" fill={fill} stroke={stroke} strokeWidth={sw} />
-        <circle cx="22" cy="40" r="2" fill={stroke} />
-        <circle cx="34" cy="40" r="2" fill={stroke} />
+        {/* Ears + head overlapping the body's left end (no neck gap) */}
+        <path d="M28 30 L34 20 L42 30 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <path d="M44 30 L50 20 L56 30 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <ellipse cx="42" cy="42" rx="21" ry="15" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <circle cx="36" cy="42" r="2" fill={stroke} />
+        <circle cx="48" cy="42" r="2" fill={stroke} />
       </g>
     </svg>
   );
