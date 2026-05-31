@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meow Mode — Guide / 사용 설명서</title>
+<style>
+  :root { --ink:#2b2b2b; --lav:#d9d2f5; --soft:#fbf9ff; }
+  * { box-sizing:border-box; }
+  body{ font-family:-apple-system,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+        color:var(--ink); line-height:1.6; margin:0; background:#fff; }
+  .wrap{ max-width:760px; margin:0 auto; padding:48px 28px 80px; }
+  header{ text-align:center; margin-bottom:8px; }
+  header .badge{ display:inline-block; background:var(--lav); border:2px solid var(--ink);
+        border-radius:18px; padding:6px 16px; font-weight:700; font-size:14px; }
+  h1{ font-size:34px; margin:18px 0 2px; }
+  .sub{ color:#666; margin:0 0 6px; }
+  .price{ font-weight:700; }
+  nav.langs{ text-align:center; margin:18px 0 6px; font-size:14px; }
+  nav.langs a{ color:#7a5cff; text-decoration:none; margin:0 6px; font-weight:700; }
+  section{ border-top:2px dashed #ddd; padding-top:26px; margin-top:34px; }
+  h2{ font-size:24px; margin:0 0 14px; }
+  h3{ font-size:17px; margin:18px 0 6px; }
+  ol,ul{ padding-left:22px; } li{ margin:5px 0; }
+  .warn{ background:#fff6da; border:1.5px solid #e6c64d; border-radius:12px; padding:12px 16px; margin:14px 0; }
+  .tip{ background:var(--soft); border:1.5px solid var(--lav); border-radius:12px; padding:12px 16px; margin:14px 0; }
+  kbd{ background:#eee; border:1px solid #ccc; border-bottom-width:2px; border-radius:5px; padding:1px 6px; font-size:13px; }
+  table{ border-collapse:collapse; width:100%; margin:10px 0; }
+  td{ border:1px solid #e2e2e2; padding:7px 10px; vertical-align:top; }
+  td:first-child{ font-weight:700; white-space:nowrap; width:34%; }
+  .foot{ text-align:center; color:#999; font-size:13px; margin-top:40px; }
+  @media print{ nav.langs{ display:none; } section{ page-break-inside:avoid; } body{ font-size:13px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="badge">🐾 Meow Mode</span>
+    <h1>사용 설명서 · Guide</h1>
+    <p class="sub">A doodle kitten that lives on your Mac desktop · <span class="price">$2.99</span></p>
+  </header>
+  <nav class="langs">
+    <a href="#ko">한국어</a> · <a href="#en">English</a> · <a href="#ja">日本語</a> · <a href="#zh">中文</a>
+  </nav>
+
+  <!-- The 3 things that cause 90% of support questions, up front, all langs -->
+  <div class="warn" style="margin-top:22px;">
+    <b>⭐ 딱 이것만 기억하세요 · Read this first · まずこれだけ · 先看这个</b>
+    <ol style="margin:8px 0 0;">
+      <li><b>첫 실행은 우클릭 → 열기.</b> 그냥 더블클릭하면 "손상됨"이 떠요(서명 안 한 앱이라 정상, 안전함). &nbsp;|&nbsp;
+          <b>First launch = right-click → Open</b> (double-click shows "damaged"; that's normal &amp; safe). &nbsp;|&nbsp;
+          <b>初回は右クリック→開く</b>（ダブルクリックだと「壊れている」と出ます。正常で安全）。&nbsp;|&nbsp;
+          <b>首次右键→打开</b>（双击会显示“已损坏”，正常且安全）。</li>
+      <li><b>칩에 맞는 파일</b>을 받으세요: 애플 실리콘=<code>arm64.dmg</code>, 인텔=<code>.dmg</code>. &nbsp;|&nbsp;
+          <b>Pick the file for your chip:</b> Apple Silicon = <code>arm64.dmg</code>, Intel = <code>.dmg</code>. &nbsp;|&nbsp;
+          <b>チップに合うファイル</b>を。&nbsp;|&nbsp; <b>选对应芯片的文件</b>。</li>
+      <li><b>아이콘이 옛날 거면</b> 로그아웃 후 재로그인 (macOS 캐시). &nbsp;|&nbsp;
+          <b>Old icon?</b> Log out &amp; back in. &nbsp;|&nbsp; <b>アイコンが古い？</b>再ログイン。&nbsp;|&nbsp; <b>图标没变？</b>注销重登。</li>
+    </ol>
+  </div>
+
+  <!-- ============ 한국어 ============ -->
+  <section id="ko">
+    <h2>🇰🇷 한국어</h2>
+
+    <h3>1. 설치</h3>
+    <ol>
+      <li>내 맥에 맞는 <b>.dmg</b>를 받으세요.
+        <ul>
+          <li><b>애플 실리콘(M1/M2/M3/M4):</b> <code>Meow Mode-x.x.x-arm64.dmg</code></li>
+          <li><b>인텔:</b> <code>Meow Mode-x.x.x.dmg</code></li>
+          <li>모르겠으면 애플 메뉴 → <b>이 Mac에 관하여</b>에서 칩 확인.</li>
+        </ul>
+      </li>
+      <li><b>.dmg</b>를 열고 <b>Meow Mode</b>를 <b>응용 프로그램</b> 폴더로 끌어다 놓기.</li>
+    </ol>
+
+    <h3>2. 첫 실행 (중요!)</h3>
+    <div class="warn">
+      서명/공증을 하지 않은 앱이라, 처음엔 macOS가 막습니다. <b>안전하니</b> 아래대로 한 번만 풀어주세요.
+    </div>
+    <ul>
+      <li><b>방법:</b> 응용 프로그램에서 <b>Meow Mode</b>를 <b>우클릭 → 열기 → (다시) 열기</b>.</li>
+      <li><b>macOS Sequoia(15) 이상:</b> 더블클릭 → 차단되면 → <b>시스템 설정 → 개인정보 보호 및 보안</b> → 아래쪽 "Meow Mode이(가) 차단되었습니다" 옆 <b>"그래도 열기"</b>.</li>
+    </ul>
+    <div class="tip">한 번만 열어주면, 그 다음부터는 그냥 더블클릭으로 열립니다.</div>
+
+    <h3>3. 기본 사용법</h3>
+    <ul>
+      <li>🐾 <b>고양이</b>는 알아서 돌아다녀요. <b>드래그</b>해서 옮길 수 있어요.</li>
+      <li>🏠 <b>집</b>도 드래그로 이동. 지붕의 <b>⚙️</b>를 누르면 <b>설정</b>이 열려요.</li>
+      <li>🍚 <b>밥그릇·물그릇</b>을 클릭하면 채워집니다. 배고프면 고양이가 보채요.</li>
+      <li>🖱️ 마우스를 고양이 가까이 가져가면 <b>쳐다봐요</b>.</li>
+    </ul>
+
+    <h3>4. 메뉴바 아이콘 (화면 맨 위 고양이 얼굴)</h3>
+    <table>
+      <tr><td>잠깐 끄기 / 다시 켜기</td><td>고양이를 잠시 숨겼다 다시 부르기 (아이콘이 자는 얼굴로 바뀜)</td></tr>
+      <tr><td>고양이 찾기</td><td>어디 있는지 모를 때 — 화면 가운데로 잠깐 불러옴</td></tr>
+      <tr><td>화면 위치</td><td>맨앞 / 중간 / 맨뒤 — 다른 창과의 순서 조절</td></tr>
+      <tr><td>종료</td><td>앱 끄기</td></tr>
+    </table>
+
+    <h3>5. 설정 (지붕의 ⚙️)</h3>
+    <ul>
+      <li><b>이름</b> 바꾸기, <b>활동량</b>(조용/보통/활발), <b>활동 영역</b></li>
+      <li><b>소리</b>: 끔 / 기본 / 아기 / 굵은 — 누르면 미리 들려요</li>
+      <li><b>말풍선</b> 켜기·끄기, <b>언어</b>(한/영/일/중)</li>
+    </ul>
+
+    <h3>6. 문제 해결</h3>
+    <table>
+      <tr><td>"손상되어 휴지통으로" 뜸</td><td>위 <b>2번</b>대로 우클릭→열기 (또는 시스템 설정에서 "그래도 열기").</td></tr>
+      <tr><td>아이콘이 안 바뀜</td><td>macOS 아이콘 캐시 탓. <b>로그아웃 후 다시 로그인</b>하면 갱신됩니다.</td></tr>
+      <tr><td>고양이가 안 보임</td><td>메뉴바 아이콘 → <b>고양이 찾기</b>. 또는 잠깐 끄기 상태인지 확인.</td></tr>
+      <tr><td>클릭이 고양이에 막힘</td><td>고양이/집/그릇 위가 아니면 클릭은 그대로 통과합니다. 정상이에요.</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ English ============ -->
+  <section id="en">
+    <h2>🇬🇧 English</h2>
+
+    <h3>1. Install</h3>
+    <ol>
+      <li>Download the right <b>.dmg</b> for your Mac:
+        <ul>
+          <li><b>Apple Silicon (M1/M2/M3/M4):</b> <code>Meow Mode-x.x.x-arm64.dmg</code></li>
+          <li><b>Intel:</b> <code>Meow Mode-x.x.x.dmg</code></li>
+          <li>Not sure? Apple menu → <b>About This Mac</b> → check the chip.</li>
+        </ul>
+      </li>
+      <li>Open the <b>.dmg</b> and drag <b>Meow Mode</b> into your <b>Applications</b> folder.</li>
+    </ol>
+
+    <h3>2. First launch (important!)</h3>
+    <div class="warn">
+      The app isn't notarized, so macOS blocks it the first time. It's <b>safe</b> — just allow it once below.
+    </div>
+    <ul>
+      <li><b>How:</b> right-click <b>Meow Mode</b> in Applications → <b>Open</b> → <b>Open</b> again.</li>
+      <li><b>macOS Sequoia (15)+:</b> double-click → if blocked → <b>System Settings → Privacy &amp; Security</b> → near the bottom, next to "Meow Mode was blocked", click <b>"Open Anyway"</b>.</li>
+    </ul>
+    <div class="tip">After allowing it once, it opens with a normal double-click from then on.</div>
+
+    <h3>3. Basics</h3>
+    <ul>
+      <li>🐾 The <b>cat</b> wanders on its own. <b>Drag</b> it to move it.</li>
+      <li>🏠 Drag the <b>house</b> too. Click the <b>⚙️</b> on the roof for <b>Settings</b>.</li>
+      <li>🍚 Click the <b>food / water bowls</b> to refill them. It nags when hungry.</li>
+      <li>🖱️ Move your cursor near the cat and it <b>looks at it</b>.</li>
+    </ul>
+
+    <h3>4. Menu bar icon (cat face, top of screen)</h3>
+    <table>
+      <tr><td>Pause / Resume</td><td>Hide the cat for a bit, then bring it back (icon shows sleepy eyes)</td></tr>
+      <tr><td>Find the cat</td><td>Lost it? Briefly calls it to the center of the screen</td></tr>
+      <tr><td>Window layer</td><td>Front / Middle / Back — how it stacks against other windows</td></tr>
+      <tr><td>Quit</td><td>Close the app</td></tr>
+    </table>
+
+    <h3>5. Settings (⚙️ on the roof)</h3>
+    <ul>
+      <li>Rename the cat, <b>activity level</b>, <b>roam area</b></li>
+      <li><b>Sound</b>: Off / Classic / Kitten / Deep — tap to preview</li>
+      <li>Speech bubbles on/off, <b>language</b> (KO/EN/JA/ZH)</li>
+    </ul>
+
+    <h3>6. Troubleshooting</h3>
+    <table>
+      <tr><td>"…is damaged, move to Trash"</td><td>Do step <b>2</b>: right-click → Open (or "Open Anyway" in System Settings).</td></tr>
+      <tr><td>Icon didn't update</td><td>It's the macOS icon cache. <b>Log out and back in</b> to refresh.</td></tr>
+      <tr><td>Can't see the cat</td><td>Menu bar icon → <b>Find the cat</b>, or check if it's paused.</td></tr>
+      <tr><td>Clicks blocked by the cat</td><td>Clicks pass through everywhere except on the cat/house/bowls. That's normal.</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ 日本語 ============ -->
+  <section id="ja">
+    <h2>🇯🇵 日本語</h2>
+
+    <h3>1. インストール</h3>
+    <ol>
+      <li>お使いの Mac に合った <b>.dmg</b> をダウンロード：
+        <ul>
+          <li><b>Apple Silicon（M1/M2/M3/M4）:</b> <code>Meow Mode-x.x.x-arm64.dmg</code></li>
+          <li><b>Intel:</b> <code>Meow Mode-x.x.x.dmg</code></li>
+          <li>不明な場合は Apple メニュー → <b>この Mac について</b> でチップを確認。</li>
+        </ul>
+      </li>
+      <li><b>.dmg</b> を開き、<b>Meow Mode</b> を <b>アプリケーション</b> フォルダへドラッグ。</li>
+    </ol>
+
+    <h3>2. 初回起動（重要！）</h3>
+    <div class="warn">
+      公証していないアプリのため、初回は macOS がブロックします。<b>安全</b>なので、下記の手順で一度だけ許可してください。
+    </div>
+    <ul>
+      <li><b>方法:</b> アプリケーションの <b>Meow Mode</b> を <b>右クリック → 開く → もう一度「開く」</b>。</li>
+      <li><b>macOS Sequoia(15) 以降:</b> ダブルクリック → ブロックされたら → <b>システム設定 → プライバシーとセキュリティ</b> → 下の方「Meow Mode はブロックされました」の横の <b>「このまま開く」</b>。</li>
+    </ul>
+    <div class="tip">一度許可すれば、次回からは普通のダブルクリックで開きます。</div>
+
+    <h3>3. 基本の使い方</h3>
+    <ul>
+      <li>🐾 <b>猫</b>は自由に歩き回ります。<b>ドラッグ</b>で移動できます。</li>
+      <li>🏠 <b>おうち</b>もドラッグで移動。屋根の <b>⚙️</b> で <b>設定</b>が開きます。</li>
+      <li>🍚 <b>ごはん・水のお皿</b>をクリックで補充。お腹がすくと催促します。</li>
+      <li>🖱️ カーソルを近づけると、猫が<b>見つめます</b>。</li>
+    </ul>
+
+    <h3>4. メニューバーのアイコン（画面上部の猫の顔）</h3>
+    <table>
+      <tr><td>一時停止 / 再開</td><td>猫を少し隠して、また呼び戻す（アイコンが寝顔に変わります）</td></tr>
+      <tr><td>猫を探す</td><td>見失ったとき、画面中央に少し呼び寄せます</td></tr>
+      <tr><td>表示レイヤー</td><td>最前 / ふつう / 最背 — 他のウインドウとの重なり順</td></tr>
+      <tr><td>終了</td><td>アプリを終了</td></tr>
+    </table>
+
+    <h3>5. 設定（屋根の ⚙️）</h3>
+    <ul>
+      <li>名前の変更、<b>活動量</b>、<b>行動エリア</b></li>
+      <li><b>鳴き声</b>: オフ / 標準 / 子猫 / 太い — タップで試聴</li>
+      <li>吹き出しのオン・オフ、<b>言語</b>（韓/英/日/中）</li>
+    </ul>
+
+    <h3>6. トラブルシューティング</h3>
+    <table>
+      <tr><td>「壊れている、ゴミ箱へ」</td><td>手順 <b>2</b>：右クリック → 開く（または設定で「このまま開く」）。</td></tr>
+      <tr><td>アイコンが変わらない</td><td>macOS のアイコンキャッシュです。<b>ログアウトして再ログイン</b>で更新。</td></tr>
+      <tr><td>猫が見えない</td><td>メニューバー → <b>猫を探す</b>、または一時停止中か確認。</td></tr>
+      <tr><td>クリックが猫にさえぎられる</td><td>猫・家・お皿の上以外はクリックがそのまま通ります。正常です。</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ 中文 ============ -->
+  <section id="zh">
+    <h2>🇨🇳 中文</h2>
+
+    <h3>1. 安装</h3>
+    <ol>
+      <li>下载适合你 Mac 的 <b>.dmg</b>：
+        <ul>
+          <li><b>Apple 芯片（M1/M2/M3/M4）:</b> <code>Meow Mode-x.x.x-arm64.dmg</code></li>
+          <li><b>Intel:</b> <code>Meow Mode-x.x.x.dmg</code></li>
+          <li>不确定？点击苹果菜单 → <b>关于本机</b> 查看芯片。</li>
+        </ul>
+      </li>
+      <li>打开 <b>.dmg</b>，将 <b>Meow Mode</b> 拖入 <b>应用程序</b> 文件夹。</li>
+    </ol>
+
+    <h3>2. 首次启动（重要！）</h3>
+    <div class="warn">
+      应用未经公证，首次会被 macOS 拦截。它是<b>安全的</b> —— 按下面操作允许一次即可。
+    </div>
+    <ul>
+      <li><b>方法:</b> 在应用程序里 <b>右键点击 Meow Mode → 打开 → 再次「打开」</b>。</li>
+      <li><b>macOS Sequoia(15) 及以上:</b> 双击 → 被拦截 → <b>系统设置 → 隐私与安全性</b> → 底部「Meow Mode 已被阻止」旁点 <b>"仍要打开"</b>。</li>
+    </ul>
+    <div class="tip">允许一次后，之后双击即可正常打开。</div>
+
+    <h3>3. 基本用法</h3>
+    <ul>
+      <li>🐾 <b>猫咪</b>会自己活动。<b>拖动</b>可移动它。</li>
+      <li>🏠 <b>小屋</b>也能拖动。点击屋顶的 <b>⚙️</b> 打开<b>设置</b>。</li>
+      <li>🍚 点击<b>食碗 / 水碗</b>补充。饿了它会催你。</li>
+      <li>🖱️ 把光标靠近猫咪，它会<b>盯着看</b>。</li>
+    </ul>
+
+    <h3>4. 菜单栏图标（屏幕顶部的猫脸）</h3>
+    <table>
+      <tr><td>暂停 / 继续</td><td>暂时藏起猫咪再唤回（图标变成睡眼）</td></tr>
+      <tr><td>寻找猫咪</td><td>找不到时，把它短暂唤到屏幕中央</td></tr>
+      <tr><td>窗口层级</td><td>最前 / 中间 / 最后 —— 与其他窗口的层叠顺序</td></tr>
+      <tr><td>退出</td><td>关闭应用</td></tr>
+    </table>
+
+    <h3>5. 设置（屋顶的 ⚙️）</h3>
+    <ul>
+      <li>重命名、<b>活跃度</b>、<b>活动范围</b></li>
+      <li><b>叫声</b>：关 / 默认 / 幼猫 / 低沉 —— 点击试听</li>
+      <li>对话气泡开关、<b>语言</b>（韩/英/日/中）</li>
+    </ul>
+
+    <h3>6. 疑难解答</h3>
+    <table>
+      <tr><td>“已损坏，移到废纸篓”</td><td>按第 <b>2</b> 步：右键 → 打开（或在系统设置点“仍要打开”）。</td></tr>
+      <tr><td>图标没更新</td><td>是 macOS 图标缓存。<b>注销后重新登录</b>即可刷新。</td></tr>
+      <tr><td>看不到猫咪</td><td>菜单栏图标 → <b>寻找猫咪</b>，或检查是否处于暂停。</td></tr>
+      <tr><td>点击被猫咪挡住</td><td>除猫/屋/碗之外，点击都会正常穿透。这是正常的。</td></tr>
+    </table>
+  </section>
+
+  <p class="foot">Meow Mode · Celine Lee · lifetime free updates 🐾</p>
+</div>
+</body>
+</html>
