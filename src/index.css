@@ -77,11 +77,11 @@ html, body, #root {
 }
 
 .cat {
-  /* Sized to the external doodle SVG aspect (180:140). The old 80x80 square
-     squashed the wide cat sideways and made it look tiny; this keeps the
-     natural proportions and gives the drawing more room. */
-  width: 128px;
-  height: 100px;
+  /* Sized to the doodle proportions. Bigger than before so the hand-drawn
+     lines read clearly at desktop-pet scale. object-fit keeps each pose's
+     own aspect from distorting. */
+  width: 150px;
+  height: 118px;
   transition: transform 0.1s linear;
   touch-action: none;
 }

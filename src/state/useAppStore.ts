@@ -36,7 +36,10 @@ export type CatAction =
   | 'box'
   | 'zoomies'
   | 'headbonk'
-  | 'peek';
+  | 'peek'
+  | 'napping'
+  | 'knead'
+  | 'sulk';
 
 export interface CatState {
   action: CatAction;

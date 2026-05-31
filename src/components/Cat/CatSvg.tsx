@@ -6,7 +6,7 @@ interface CatSvgProps {
 }
 
 const stroke = '#222';
-const sw = 2.5;
+const sw = 3.6;
 const fill = '#fff';
 
 /**
@@ -48,6 +48,9 @@ export function CatSvg({ action, frame }: CatSvgProps) {
   if (action === 'zoomies') return <ZoomiesCat frame={frame} />;
   if (action === 'headbonk') return <HeadbonkCat frame={frame} />;
   if (action === 'peek') return <PeekCat frame={frame} />;
+  if (action === 'napping') return <NappingCat frame={frame} />;
+  if (action === 'knead') return <KneadCat frame={frame} />;
+  if (action === 'sulk') return <SulkCat frame={frame} />;
   return <SittingCat frame={frame} />;
 }
 
@@ -119,7 +122,7 @@ function DangleCat({ frame }: { frame: number }) {
   return (
     <svg viewBox="0 0 80 110" width="100%" height="100%">
       {/* Invisible ledge line at the top */}
-      <line x1="6" y1="10" x2="74" y2="10" stroke={stroke} strokeWidth={1.5} strokeDasharray="4 3" strokeLinecap="round" />
+      <line x1="6" y1="10" x2="74" y2="10" stroke={stroke} strokeWidth={2.1} strokeDasharray="4 3" strokeLinecap="round" />
       <g transform={`translate(${swing} 0)`}>
         {/* Paws gripping the ledge */}
         <ellipse cx="28" cy="10" rx="5" ry="4" fill={fill} stroke={stroke} strokeWidth={sw} />
@@ -133,11 +136,11 @@ function DangleCat({ frame }: { frame: number }) {
         <path d="M28 36 L32 26 L38 36 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
         <path d="M42 36 L48 26 L52 36 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
         {/* Face wide-eyed */}
-        <circle cx="34" cy="46" r="2.5" fill="none" stroke={stroke} strokeWidth={1.8} />
-        <circle cx="46" cy="46" r="2.5" fill="none" stroke={stroke} strokeWidth={1.8} />
+        <circle cx="34" cy="46" r="2.5" fill="none" stroke={stroke} strokeWidth={2.5} />
+        <circle cx="46" cy="46" r="2.5" fill="none" stroke={stroke} strokeWidth={2.5} />
         <circle cx="34" cy="46" r="1" fill={stroke} />
         <circle cx="46" cy="46" r="1" fill={stroke} />
-        <ellipse cx="40" cy="54" rx="2.5" ry="2" fill="#f08aa6" stroke={stroke} strokeWidth={1.2} />
+        <ellipse cx="40" cy="54" rx="2.5" ry="2" fill="#f08aa6" stroke={stroke} strokeWidth={2.5} />
         {/* Back legs dangling */}
         <line x1="32" y1="76" x2="28" y2="96" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
         <line x1="48" y1="76" x2="52" y2="96" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
@@ -174,14 +177,14 @@ function ClimbCat({ frame }: { frame: number }) {
         <ellipse cx="48" cy="50" rx="14" ry="12" fill={fill} stroke={stroke} strokeWidth={sw} />
         <circle cx="42" cy="50" r="2" fill={stroke} />
         <circle cx="52" cy="50" r="2" fill={stroke} />
-        <ellipse cx="47" cy="56" rx="2" ry="1.5" fill="#f08aa6" stroke={stroke} strokeWidth={1.2} />
+        <ellipse cx="47" cy="56" rx="2" ry="1.5" fill="#f08aa6" stroke={stroke} strokeWidth={2.5} />
       </g>
       {/* Scratch marks on the wall — disappear when cat climbs above them */}
       {frame < 2 && (
         <>
-          <path d="M22 88 L26 100" stroke={stroke} strokeWidth={1.4} strokeLinecap="round" />
-          <path d="M28 88 L32 100" stroke={stroke} strokeWidth={1.4} strokeLinecap="round" />
-          <path d="M70 90 L74 102" stroke={stroke} strokeWidth={1.4} strokeLinecap="round" />
+          <path d="M22 88 L26 100" stroke={stroke} strokeWidth={2.0} strokeLinecap="round" />
+          <path d="M28 88 L32 100" stroke={stroke} strokeWidth={2.0} strokeLinecap="round" />
+          <path d="M70 90 L74 102" stroke={stroke} strokeWidth={2.0} strokeLinecap="round" />
         </>
       )}
     </svg>
@@ -207,7 +210,7 @@ function SlipCat({ frame }: { frame: number }) {
           <ellipse cx="38" cy="38" rx="18" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
           <circle cx="32" cy="38" r="2.5" fill={stroke} />
           <circle cx="44" cy="38" r="2.5" fill={stroke} />
-          <ellipse cx="38" cy="46" rx="3" ry="2.5" fill="#f08aa6" stroke={stroke} strokeWidth={1.4} />
+          <ellipse cx="38" cy="46" rx="3" ry="2.5" fill="#f08aa6" stroke={stroke} strokeWidth={2.0} />
           {/* Paws flailing — splayed legs */}
           <line x1="56" y1="64" x2={50 + frame * 2} y2={78 + frame * 2} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
           <line x1="68" y1="64" x2={64 - frame * 2} y2={80} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
@@ -216,7 +219,7 @@ function SlipCat({ frame }: { frame: number }) {
         </g>
       </g>
       {/* Skid lines under the back foot */}
-      <path d="M30 84 L50 84 M58 86 L78 86" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+      <path d="M30 84 L50 84 M58 86 L78 86" stroke={stroke} strokeWidth={2.3} fill="none" strokeLinecap="round" />
       <text x="86" y="20" fontSize="11" fill={stroke}>어어!</text>
     </svg>
   );
@@ -286,7 +289,7 @@ function RollCat({ frame }: { frame: number }) {
       </g>
       {/* motion lines under */}
       <path d="M20 92 L26 92 M34 92 L40 92 M48 92 L54 92 M62 92 L68 92 M76 92 L82 92"
-            stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+            stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
     </svg>
   );
 }
@@ -304,10 +307,10 @@ function ShakeCat({ frame }: { frame: number }) {
         <Whiskers />
       </g>
       {/* motion squiggles on both sides */}
-      <path d="M14 40 Q10 44 14 48" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
-      <path d="M8 50 Q4 54 8 58" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
-      <path d="M96 40 Q100 44 96 48" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
-      <path d="M102 50 Q106 54 102 58" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+      <path d="M14 40 Q10 44 14 48" stroke={stroke} strokeWidth={2.3} fill="none" strokeLinecap="round" />
+      <path d="M8 50 Q4 54 8 58" stroke={stroke} strokeWidth={2.3} fill="none" strokeLinecap="round" />
+      <path d="M96 40 Q100 44 96 48" stroke={stroke} strokeWidth={2.3} fill="none" strokeLinecap="round" />
+      <path d="M102 50 Q106 54 102 58" stroke={stroke} strokeWidth={2.3} fill="none" strokeLinecap="round" />
     </svg>
   );
 }
@@ -330,7 +333,7 @@ function HappyCat({ frame }: { frame: number }) {
       </g>
       {/* tiny heart */}
       <path d="M80 18 q-3 -4 -6 0 q0 4 6 8 q6 -4 6 -8 q-3 -4 -6 0 Z"
-            fill="none" stroke={stroke} strokeWidth={1.6} strokeLinejoin="round" />
+            fill="none" stroke={stroke} strokeWidth={2.3} strokeLinejoin="round" />
     </svg>
   );
 }
@@ -348,8 +351,8 @@ function MeowCat({ frame }: { frame: number }) {
       <Whiskers />
       {wave === 1 && (
         <>
-          <path d="M86 44 Q94 48 86 52" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
-          <path d="M92 38 Q104 48 92 58" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+          <path d="M86 44 Q94 48 86 52" stroke={stroke} strokeWidth={2.3} fill="none" strokeLinecap="round" />
+          <path d="M92 38 Q104 48 92 58" stroke={stroke} strokeWidth={2.3} fill="none" strokeLinecap="round" />
         </>
       )}
     </svg>
@@ -415,11 +418,11 @@ function CaughtCat({ frame }: { frame: number }) {
       <Ears />
       <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
       <ellipse cx="50" cy="78" rx="22" ry="16" fill={fill} stroke={stroke} strokeWidth={sw} />
-      <circle cx="40" cy="48" r={wide} fill="none" stroke={stroke} strokeWidth={1.8} />
-      <circle cx="60" cy="48" r={wide} fill="none" stroke={stroke} strokeWidth={1.8} />
+      <circle cx="40" cy="48" r={wide} fill="none" stroke={stroke} strokeWidth={2.5} />
+      <circle cx="60" cy="48" r={wide} fill="none" stroke={stroke} strokeWidth={2.5} />
       <circle cx="40" cy="48" r="1.4" fill={stroke} />
       <circle cx="60" cy="48" r="1.4" fill={stroke} />
-      <ellipse cx="50" cy="58" rx="2" ry="2.5" fill="#f08aa6" stroke={stroke} strokeWidth={1.2} />
+      <ellipse cx="50" cy="58" rx="2" ry="2.5" fill="#f08aa6" stroke={stroke} strokeWidth={2.5} />
       <Whiskers />
       <text x="80" y="20" fontSize="14" fill={stroke}>!</text>
     </svg>
@@ -502,8 +505,8 @@ function Ears() {
 function Whiskers() {
   return (
     <>
-      <path d="M30 52 L22 50 M30 56 L22 58" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
-      <path d="M70 52 L78 50 M70 56 L78 58" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+      <path d="M30 52 L22 50 M30 56 L22 58" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
+      <path d="M70 52 L78 50 M70 56 L78 58" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
     </>
   );
 }
@@ -523,7 +526,7 @@ function Face({ blink = false, mouthOpen = 0 }: { blink?: boolean; mouthOpen?: n
         </>
       )}
       {mouthOpen > 0 ? (
-        <ellipse cx="50" cy="58" rx={2 + mouthOpen * 3} ry={1 + mouthOpen * 3} fill="#f08aa6" stroke={stroke} strokeWidth={1.4} />
+        <ellipse cx="50" cy="58" rx={2 + mouthOpen * 3} ry={1 + mouthOpen * 3} fill="#f08aa6" stroke={stroke} strokeWidth={2.0} />
       ) : (
         <path d="M48 56 Q50 58 52 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       )}
@@ -575,7 +578,7 @@ function WalkingCat({ frame }: { frame: number }) {
           <circle cx="32" cy="32" r="2" fill={stroke} />
           <circle cx="44" cy="32" r="2" fill={stroke} />
           <path d="M36 38 Q38 40 40 38" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-          <path d="M22 32 L14 30 M22 36 L14 38" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+          <path d="M22 32 L14 30 M22 36 L14 38" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
         </g>
         <line x1="52" y1={60} x2="52" y2={70 - legA} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
         <line x1="62" y1={60} x2="62" y2={70 - legB} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
@@ -654,7 +657,7 @@ function SideHunchedCat({ dip, drip = false }: { dip: number; drip?: boolean }) 
         <circle cx="-4" cy="0" r="1.6" fill={stroke} />
         <circle cx="6" cy="0" r="1.6" fill={stroke} />
         <path d="M-3 6 Q1 8 5 6" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-        <path d="M-14 0 L-20 -2 M-14 4 L-20 6" stroke={stroke} strokeWidth={1.4} strokeLinecap="round" />
+        <path d="M-14 0 L-20 -2 M-14 4 L-20 6" stroke={stroke} strokeWidth={2.0} strokeLinecap="round" />
         {drip && (
           <line x1="2" y1="10" x2="2" y2="14" stroke="#6aa8d8" strokeWidth={2} strokeLinecap="round" />
         )}
@@ -681,7 +684,7 @@ function SleepingCat({ frame }: { frame: number }) {
         <path d="M30 28 L36 18 L42 28 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
         <path d="M22 36 Q24 38 26 36" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
         <path d="M30 38 Q32 40 34 38" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-        <path d="M14 40 L8 38 M14 44 L8 46" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+        <path d="M14 40 L8 38 M14 44 L8 46" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
         <path d="M108 38 Q120 30 110 22" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       </g>
       {frame === 0 && (
@@ -806,15 +809,15 @@ function BoxCat({ frame }: { frame: number }) {
         <circle cx="43" cy="56" r="2.2" fill={stroke} />
         <circle cx="57" cy="56" r="2.2" fill={stroke} />
         <path d="M47 63 Q50 66 53 63" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-        <path d="M30 56 L20 54 M30 60 L20 62" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
-        <path d="M70 56 L80 54 M70 60 L80 62" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+        <path d="M30 56 L20 54 M30 60 L20 62" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
+        <path d="M70 56 L80 54 M70 60 L80 62" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
       </g>
       {/* Box in front — front face + flaps */}
       <path d="M20 64 L80 64 L84 96 L16 96 Z" fill="#fff" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
       <path d="M20 64 L8 56 M80 64 L92 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       <path d="M8 56 L14 64 M92 56 L86 64" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
       {/* tape seam */}
-      <line x1="50" y1="64" x2="50" y2="96" stroke={stroke} strokeWidth={1.4} strokeDasharray="3 3" />
+      <line x1="50" y1="64" x2="50" y2="96" stroke={stroke} strokeWidth={2.0} strokeDasharray="3 3" />
     </svg>
   );
 }
@@ -835,7 +838,7 @@ function ZoomiesCat({ frame }: { frame: number }) {
         {/* Head leading */}
         <ellipse cx="36" cy="38" rx="17" ry="15" fill={fill} stroke={stroke} strokeWidth={sw} />
         <path d="M30 38 L34 40 M30 38 L34 36" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-        <ellipse cx="38" cy="44" rx="2.5" ry="2" fill="#f08aa6" stroke={stroke} strokeWidth={1.2} />
+        <ellipse cx="38" cy="44" rx="2.5" ry="2" fill="#f08aa6" stroke={stroke} strokeWidth={2.5} />
         {/* Legs flung — front reaching, back kicking */}
         <line x1="52" y1="56" x2={40 - dash} y2="68" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
         <line x1="58" y1="56" x2={48 - dash} y2="70" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
@@ -843,7 +846,7 @@ function ZoomiesCat({ frame }: { frame: number }) {
         <line x1="94" y1="54" x2={106 + dash} y2="62" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
       </g>
       {/* Speed lines trailing behind (right side, since cat faces right) */}
-      <path d="M4 36 L24 36 M2 46 L20 46 M6 56 L22 56" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+      <path d="M4 36 L24 36 M2 46 L20 46 M6 56 L22 56" stroke={stroke} strokeWidth={2.3} fill="none" strokeLinecap="round" />
     </svg>
   );
 }
@@ -865,10 +868,10 @@ function HeadbonkCat({ frame }: { frame: number }) {
       </g>
       {/* affection hearts drifting up on the lean side */}
       <path d="M22 26 q-2.5 -3 -5 0 q0 3 5 6 q5 -3 5 -6 q-2.5 -3 -5 0 Z"
-            fill="none" stroke={stroke} strokeWidth={1.5} strokeLinejoin="round" />
+            fill="none" stroke={stroke} strokeWidth={2.1} strokeLinejoin="round" />
       {frame === 1 && (
         <path d="M14 14 q-2 -2.5 -4 0 q0 2.5 4 5 q4 -2.5 4 -5 q-2 -2.5 -4 0 Z"
-              fill="none" stroke={stroke} strokeWidth={1.3} strokeLinejoin="round" />
+              fill="none" stroke={stroke} strokeWidth={1.9} strokeLinejoin="round" />
       )}
     </svg>
   );
@@ -880,7 +883,7 @@ function PeekCat({ frame }: { frame: number }) {
   return (
     <svg viewBox="0 0 100 100" width="100%" height="100%">
       {/* Vertical edge the cat peeks around */}
-      <line x1="14" y1="6" x2="14" y2="94" stroke={stroke} strokeWidth={1.6} strokeDasharray="5 4" />
+      <line x1="14" y1="6" x2="14" y2="94" stroke={stroke} strokeWidth={2.3} strokeDasharray="5 4" />
       <g transform={`translate(${out} 0)`}>
         {/* Only the right half of the head clears the edge */}
         <path d="M30 40 L36 28 L42 40 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
@@ -891,8 +894,90 @@ function PeekCat({ frame }: { frame: number }) {
         <circle cx="34" cy="50" r="2.4" fill={stroke} />
         <circle cx="44" cy="50" r="2.4" fill={stroke} />
         <path d="M37 58 Q40 60 43 58" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
-        <path d="M52 48 L60 46 M52 52 L60 54" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+        <path d="M52 48 L60 46 M52 52 L60 54" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
       </g>
+    </svg>
+  );
+}
+
+/* 낮잠냥 — lying on its back, front paws folded on the belly, eyes closed.
+   Gentle breathing + a drifting z. */
+function NappingCat({ frame }: { frame: number }) {
+  const breathe = frame % 2 === 0 ? 1 : 1.04;
+  return (
+    <svg viewBox="0 0 140 80" width="100%" height="100%">
+      {/* Body — long oval, belly up */}
+      <g transform={`translate(70 52) scale(1 ${breathe}) translate(-70 -52)`}>
+        <ellipse cx="70" cy="52" rx="52" ry="17" fill={fill} stroke={stroke} strokeWidth={sw} />
+      </g>
+      {/* Head at the left, tilted back asleep */}
+      <ellipse cx="24" cy="48" rx="16" ry="15" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <path d="M12 40 L16 28 L22 40 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M24 40 L30 28 L34 40 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      {/* closed eyes (happy arcs) */}
+      <path d="M16 48 Q19 51 22 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M27 48 Q30 51 33 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <ellipse cx="24" cy="55" rx="2.4" ry="1.8" fill="#f08aa6" stroke={stroke} strokeWidth={1.8} />
+      {/* Front paws folded on the belly */}
+      <ellipse cx="68" cy="40" rx="7" ry="5" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="82" cy="40" rx="7" ry="5" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* Tail curling at the right */}
+      <path d="M120 52 Q134 44 128 30" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      {/* drifting zzz */}
+      <text x="40" y="18" fontSize="12" fill={stroke}>{frame === 0 ? 'z' : frame === 1 ? 'Z' : 'z'}</text>
+    </svg>
+  );
+}
+
+/* 꾹꾹이 — making biscuits. Sitting upright, both front paws push down
+   alternately (knead). */
+function KneadCat({ frame }: { frame: number }) {
+  // Alternate paws up/down each frame
+  const leftY = frame % 2 === 0 ? 0 : 6;
+  const rightY = frame % 2 === 0 ? 6 : 0;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <Ears />
+      <ellipse cx="50" cy="48" rx="26" ry="26" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="50" cy="78" rx="24" ry="17" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* content half-closed eyes */}
+      <path d="M37 47 Q40 49 43 47" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M57 47 Q60 49 63 47" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M47 55 Q50 57 53 55" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <Whiskers />
+      {/* Front legs + paws kneading (push down alternately) */}
+      <line x1="40" y1="72" x2="40" y2={84 - leftY} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <line x1="60" y1="72" x2="60" y2={84 - rightY} stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      <ellipse cx="40" cy={86 - leftY} rx="6" ry="4" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <ellipse cx="60" cy={86 - rightY} rx="6" ry="4" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* little motion ticks above the lifted paw */}
+      {leftY === 6 && <path d="M36 70 L40 66 L44 70" stroke={stroke} strokeWidth={2.1} fill="none" strokeLinecap="round" />}
+      {rightY === 6 && <path d="M56 70 L60 66 L64 70" stroke={stroke} strokeWidth={2.1} fill="none" strokeLinecap="round" />}
+    </svg>
+  );
+}
+
+/* 뿌잉뿌잉 — sulking. Back turned to the viewer, tail flicking side to side. */
+function SulkCat({ frame }: { frame: number }) {
+  const tail = [(-18), 0, 18, 0][frame] ?? 0;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      {/* Ears seen from behind */}
+      <path d="M30 34 L36 22 L44 34 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M56 34 L64 22 L70 34 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      {/* Rounded back of the head (no face) */}
+      <ellipse cx="50" cy="44" rx="24" ry="22" fill={fill} stroke={stroke} strokeWidth={sw} />
+      {/* Back/body as a big rounded hump */}
+      <path d="M22 86 L22 64 Q22 44 50 44 Q78 44 78 64 L78 86 Z"
+            fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      {/* faint spine line */}
+      <path d="M50 46 L50 62" stroke={stroke} strokeWidth={2.1} strokeLinecap="round" />
+      {/* Tail flicking at the base, off to one side */}
+      <g transform={`rotate(${tail} 78 84)`}>
+        <path d="M76 84 Q92 80 90 62" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      </g>
+      {/* hmph mark */}
+      <text x="78" y="30" fontSize="13" fill={stroke}>{frame % 2 === 0 ? '흥' : ''}</text>
     </svg>
   );
 }

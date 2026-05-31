@@ -47,6 +47,9 @@ export const FRAME_SPECS: Record<CatAction, FrameSpec> = {
   zoomies: { count: 2, intervalMs: 90 },
   headbonk: { count: 3, intervalMs: 220 },
   peek: { count: 3, intervalMs: 350 },
+  napping: { count: 3, intervalMs: 700 },
+  knead: { count: 2, intervalMs: 280 },
+  sulk: { count: 4, intervalMs: 260 },
 };
 
 /**
