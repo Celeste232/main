@@ -97,29 +97,44 @@ function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function playMeow(volume: number) {
+/**
+ * Synthesized meow variants. Each is a bandpass-filtered sawtooth whose pitch
+ * sweeps up then down (the classic "me-ow" contour); the three presets differ
+ * in pitch range, length and timbre:
+ *   1 = 기본  — the original mid-pitch meow
+ *   2 = 아기  — higher, shorter, kitten-like "mew"
+ *   3 = 굵은  — lower, longer, throatier "mrrow"
+ */
+const MEOW_PRESETS = {
+  1: { type: 'sawtooth' as OscillatorType, band: 900, q: 3, f0: 420, f1: 780, f2: 520, attack: 0.06, hold: 0.32, end: 0.52, stop: 0.55, gain: 0.18 },
+  2: { type: 'triangle' as OscillatorType, band: 1500, q: 4, f0: 620, f1: 1120, f2: 820, attack: 0.04, hold: 0.18, end: 0.30, stop: 0.33, gain: 0.16 },
+  3: { type: 'sawtooth' as OscillatorType, band: 600, q: 2.2, f0: 260, f1: 470, f2: 320, attack: 0.08, hold: 0.46, end: 0.74, stop: 0.78, gain: 0.20 },
+};
+
+export function playMeow(volume: number, soundType: 1 | 2 | 3 = 1) {
   try {
+    const p = MEOW_PRESETS[soundType] ?? MEOW_PRESETS[1];
     const ctx = new AudioContext();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     const filter = ctx.createBiquadFilter();
     filter.type = 'bandpass';
-    filter.frequency.value = 900;
-    filter.Q.value = 3;
+    filter.frequency.value = p.band;
+    filter.Q.value = p.q;
     osc.connect(filter);
     filter.connect(gain);
     gain.connect(ctx.destination);
     const now = ctx.currentTime;
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(420, now);
-    osc.frequency.exponentialRampToValueAtTime(780, now + 0.12);
-    osc.frequency.exponentialRampToValueAtTime(520, now + 0.45);
+    osc.type = p.type;
+    osc.frequency.setValueAtTime(p.f0, now);
+    osc.frequency.exponentialRampToValueAtTime(p.f1, now + p.attack * 2);
+    osc.frequency.exponentialRampToValueAtTime(p.f2, now + p.end);
     gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(volume * 0.18, now + 0.06);
-    gain.gain.setValueAtTime(volume * 0.18, now + 0.32);
-    gain.gain.linearRampToValueAtTime(0, now + 0.52);
+    gain.gain.linearRampToValueAtTime(volume * p.gain, now + p.attack);
+    gain.gain.setValueAtTime(volume * p.gain, now + p.hold);
+    gain.gain.linearRampToValueAtTime(0, now + p.end);
     osc.start(now);
-    osc.stop(now + 0.55);
+    osc.stop(now + p.stop);
     osc.onended = () => ctx.close();
   } catch {
     // AudioContext not available (e.g. test env)
@@ -399,7 +414,7 @@ export function useCatBehavior(displayBounds: { width: number; height: number } 
     if (cat.action !== 'meow') return;
     const s = useAppStore.getState().settings;
     if (!s?.soundEnabled) return;
-    playMeow(s.volume ?? 0.5);
+    playMeow(s.volume ?? 0.5, s.soundType ?? 1);
   }, [cat.action]);
 
   // Random chatter — every 20-50 seconds the cat blurts something cute.

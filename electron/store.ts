@@ -9,6 +9,8 @@ export interface Settings {
   launchAtStartup: boolean;
   alwaysOnTop: boolean;
   soundEnabled: boolean;
+  /** Which synthesized meow to play: 1 = 기본, 2 = 아기, 3 = 굵은. */
+  soundType: 1 | 2 | 3;
   volume: number;
   hideCat: boolean;
   roamArea: 'at-house' | 'near-house' | 'edges' | 'full';
@@ -32,6 +34,7 @@ export const DEFAULT_SETTINGS: Settings = {
   launchAtStartup: false,
   alwaysOnTop: true,
   soundEnabled: true,
+  soundType: 1,
   volume: 0.5,
   hideCat: false,
   roamArea: 'full',

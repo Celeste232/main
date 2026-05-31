@@ -1,5 +1,6 @@
 import { useAppStore } from '../../state/useAppStore';
 import { useT } from '../../i18n/strings';
+import { playMeow } from '../../hooks/useCatBehavior';
 import type { Settings } from '../../../electron/store';
 
 interface SettingsMenuProps {
@@ -212,6 +213,28 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
             className={settings.language === 'zh' ? 'active' : ''}
             onPointerUp={(e) => { stop(e); void patch({ language: 'zh' }); }}
           >中文</button>
+        </div>
+      </div>
+
+      <div className="settings-row">
+        <label>{t.sound}</label>
+        <div className="doodle-pills">
+          <button
+            className={!settings.soundEnabled ? 'active' : ''}
+            onPointerUp={(e) => { stop(e); void patch({ soundEnabled: false }); }}
+          >{t.soundOff}</button>
+          {([1, 2, 3] as const).map((n) => (
+            <button
+              key={n}
+              className={settings.soundEnabled && (settings.soundType ?? 1) === n ? 'active' : ''}
+              onPointerUp={(e) => {
+                stop(e);
+                // Pick this meow and play a preview so the difference is audible.
+                void patch({ soundEnabled: true, soundType: n });
+                playMeow(settings.volume ?? 0.5, n);
+              }}
+            >{t[`soundType${n}` as const]}</button>
+          ))}
         </div>
       </div>
 
