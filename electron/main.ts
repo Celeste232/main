@@ -32,7 +32,11 @@ function applyWindowLayer(layer: Settings['windowLayer']) {
   if (!mainWindow) return;
   switch (layer) {
     case 'front':
-      mainWindow.setAlwaysOnTop(true, 'screen-saver');
+      // 'floating' (not 'screen-saver'): the screen-saver level makes macOS
+      // composite the window as a separate capture layer, so screen
+      // recordings showed the cat twice. floating still sits above normal
+      // app windows without that double-capture.
+      mainWindow.setAlwaysOnTop(true, 'floating');
       break;
     case 'normal':
       mainWindow.setAlwaysOnTop(false);
@@ -149,7 +153,7 @@ function refreshTray() {
       click: () => {
         if (!mainWindow) return;
         if (settingsStore.get().windowLayer === 'back') {
-          mainWindow.setAlwaysOnTop(true, 'screen-saver');
+          mainWindow.setAlwaysOnTop(true, 'floating');
           mainWindow.show();
           mainWindow.focus();
           setTimeout(() => {
@@ -262,7 +266,7 @@ function registerIpc() {
   ipcMain.on('window:flash-to-front', () => {
     if (!mainWindow) return;
     const layer = settingsStore.get().windowLayer;
-    mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    mainWindow.setAlwaysOnTop(true, 'floating');
     mainWindow.show();
     mainWindow.focus();
     setTimeout(() => {
