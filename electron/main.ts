@@ -115,6 +115,13 @@ function createWindow() {
     if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
     mainWindow?.setIgnoreMouseEvents(true, { forward: true });
   });
+  // When focus leaves our window (user clicking another app), make sure we're
+  // back to passthrough so we never trap the cursor with a stuck "click-through
+  // off" state. The renderer re-disables it on the next mousemove over a button.
+  mainWindow.on('blur', () => {
+    if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
+    mainWindow?.setIgnoreMouseEvents(true, { forward: true });
+  });
 
   mainWindow.on('closed', () => {
     mainWindow = null;

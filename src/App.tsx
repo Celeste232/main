@@ -66,7 +66,7 @@ export function App() {
       <WaterBowl x={waterBowlPos.x} y={waterBowlPos.y} />
       <Cat />
       {settingsOpen && (
-        <SettingsMenu x={housePos.x + 120} y={Math.max(housePos.y - 20, 20)} />
+        <SettingsMenu x={housePos.x + 40} y={Math.max(housePos.y - 20, 20)} />
       )}
     </div>
   );
