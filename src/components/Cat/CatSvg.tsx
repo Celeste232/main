@@ -44,6 +44,10 @@ export function CatSvg({ action, frame }: CatSvgProps) {
   if (action === 'superman') return <SupermanCat frame={frame} />;
   if (action === 'dangle') return <DangleCat frame={frame} />;
   if (action === 'climb') return <ClimbCat frame={frame} />;
+  if (action === 'box') return <BoxCat frame={frame} />;
+  if (action === 'zoomies') return <ZoomiesCat frame={frame} />;
+  if (action === 'headbonk') return <HeadbonkCat frame={frame} />;
+  if (action === 'peek') return <PeekCat frame={frame} />;
   return <SittingCat frame={frame} />;
 }
 
@@ -785,6 +789,110 @@ function StartledCat({ frame }: { frame: number }) {
       </g>
       <text x="14" y="22" fontSize="14" fill={stroke}>!</text>
       <text x="78" y="22" fontSize="14" fill={stroke}>!</text>
+    </svg>
+  );
+}
+
+/* 상자 안 — only the head + ears poke out over a box rim. 발그림 box. */
+function BoxCat({ frame }: { frame: number }) {
+  const peek = frame % 2 === 0 ? 0 : -2;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      {/* Head poking up behind the box */}
+      <g transform={`translate(0 ${peek})`}>
+        <path d="M34 50 L40 38 L46 50 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <path d="M54 50 L60 38 L66 50 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <ellipse cx="50" cy="56" rx="20" ry="17" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <circle cx="43" cy="56" r="2.2" fill={stroke} />
+        <circle cx="57" cy="56" r="2.2" fill={stroke} />
+        <path d="M47 63 Q50 66 53 63" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <path d="M30 56 L20 54 M30 60 L20 62" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+        <path d="M70 56 L80 54 M70 60 L80 62" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+      </g>
+      {/* Box in front — front face + flaps */}
+      <path d="M20 64 L80 64 L84 96 L16 96 Z" fill="#fff" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+      <path d="M20 64 L8 56 M80 64 L92 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      <path d="M8 56 L14 64 M92 56 L86 64" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+      {/* tape seam */}
+      <line x1="50" y1="64" x2="50" y2="96" stroke={stroke} strokeWidth={1.4} strokeDasharray="3 3" />
+    </svg>
+  );
+}
+
+/* 우다다 — zoomies. Streaking forward with motion lines, legs flung out. */
+function ZoomiesCat({ frame }: { frame: number }) {
+  const dash = frame % 2 === 0 ? 0 : 4;
+  return (
+    <svg viewBox="0 0 140 80" width="100%" height="100%">
+      <g transform="translate(140 0) scale(-1 1)">
+        {/* Tail streaming straight back */}
+        <path d="M104 44 Q124 40 134 46" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        {/* Stretched body mid-run */}
+        <ellipse cx="72" cy="46" rx="38" ry="12" fill={fill} stroke={stroke} strokeWidth={sw} />
+        {/* Ears swept back */}
+        <path d="M24 30 L26 20 L34 28 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <path d="M38 28 L42 18 L48 28 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        {/* Head leading */}
+        <ellipse cx="36" cy="38" rx="17" ry="15" fill={fill} stroke={stroke} strokeWidth={sw} />
+        <path d="M30 38 L34 40 M30 38 L34 36" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <ellipse cx="38" cy="44" rx="2.5" ry="2" fill="#f08aa6" stroke={stroke} strokeWidth={1.2} />
+        {/* Legs flung — front reaching, back kicking */}
+        <line x1="52" y1="56" x2={40 - dash} y2="68" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+        <line x1="58" y1="56" x2={48 - dash} y2="70" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+        <line x1="88" y1="56" x2={100 + dash} y2="66" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+        <line x1="94" y1="54" x2={106 + dash} y2="62" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+      </g>
+      {/* Speed lines trailing behind (right side, since cat faces right) */}
+      <path d="M4 36 L24 36 M2 46 L20 46 M6 56 L22 56" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* 부비부비 — headbonk. Leans head to one side with affection hearts. */
+function HeadbonkCat({ frame }: { frame: number }) {
+  const lean = frame === 0 ? -10 : frame === 1 ? -16 : -10;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <ellipse cx="50" cy="82" rx="22" ry="15" fill={fill} stroke={stroke} strokeWidth={sw} />
+      <g transform={`rotate(${lean} 50 66) translate(0 6)`}>
+        <Ears />
+        <ellipse cx="50" cy="48" rx="25" ry="25" fill={fill} stroke={stroke} strokeWidth={sw} />
+        {/* happy closed ^_^ eyes */}
+        <path d="M36 48 Q40 44 44 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <path d="M56 48 Q60 44 64 48" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <path d="M46 56 Q50 59 54 56" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <Whiskers />
+      </g>
+      {/* affection hearts drifting up on the lean side */}
+      <path d="M22 26 q-2.5 -3 -5 0 q0 3 5 6 q5 -3 5 -6 q-2.5 -3 -5 0 Z"
+            fill="none" stroke={stroke} strokeWidth={1.5} strokeLinejoin="round" />
+      {frame === 1 && (
+        <path d="M14 14 q-2 -2.5 -4 0 q0 2.5 4 5 q4 -2.5 4 -5 q-2 -2.5 -4 0 Z"
+              fill="none" stroke={stroke} strokeWidth={1.3} strokeLinejoin="round" />
+      )}
+    </svg>
+  );
+}
+
+/* 빼꼼 — peeking in from the left edge, only half the cat visible. */
+function PeekCat({ frame }: { frame: number }) {
+  const out = frame === 0 ? -6 : frame === 1 ? 0 : -3;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      {/* Vertical edge the cat peeks around */}
+      <line x1="14" y1="6" x2="14" y2="94" stroke={stroke} strokeWidth={1.6} strokeDasharray="5 4" />
+      <g transform={`translate(${out} 0)`}>
+        {/* Only the right half of the head clears the edge */}
+        <path d="M30 40 L36 28 L42 40 Z" fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        <ellipse cx="36" cy="50" rx="20" ry="18" fill={fill} stroke={stroke} strokeWidth={sw} />
+        {/* one paw gripping the edge */}
+        <ellipse cx="22" cy="66" rx="5" ry="4" fill={fill} stroke={stroke} strokeWidth={sw} />
+        {/* eyes looking out (toward the right) */}
+        <circle cx="34" cy="50" r="2.4" fill={stroke} />
+        <circle cx="44" cy="50" r="2.4" fill={stroke} />
+        <path d="M37 58 Q40 60 43 58" stroke={stroke} strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <path d="M52 48 L60 46 M52 52 L60 54" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+      </g>
     </svg>
   );
 }

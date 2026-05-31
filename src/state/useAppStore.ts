@@ -32,7 +32,11 @@ export type CatAction =
   | 'slip'
   | 'superman'
   | 'dangle'
-  | 'climb';
+  | 'climb'
+  | 'box'
+  | 'zoomies'
+  | 'headbonk'
+  | 'peek';
 
 export interface CatState {
   action: CatAction;

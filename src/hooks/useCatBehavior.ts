@@ -34,6 +34,10 @@ const ACTION_DURATIONS: Record<CatAction, [number, number]> = {
   superman: [10000, 30000],
   dangle: [1500, 2500],
   climb: [1500, 2200],
+  box: [8000, 20000],
+  zoomies: [1200, 2200],
+  headbonk: [1500, 2800],
+  peek: [2000, 4000],
 };
 
 // Activity-level → weighted action pool. Repeated entries = higher weight.
@@ -52,6 +56,9 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'sneeze',
     'shake',
     'superman', 'superman',
+    'box', 'box',
+    'peek',
+    'headbonk',
   ],
   normal: [
     'walking', 'walking',
@@ -73,6 +80,10 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'shake',
     'superman',
     'sleeping',
+    'box',
+    'peek',
+    'headbonk',
+    'zoomies',
   ],
   energetic: [
     'walking', 'walking', 'walking',
@@ -90,6 +101,9 @@ const ACTIVITY_BIAS: Record<'calm' | 'normal' | 'energetic', CatAction[]> = {
     'roll',
     'sneeze',
     'shake',
+    'zoomies', 'zoomies',
+    'headbonk',
+    'peek',
   ],
 };
 

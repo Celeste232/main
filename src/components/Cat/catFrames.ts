@@ -43,6 +43,10 @@ export const FRAME_SPECS: Record<CatAction, FrameSpec> = {
   superman: { count: 2, intervalMs: 1500 },
   dangle: { count: 3, intervalMs: 280 },
   climb: { count: 3, intervalMs: 200 },
+  box: { count: 2, intervalMs: 900 },
+  zoomies: { count: 2, intervalMs: 90 },
+  headbonk: { count: 3, intervalMs: 220 },
+  peek: { count: 3, intervalMs: 350 },
 };
 
 /**
