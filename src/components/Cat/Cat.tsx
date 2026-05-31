@@ -116,9 +116,19 @@ export function Cat() {
         }}
       >
         {assetUrl ? (
-          <img src={assetUrl} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
+          <img
+            src={assetUrl}
+            alt=""
+            draggable={false}
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
         ) : frameUrl ? (
-          <img src={frameUrl} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
+          <img
+            src={frameUrl}
+            alt=""
+            draggable={false}
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
         ) : (
           <CatSvg action={cat.action} frame={frame} />
         )}

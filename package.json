@@ -1,6 +1,6 @@
 {
   "name": "meow-mode",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Meow Mode — 발그림 고양이가 데스크탑 위를 돌아다닙니다. A doodle kitten that wanders your desktop with its own little house, bowls, and chaotic charm.",
   "homepage": "https://github.com/Celeste232/main",
   "repository": {
@@ -59,9 +59,18 @@
       "!**/*.map"
     ],
     "extraResources": [
-      { "from": "build/icon.png",              "to": "build/icon.png" },
-      { "from": "build/tray-icon.png",         "to": "build/tray-icon.png" },
-      { "from": "build/tray-icon-paused.png",  "to": "build/tray-icon-paused.png" }
+      {
+        "from": "build/icon.png",
+        "to": "build/icon.png"
+      },
+      {
+        "from": "build/tray-icon.png",
+        "to": "build/tray-icon.png"
+      },
+      {
+        "from": "build/tray-icon-paused.png",
+        "to": "build/tray-icon-paused.png"
+      }
     ],
     "publish": {
       "provider": "github",
@@ -74,8 +83,20 @@
     },
     "mac": {
       "target": [
-        { "target": "dmg", "arch": ["arm64", "x64"] },
-        { "target": "zip", "arch": ["arm64", "x64"] }
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
       ],
       "icon": "build/icon.icns",
       "category": "public.app-category.entertainment",

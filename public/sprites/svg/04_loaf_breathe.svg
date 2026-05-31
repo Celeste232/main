@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="180" height="140" viewBox="0 0 180 140">
   <style>
-    .line { fill:white; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .line { fill:white; stroke:#111111; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
     .ink { fill:#111111; stroke:none; }
-    .none { fill:none; stroke:#111111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .none { fill:none; stroke:#111111; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
     @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
     @keyframes tail { 0%,100%{transform:rotate(-7deg)} 50%{transform:rotate(9deg)} }
     @keyframes blink { 0%,88%,100%{transform:scaleY(1)} 92%{transform:scaleY(.12)} }
