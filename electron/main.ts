@@ -21,6 +21,18 @@ const TRAY_ICON_PAUSED = path.join(ICON_DIR, 'tray-icon-paused.png');
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let cursorTimer: ReturnType<typeof setInterval> | null = null;
+// The renderer's most recent passthrough decision. focus/visibility changes
+// re-assert THIS, instead of hard-coding click-through back on — forcing it on
+// used to clobber an in-progress click on the settings panel, so the click
+// leaked through to whatever app was behind us.
+let mouseIgnored = true;
+
+function setMouseIgnored(ignore: boolean) {
+  mouseIgnored = ignore;
+  if (!mainWindow) return;
+  if (ignore) mainWindow.setIgnoreMouseEvents(true, { forward: true });
+  else mainWindow.setIgnoreMouseEvents(false);
+}
 
 function getLeftmostDisplay() {
   const displays = screen.getAllDisplays();
@@ -83,6 +95,10 @@ function createWindow() {
     resizable: false,
     movable: false,
     focusable: true,
+    // Deliver the first click to content even when we aren't the key window,
+    // so clicking the cat / house / settings works on the first try instead of
+    // the click only activating the window.
+    acceptFirstMouse: true,
     hasShadow: false,
     fullscreenable: false,
     show: false,
@@ -93,7 +109,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.setIgnoreMouseEvents(true, { forward: true });
+  setMouseIgnored(true);
   applyWindowLayer(settings.windowLayer);
 
   if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') {
@@ -110,22 +126,24 @@ function createWindow() {
     if (!settingsStore.get().paused) mainWindow?.show();
   });
 
-  // macOS sometimes drops the click-through forwarding when the window
-  // loses and regains focus. Re-apply on every focus to be safe.
+  // Re-assert the renderer's CURRENT passthrough state on focus/show. This
+  // re-establishes mouse-move forwarding after a focus change WITHOUT flipping
+  // click-through back on mid-click — forcing it on here made the first click on
+  // the settings panel leak to the app behind us.
   mainWindow.on('focus', () => {
     if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
-    mainWindow?.setIgnoreMouseEvents(true, { forward: true });
+    setMouseIgnored(mouseIgnored);
   });
   mainWindow.on('show', () => {
     if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
-    mainWindow?.setIgnoreMouseEvents(true, { forward: true });
+    setMouseIgnored(mouseIgnored);
   });
-  // When focus leaves our window (user clicking another app), make sure we're
-  // back to passthrough so we never trap the cursor with a stuck "click-through
-  // off" state. The renderer re-disables it on the next mousemove over a button.
+  // When focus leaves our window (user clicking another app), force passthrough
+  // so we never trap the cursor with a stuck "click-through off" state. The
+  // renderer re-disables it on the next sampled cursor over a button.
   mainWindow.on('blur', () => {
     if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
-    mainWindow?.setIgnoreMouseEvents(true, { forward: true });
+    setMouseIgnored(true);
   });
 
   // Robust click-through: the MAIN process owns the sampling clock and pushes
@@ -277,11 +295,7 @@ function registerIpc() {
   ipcMain.on('window:set-ignore-mouse', (_e, ignore: boolean) => {
     if (!mainWindow) return;
     if (process.env.CAT_HOUSE_DEBUG_NO_PASSTHROUGH === '1') return;
-    if (ignore) {
-      mainWindow.setIgnoreMouseEvents(true, { forward: true });
-    } else {
-      mainWindow.setIgnoreMouseEvents(false);
-    }
+    setMouseIgnored(ignore);
   });
 
   ipcMain.handle('display:get-bounds', () => {
