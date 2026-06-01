@@ -173,7 +173,7 @@
 
 **산출물**:
 - `Meow Mode-0.1.X-arm64.dmg` (Apple Silicon)
-- `Meow Mode-0.1.X-x64.dmg` (Intel)
+- `Meow Mode-0.1.X.dmg` (Intel — x64, suffix 없음)
 - `.zip` 동일 두 개
 - `.blockmap` / `latest-mac.yml`
 

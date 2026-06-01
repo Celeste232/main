@@ -25,7 +25,7 @@
 - 진지함 0%, 귀여움 75%, 카오스 25%
 
 **기능**
-- 20가지 자세 (걷기, 식빵, 슈퍼맨, 그루밍, 점프, 미끄러지기, 매달리기, …)
+- 30가지 넘는 자세 (걷기, 식빵, 슈퍼맨, 그루밍, 점프, 미끄러지기, 매달리기, …)
 - 마우스가 가까이 가면 쳐다봄
 - 집/밥그릇/물그릇 인터랙션
 - "맨 앞 / 보통 / 맨 뒤" 화면 위치 설정
@@ -64,7 +64,7 @@ It loafs, stretches, naps, suddenly meows "I'm bored," and slides off invisible 
 - Lifetime free updates
 
 **Features**
-- 20+ poses (walking, loafing, superman pose, grooming, jumping, slipping, dangling, …)
+- 30+ poses (walking, loafing, superman pose, grooming, jumping, slipping, dangling, …)
 - Looks at your cursor when it gets close
 - House + food + water bowl interactions
 - Front / Middle / Back window layer (so it doesn't get in the way of work)
@@ -103,7 +103,7 @@ It loafs, stretches, naps, suddenly meows "I'm bored," and slides off invisible 
 - 永久無料アップデート付き
 
 **できること**
-- 20種以上のポーズ (歩く、食パン、スーパーマン、グルーミング、ジャンプ、すべる、ぶら下がる、…)
+- 30種以上のポーズ (歩く、食パン、スーパーマン、グルーミング、ジャンプ、すべる、ぶら下がる、…)
 - カーソルが近づくと、見つめます
 - おうち + ごはん + みずの設定
 - 「最前 / ふつう / 最背」の画面位置設定
@@ -142,7 +142,7 @@ It loafs, stretches, naps, suddenly meows "I'm bored," and slides off invisible 
 - 终身免费更新
 
 **功能**
-- 20+ 种姿势 (走路、面包、超人姿势、舔毛、跳跃、打滑、悬挂、…)
+- 30+ 种姿势 (走路、面包、超人姿势、舔毛、跳跃、打滑、悬挂、…)
 - 鼠标靠近时会盯着看
 - 屋子 + 饭盆 + 水盆 互动
 - "最前 / 中间 / 最后" 窗口层级 (不挡工作)

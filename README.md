@@ -27,7 +27,7 @@ Meow Mode is a tiny hand-drawn cat that lives on top of your desktop. It strolls
 
 1. Download the right `.dmg` for your Mac:
    - **Apple Silicon (M1/M2/M3/M4):** `Meow Mode-x.x.x-arm64.dmg`
-   - **Intel:** `Meow Mode-x.x.x-x64.dmg`
+   - **Intel:** `Meow Mode-x.x.x.dmg`
    - Not sure? Apple menu →  **About This Mac** → check the chip.
 2. Open the `.dmg` and drag **Meow Mode** into your **Applications** folder.
 3. **First launch:** right-click the app → **Open** → **Open** again.

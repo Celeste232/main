@@ -1,21 +1,22 @@
-# 판매 체크리스트 — Meow Mode v0.2.0
+# 판매 체크리스트 — Meow Mode
 
 너가 직접 해야 할 것들 순서대로. **체크하면서 진행해.**
 
 ---
 
-## 1단계 — 판매용 dmg 빌드 (Actions, 약 15분)
+## 1단계 — 판매용 dmg 빌드 (Actions, 약 2~3분)
 
 🔗 https://github.com/Celeste232/main/actions/workflows/release.yml
 
-→ **Run workflow** 클릭 (브랜치 아무거나 OK, 입력칸 없음).
+→ **Run workflow** 클릭 → **"Use workflow from"에서 `claude/cat-house-interactions-pFJxU` 선택** → Run.
+(⚠️ main을 고르면 옛 워크플로가 돌아 옛 버전이 빌드됨. PR #1을 머지하면 그 뒤로는 아무 브랜치나 OK.)
 워크플로가 항상 최신 개발 브랜치를 빌드하고, 버전은 `package.json`에서 자동으로 읽어 태그를 붙여.
 
-약 15분 후 https://github.com/Celeste232/main/releases 에 **v0.2.0** 릴리즈가 생김.
+약 2~3분 후 https://github.com/Celeste232/main/releases 에 최신 버전(예: **v0.2.9**) 릴리즈가 생김.
 
 → 그 페이지에서 dmg 두 개 다운로드:
-- `Meow Mode-0.2.0-arm64.dmg` (Apple Silicon)
-- `Meow Mode-0.2.0-x64.dmg` (Intel)
+- `Meow Mode-<버전>-arm64.dmg` (Apple Silicon)
+- `Meow Mode-<버전>.dmg` (Intel — suffix 없음)
 
 이 두 파일이 **판매 파일**이야.
 
@@ -31,7 +32,7 @@
    - **Type**: Digital product
    - **Name**: `Meow Mode`
    - **Price**: `2.99 USD`
-4. **Content** 탭 → 두 dmg 파일 업로드 (`Meow Mode-0.2.0-arm64.dmg`, `-x64.dmg`)
+4. **Content** 탭 → 두 dmg + 가이드 업로드 (`Meow Mode-<버전>-arm64.dmg`, `Meow Mode-<버전>.dmg`, `meow-mode-guide.html`)
 5. **Description** 탭 → `docs/sales-copy.md` 의 영문 또는 한국어 긴 글 복붙
 6. **Cover image**: `build/icon.png` 업로드 (또는 프리뷰 영상 썸네일)
 7. **Settings**:
