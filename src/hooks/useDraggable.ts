@@ -71,7 +71,9 @@ export function useDraggable(
       // capture may have already been released
     }
     if (s.moved) {
-      onDragEnd?.(pos);
+      // Use the drag ref's final position, not React state, which may be a
+      // frame stale if pointerup lands before the last move's setPos commits.
+      onDragEnd?.({ x: s.lastX, y: s.lastY });
     } else {
       onClick?.();
     }

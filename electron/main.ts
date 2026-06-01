@@ -38,9 +38,13 @@ function applyWindowLayer(layer: Settings['windowLayer']) {
       // recordings showed the cat twice. floating still sits above normal
       // app windows without that double-capture.
       mainWindow.setAlwaysOnTop(true, 'floating');
+      // Coming back from 'back' must clear the all-Spaces flag, or the cat
+      // keeps showing on every Space until restart.
+      if (process.platform === 'darwin') mainWindow.setVisibleOnAllWorkspaces(false);
       break;
     case 'normal':
       mainWindow.setAlwaysOnTop(false);
+      if (process.platform === 'darwin') mainWindow.setVisibleOnAllWorkspaces(false);
       break;
     case 'back':
       mainWindow.setAlwaysOnTop(false);
