@@ -1,18 +1,65 @@
 # 옵시디언 참고 디자인 모음
 
-> 옵시디언(Obsidian) 및 생산성 도구 UI/UX 레퍼런스 이미지 컬렉션
+> 옵시디언(Obsidian) 및 생산성 도구 UI/UX 레퍼런스 이미지 컬렉션  
+> 총 **41개 스크린샷** 정리
 
 ---
 
-## 📁 카테고리별 정리
+## 📁 파일 목록 (시간순, 내용 분석)
+
+| # | 파일명 | 크기 | 추정 내용 |
+|---|--------|------|-----------|
+| 01 | 스크린샷 2026-06-04 오전 2.42.39.png | 627×626 | 정사각형 아이콘/앱 로고 계열 |
+| 02 | 스크린샷 2026-06-04 오전 2.47.25.png | 570×455 | 핑크/보라 파스텔 - 플래너 UI |
+| 03 | 스크린샷 2026-06-04 오전 2.47.32.png | 622×391 | 와이드 비율 - 대시보드 |
+| 04 | 스크린샷 2026-06-04 오전 2.47.39.png | 575×441 | 핑크/보라 파스텔 - 플래너 |
+| 05 | 스크린샷 2026-06-04 오전 2.47.46.png | 610×562 | 파스텔 혼합 - 라이프 플래너 |
+| 06 | 스크린샷 2026-06-04 오전 2.47.53.png | 672×570 | 보라/빨강 - ADHD 계열 |
+| 07 | 스크린샷 2026-06-04 오전 2.48.01.png | 633×496 | 다크/블루 계열 |
+| 08 | 스크린샷 2026-06-04 오전 2.49.13.png | 538×392 | 파랑/청록 대시보드 |
+| 09 | 스크린샷 2026-06-04 오전 2.49.22.png | 760×517 | 파랑/청록 와이드 |
+| 10 | 스크린샷 2026-06-04 오전 2.49.30.png | 770×538 | 파랑/청록 와이드 |
+| 11 | 스크린샷 2026-06-04 오전 2.49.37.png | 776×549 | 파랑/오렌지 와이드 |
+| 12 | 스크린샷 2026-06-04 오전 2.49.49.png | 1146×796 | **대형** 파랑+핑크 대시보드 |
+| 13 | 스크린샷 2026-06-04 오전 2.49.55.png | 955×639 | 파랑/오렌지 대형 |
+| 14 | 스크린샷 2026-06-04 오전 2.50.06.png | 1117×533 | **파노라마** 파랑+핑크 |
+| 15 | 스크린샷 2026-06-04 오전 2.51.00.png | 484×511 | 오렌지/빨강 정사각형 |
+| 16 | 스크린샷 2026-06-04 오전 2.51.24.png | 735×580 | 오렌지/파랑 혼합 |
+| 17 | 스크린샷 2026-06-04 오전 2.51.34.png | 752×567 | 오렌지/청록 |
+| 18 | 스크린샷 2026-06-04 오전 2.52.31.png | 584×468 | 오렌지/보라 |
+| 19 | 스크린샷 2026-06-04 오전 2.52.46.png | 750×554 | 빨강/오렌지 계열 |
+| 20 | 스크린샷 2026-06-04 오전 2.52.50.png | 707×586 | 핑크/빨강 |
+| 21 | 스크린샷 2026-06-04 오전 2.53.39.png | 722×530 | 파랑+핑크 혼합 |
+| 22 | 스크린샷 2026-06-04 오전 2.54.08.png | 665×658 | 보라/파랑 정사각형형 |
+| 23 | 스크린샷 2026-06-04 오전 2.54.14.png | 633×638 | 보라/파랑 정사각형형 |
+| 24 | 스크린샷 2026-06-04 오전 2.54.48.png | 760×610 | 청록/오렌지 |
+| 25 | 스크린샷 2026-06-04 오전 2.54.59.png | 770×675 | 오렌지/노랑 파스텔 |
+| 26 | 스크린샷 2026-06-04 오전 2.55.16.png | 449×754 | **세로형** 오렌지/노랑 |
+| 27 | 스크린샷 2026-06-04 오전 2.55.48.png | 601×390 | 와이드 오렌지/청록 |
+| 28 | 스크린샷 2026-06-04 오전 2.56.22.png | 755×516 | 보라/오렌지 |
+| 29 | 스크린샷 2026-06-04 오전 2.56.27.png | 763×682 | 오렌지/빨강 |
+| 30 | 스크린샷 2026-06-04 오전 2.57.39.png | 546×432 | 빨강/파랑 |
+| 31 | 스크린샷 2026-06-04 오전 2.57.44.png | 609×589 | 초록/파랑 |
+| 32 | 스크린샷 2026-06-04 오전 2.57.49.png | 867×614 | 오렌지/파랑 와이드 |
+| 33 | 스크린샷 2026-06-04 오전 2.57.59.png | 800×753 | 파랑/오렌지 |
+| 34 | 스크린샷 2026-06-04 오전 2.59.21.png | 791×579 | 파랑/오렌지 |
+| 35 | 스크린샷 2026-06-04 오전 3.00.19.png | 584×498 | 오렌지/빨강 |
+| 36 | 스크린샷 2026-06-04 오전 3.06.20.png | 780×604 | 청록/파랑 |
+| 37 | 스크린샷 2026-06-04 오전 3.07.24.png | 618×591 | 오렌지/보라 |
+| 38 | 스크린샷 2026-06-04 오전 3.07.31.png | 635×596 | 파랑/오렌지 |
+| 39 | 스크린샷 2026-06-04 오전 3.07.38.png | 646×573 | 오렌지/보라 |
+| 40 | 스크린샷 2026-06-04 오전 3.07.44.png | 643×573 | 오렌지/노랑 |
+| 41 | 스크린샷 2026-06-04 오전 3.08.30.png | 606×469 | 핑크/오렌지 |
+
+---
+
+## 📊 카테고리별 정리
 
 ### 1. Obsidian 기반 볼트
 
 | 이름 | 특징 |
 |------|------|
 | **Obsidian Life Operating System Vault** | All-in-One Life Planner / 목표·태스크·프로젝트·습관 관리 / 바쁜 직장인용 |
-
----
 
 ### 2. ADHD 라이프 시스템
 
@@ -22,77 +69,41 @@
 | **ADHD Life Planner (Notion)** | Quick Actions / Today's Tasks / Daily Habits / Projects / Money 관리 |
 | **Routine & Medication Master Log** | 루틴·약 복용 추적 / 에너지 레벨 및 루틴 점수 / Finance Tracker |
 | **Time Blindness Tracker** | ADHD 시간 인식 훈련 / 예상 vs 실제 시간 비교 / Task Time Log |
-| **Overwhelm Emergency Kit** | 압도감 대응 키트 / 그라운딩 연습 포함 |
-
----
 
 ### 3. 목표 및 습관 관리
 
 | 이름 | 특징 |
 |------|------|
-| **Monthly Goals & Big Picture** | Big 3 이번달 목표 / Life Areas 추적 / Big Picture(긴급하지 않지만 중요한 일) / Monthly Goals Master Tracker |
+| **Monthly Goals & Big Picture** | Big 3 이번달 목표 / Life Areas / Big Picture(긴급하지 않지만 중요한 일) |
 
----
-
-### 4. 스프레드시트 기반 플래너 (Excel/Google Sheets)
+### 4. 스프레드시트 기반 플래너
 
 | 이름 | 특징 |
 |------|------|
 | **Life Planner+** | Goal / Habit / Tasks / Budget / Savings / Meal / Fitness / 반복 작업 자동화 / 19개 탭 |
-| **Auto-Recurring Tasks** | 반복 작업 1회 설정 → 자동 반복 / Priority·Category·Task Owner·Due Date 관리 |
-| **All-in-One Dashboard** | 자동화된 스마트 대시보드 / Today 현황·조직·재정·웰니스 한눈에 |
+| **Auto-Recurring Tasks** | 반복 작업 1회 설정 자동 반복 / Priority·Category·Owner·Due Date |
+| **All-in-One Dashboard** | 자동화 스마트 대시보드 / Today·Organization·Finance·Wellness |
 | **Task Tracker** | Filter & Sort / Smart Task Center / Overdue Alert / 차트 자동 생성 |
-| **Weekly Calendar + Time Blocking** | 주간 일정 / 일별 태스크 진행률 / Time Blocking 자동 연동 |
-| **Variable Tasks (Re-use)** | 플래너 복제 후 재사용 / 연간 대시보드 포함 |
+| **Weekly Calendar + Time Blocking** | 주간 일정 / 일별 진행률 / Time Blocking 자동 연동 |
 | **Annual Dashboard** | 30+ 탭 / Annual Budget / Task Tracker / Habit Tracker / Bill Calendar / Meal Planner |
-| **Dashboard (Tablet View)** | 월별 진행률 / 우선순위·상태·카테고리·담당자 차트 |
 
----
-
-### 5. 대시보드 비교 및 기타
+### 5. 기타 대시보드 및 참고
 
 | 이름 | 특징 |
 |------|------|
-| **Time Management Planner** | Slow Living 컨셉 / 100% 오프라인 / Today's Focus / Time Blocked 시간 추적 |
-| **Dashboard vs Spreadsheets 비교표** | 설정·실시간 업데이트·시각 디자인·정보 탐색·모바일·스트레스 레벨 비교 |
-| **FAQ 섹션** | 모바일 사용 가능 / 커스터마이징 가능 / 특별 소프트웨어 불필요 / 데이터 로컬 저장 |
+| **Time Management Planner** | Slow Living 컨셉 / 100% 오프라인 / Today's Focus |
+| **Dashboard vs Spreadsheets 비교** | 설정·실시간·디자인·탐색·모바일·스트레스 비교 |
+| **FAQ 섹션** | 모바일 지원 / 커스터마이징 / 로컬 저장 |
 
 ---
 
-## 🎨 주요 디자인 패턴
+## 🎨 공통 디자인 패턴
 
-- **컬러 팔레트**: 파스텔 핑크, 라벤더, 민트, 피치, 노랑 계열
-- **레이아웃**: 카드형 위젯 / 그리드 레이아웃 / 사이드바 네비게이션
-- **차트 유형**: 도넛 차트 / 바 차트 / 링 진행률 표시
-- **특징**: ADHD 친화적 / 미니멀 / 귀여운 일러스트 아이콘
-
----
-
-## 🗂️ 이미지 목록
-
-```
-images/
-├── 01_obsidian-life-operating-system.jpg
-├── 02_adhd-ultimate-life-system-dashboard.jpg
-├── 03_monthly-goals-big-picture.jpg
-├── 04_routine-medication-master-log.jpg
-├── 05_time-blindness-tracker.jpg
-├── 06_adhd-ultimate-life-system-overview.jpg
-├── 07_adhd-team-collaboration-personal-board.jpg
-├── 08_life-planner-plus-spreadsheet.jpg
-├── 09_auto-recurring-tasks.jpg
-├── 10_all-in-one-dashboard.jpg
-├── 11_task-tracker.jpg
-├── 12_weekly-calendar-time-blocking.jpg
-├── 13_variable-tasks-reuse.jpg
-├── 14_ultimate-adhd-life-planner-notion.jpg
-├── 15_annual-dashboard-spreadsheet.jpg
-├── 16_dashboard-tablet-view.jpg
-├── 17_time-management-planner.jpg
-├── 18_dashboard-vs-spreadsheets.jpg
-└── 19_faq-section.jpg
-```
+- **색상**: 파스텔 핑크·라벤더·민트·피치·노랑 / 포인트 보라·청록·오렌지
+- **레이아웃**: 카드형 위젯 / 사이드바+메인 / KPI상단+차트+테이블
+- **차트**: 도넛·원형 진행률·바·선 차트
+- **UX**: ADHD 친화적 / 귀여운 일러스트 / 진행률 시각화 / Quick Capture
 
 ---
 
-*최종 업데이트: 2026-06-04*
+*업데이트: 2026-06-04 | 파일 41개*
