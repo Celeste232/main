@@ -20,21 +20,28 @@ export function Cat() {
     prevAction: typeof cat.action;
   } | null>(null);
 
+  // PNG skin: animate this action's frames; if it has none, fall back to the
+  // fox 'idle' frames (never the cat SVG) so the fox skin always stays a fox.
+  const useDoodle = settings?.catSkin === 'svg-doodle';
+  let frames: string[] = [];
+  if (!useDoodle) {
+    frames = getFrames(cat.action);
+    if (frames.length === 0) frames = getFrames('idle');
+  }
+
   useEffect(() => {
     setFrame(0);
     const spec = FRAME_SPECS[cat.action];
+    const count = frames.length || spec.count;
     const id = setInterval(() => {
-      setFrame((f) => (f + 1) % spec.count);
+      setFrame((f) => (f + 1) % count);
     }, spec.intervalMs);
     return () => clearInterval(id);
-  }, [cat.action]);
+  }, [cat.action, frames.length]);
 
   if (settings?.hideCat) return null;
-  const useDoodle = settings?.catSkin === 'svg-doodle';
-  const frames = useDoodle ? [] : getFrames(cat.action);
   const frameUrl = frames[frame % Math.max(frames.length, 1)];
   // Prefer an external animated SVG asset when one exists for this action.
-  // These ship their own @keyframes so we don't need the frame counter.
   const assetUrl = useDoodle ? getAssetSvg(cat.action) : null;
 
   const onPointerDown = (e: React.PointerEvent) => {
