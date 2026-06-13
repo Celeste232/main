@@ -6,16 +6,10 @@ on:
   push:
     tags:
       - 'v*'
+  # Manual trigger needs no inputs: the build always uses the dev branch's
+  # latest commit and derives the version tag from package.json. So it no
+  # longer matters which branch you pick in "Use workflow from".
   workflow_dispatch:
-    inputs:
-      ref:
-        description: 'Branch or tag to build (e.g. claude/cat-house-interactions-pFJxU)'
-        default: 'claude/cat-house-interactions-pFJxU'
-        required: true
-      version:
-        description: 'Version label for the release (e.g. v0.1.1)'
-        default: 'v0.1.1'
-        required: true
 
 permissions:
   contents: write
@@ -28,12 +22,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref }}
+          # Always build the development branch's latest commit, regardless of
+          # which branch the workflow was launched from. This prevents the
+          # build from accidentally packaging an old main commit when someone
+          # picks the wrong "Use workflow from" branch in the UI.
+          ref: claude/cat-house-interactions-pFJxU
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
+
+      - name: Resolve version from package.json
+        id: ver
+        run: echo "tag=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Install deps
         run: npm ci --no-audit --no-fund
@@ -49,15 +52,21 @@ jobs:
 
       - name: Upload artifacts to Release
         uses: softprops/action-gh-release@v2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: |
             release/*.dmg
             release/*.zip
             release/*.blockmap
             release/latest-mac.yml
-          draft: true
-          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
-          name: Meow Mode ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+          draft: false
+          # Tag name comes from package.json so it can never drift from the
+          # code that was actually built. The tag is created on the built
+          # branch's HEAD (target_commitish), not on stale main.
+          tag_name: ${{ steps.ver.outputs.tag }}
+          target_commitish: claude/cat-house-interactions-pFJxU
+          name: Meow Mode ${{ steps.ver.outputs.tag }}
           body: |
             ## 다운로드 / Download
 
