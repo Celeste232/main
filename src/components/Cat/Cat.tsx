@@ -22,9 +22,9 @@ export function Cat() {
 
   // PNG skin: animate this action's frames; if it has none, fall back to the
   // fox 'idle' frames (never the cat SVG) so the fox skin always stays a fox.
-  // Fox Mode is a separate build (VITE_FOX=1) that is always the fox; the cat
-  // app (Meow Mode) keeps its svg-doodle default and never shows the fox.
-  const useDoodle = import.meta.env.VITE_FOX !== '1' && settings?.catSkin === 'svg-doodle';
+  // Fox Mode is a separate build (__IS_FOX__ injected via VITE_FOX=1) that is
+  // always the fox; the cat app keeps its svg-doodle default.
+  const useDoodle = !__IS_FOX__ && settings?.catSkin === 'svg-doodle';
   let frames: string[] = [];
   if (!useDoodle) {
     frames = getFrames(cat.action);

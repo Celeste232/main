@@ -1,3 +1,4 @@
+import { app } from 'electron';
 import type { Settings } from './store.js';
 
 const TRAY_STRINGS = {
@@ -51,6 +52,25 @@ const TRAY_STRINGS = {
   },
 };
 
+// The Fox Mode app bundle is named "Fox Mode" — swap cat wording for fox in the
+// tray when that's the build we're running.
+const FOX_WORDS: Record<Settings['language'], [string | RegExp, string][]> = {
+  ko: [[/고양이/g, '여우'], ['Meow Mode', 'Fox Mode']],
+  en: [['Meow Mode', 'Fox Mode'], [/\bcat\b/gi, 'fox']],
+  ja: [['Meow Mode', 'Fox Mode'], [/ねこ/g, 'きつね'], [/猫/g, '狐']],
+  zh: [['Meow Mode', 'Fox Mode'], [/猫咪/g, '狐狸'], [/猫/g, '狐']],
+};
+
 export function getTrayStrings(language: Settings['language']) {
-  return TRAY_STRINGS[language] ?? TRAY_STRINGS.ko;
+  const base = TRAY_STRINGS[language] ?? TRAY_STRINGS.ko;
+  if (!app.getName().toLowerCase().includes('fox')) return base;
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(base)) {
+    let str = v;
+    for (const [from, to] of FOX_WORDS[language] ?? FOX_WORDS.ko) {
+      str = typeof from === 'string' ? str.split(from).join(to) : str.replace(from, to);
+    }
+    out[k] = str;
+  }
+  return out as typeof base;
 }

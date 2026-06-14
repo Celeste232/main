@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react';
 import electron from 'vite-plugin-electron/simple';
 
 export default defineConfig({
+  define: {
+    // true in the Fox Mode build (`VITE_FOX=1 vite build`); cat app stays false.
+    __IS_FOX__: JSON.stringify(process.env.VITE_FOX === '1'),
+  },
   plugins: [
     react(),
     electron({

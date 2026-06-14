@@ -297,11 +297,37 @@ const STRINGS = {
 export type LangCode = keyof typeof STRINGS;
 export type Strings = typeof STRINGS.ko;
 
+// In the Fox Mode build, swap cat wording for fox wording across every UI
+// string. Gated by __IS_FOX__ so the cat app (Meow Mode) is untouched.
+const FOX_WORDS: Record<LangCode, [string | RegExp, string][]> = {
+  ko: [['먀우 모드', 'Fox Mode'], [/고양이/g, '여우'], ['Cat House', 'Fox House'], ['야옹', '캥']],
+  en: [['Meow Mode', 'Fox Mode'], ['Cat House', 'Fox House'], [/\bcat\b/gi, 'fox'], ['Kitten', 'Kit'], ['Meow', 'Yip']],
+  ja: [['にゃうモード', 'フォックスモード'], [/ねこ/g, 'きつね'], [/猫/g, '狐'], ['Cat House', 'Fox House'], ['にゃー', 'コーン']],
+  zh: [['喵喵模式', '狐狸模式'], [/猫咪/g, '狐狸'], [/猫/g, '狐'], ['Cat House', 'Fox House'], ['喵', '嗷']],
+};
+
+function foxify(s: Strings, lang: LangCode): Strings {
+  if (!__IS_FOX__) return s;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(s)) {
+    if (typeof v === 'string') {
+      let str = v;
+      for (const [from, to] of FOX_WORDS[lang]) {
+        str = typeof from === 'string' ? str.split(from).join(to) : str.replace(from, to);
+      }
+      out[k] = str;
+    } else {
+      out[k] = v;
+    }
+  }
+  return out as Strings;
+}
+
 export function useT(): Strings {
   const lang = useAppStore((s) => s.settings?.language) ?? 'ko';
-  return STRINGS[lang];
+  return foxify(STRINGS[lang], lang);
 }
 
 export function getT(lang: LangCode): Strings {
-  return STRINGS[lang];
+  return foxify(STRINGS[lang], lang);
 }
