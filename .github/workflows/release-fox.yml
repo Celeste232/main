@@ -1,0 +1,70 @@
+name: Release Fox
+
+# Builds the standalone "Fox Mode" app (separate product from Meow Mode).
+# Push a tag like fox-v1.0.0, OR: Actions → Release Fox → Run workflow.
+# Always builds the dev branch's latest commit; version comes from
+# electron-builder-fox.json (extraMetadata.version), independent of Meow Mode.
+on:
+  push:
+    tags:
+      - 'fox-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-mac:
+    name: Build Fox Mode macOS dmg + zip
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/cat-house-interactions-pFJxU
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Resolve Fox Mode version
+        id: ver
+        run: echo "tag=fox-v$(node -p "require('./electron-builder-fox.json').extraMetadata.version")" >> "$GITHUB_OUTPUT"
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Build Fox Mode + package
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run build:fox
+
+      - name: Upload artifacts to Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: |
+            release-fox/*.dmg
+            release-fox/*.zip
+            release-fox/*.blockmap
+            release-fox/latest-mac.yml
+          draft: false
+          tag_name: ${{ steps.ver.outputs.tag }}
+          target_commitish: claude/cat-house-interactions-pFJxU
+          name: Fox Mode ${{ steps.ver.outputs.tag }}
+          body: |
+            ## 다운로드 / Download
+
+            - **Apple Silicon Mac (M1/M2/M3/M4)**: `Fox Mode-*-arm64.dmg`
+            - **Intel Mac**: `Fox Mode-*.dmg`
+
+            처음 실행 시: 우클릭 → "열기" → 다시 "열기" (macOS Sequoia는 시스템 설정 → 개인정보 보호 및 보안 → "그래도 열기")
+
+            ---
+
+            First launch: right-click → Open → Open again
+            (macOS Sequoia: System Settings → Privacy & Security → Open Anyway)
