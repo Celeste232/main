@@ -121,7 +121,9 @@ export function Cat() {
         style={{
           width: '100%',
           height: '100%',
-          transform: `scaleX(${cat.facing === 'left' ? -1 : 1})`,
+          // Fox sheet art faces left by default (opposite the doodle cat), so
+          // flip the sign in the fox build or it appears to walk backwards.
+          transform: `scaleX(${(cat.facing === 'left' ? -1 : 1) * (__IS_FOX__ ? -1 : 1)})`,
         }}
       >
         {assetUrl ? (

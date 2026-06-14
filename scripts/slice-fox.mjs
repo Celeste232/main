@@ -83,4 +83,12 @@ for (const [toKey, fromKey] of Object.entries(ALIAS)) {
   await copyFrames(fromKey, toKey);
   made.push(`${toKey} (=${fromKey})`);
 }
-console.log(`sliced/aliased ${made.length} actions:\n  ${made.join('\n  ')}`);
+
+// Drop frames that aren't clean loop frames. 앉기 frame 3 is a back-view shot,
+// which makes the idle/sitting fox keep spinning around.
+const DROP = [['sitting', 3], ['idle', 3]];
+for (const [key, frame] of DROP) {
+  await fs.rm(path.join(OUT, key, `${frame}.png`), { force: true });
+}
+
+console.log(`sliced/aliased ${made.length} actions (dropped ${DROP.length} back-view frames):\n  ${made.join('\n  ')}`);
