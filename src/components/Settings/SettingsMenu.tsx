@@ -8,6 +8,9 @@ interface SettingsMenuProps {
   y: number;
 }
 
+// Future paid skin packs land here. For now only the default doodle exists.
+const PURCHASED_SKINS: { value: Settings['catSkin']; label: string }[] = [];
+
 export function SettingsMenu({ x, y }: SettingsMenuProps) {
   const settings = useAppStore((s) => s.settings);
   const patch = useAppStore((s) => s.patchSettings);
@@ -88,16 +91,16 @@ export function SettingsMenu({ x, y }: SettingsMenuProps) {
 
       <div className="settings-row">
         <label>{t.skin}</label>
-        <div className="doodle-toggle">
-          <button
-            className={settings.catSkin === 'svg-doodle' ? 'active' : ''}
-            onPointerUp={(e) => { stop(e); void patch({ catSkin: 'svg-doodle' }); }}
-          >🐱</button>
-          <button
-            className={settings.catSkin === 'png' ? 'active' : ''}
-            onPointerUp={(e) => { stop(e); void patch({ catSkin: 'png' }); }}
-          >🦊</button>
-        </div>
+        <button
+          className={`doodle-dropdown${PURCHASED_SKINS.length === 0 ? ' empty' : ''}`}
+          onPointerUp={(e) => {
+            stop(e);
+            // Future: open a menu of PURCHASED_SKINS
+          }}
+          disabled={PURCHASED_SKINS.length === 0}
+        >
+          {t.skinDefault}
+        </button>
       </div>
 
       <div className="settings-row">

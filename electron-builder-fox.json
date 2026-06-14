@@ -1,0 +1,36 @@
+{
+  "appId": "com.celinelee.foxmode",
+  "productName": "Fox Mode",
+  "copyright": "Copyright © 2026 Celine Lee",
+  "extraMetadata": { "version": "1.0.0" },
+  "directories": {
+    "output": "release-fox",
+    "buildResources": "build"
+  },
+  "afterPack": "build/afterPack.cjs",
+  "files": [
+    "dist",
+    "dist-electron",
+    "!**/.*",
+    "!**/*.map"
+  ],
+  "extraResources": [
+    { "from": "build/icon-fox.png", "to": "build/icon.png" },
+    { "from": "build/tray-icon.png", "to": "build/tray-icon.png" },
+    { "from": "build/tray-icon-paused.png", "to": "build/tray-icon-paused.png" }
+  ],
+  "publish": {
+    "provider": "github",
+    "owner": "Celeste232",
+    "repo": "main"
+  },
+  "mac": {
+    "target": [
+      { "target": "dmg", "arch": ["arm64", "x64"] },
+      { "target": "zip", "arch": ["arm64", "x64"] }
+    ],
+    "icon": "build/icon-fox.png",
+    "category": "public.app-category.entertainment",
+    "identity": null
+  }
+}

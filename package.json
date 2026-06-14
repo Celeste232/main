@@ -1,6 +1,6 @@
 {
   "name": "meow-mode",
-  "version": "0.3.0",
+  "version": "0.2.10",
   "description": "Meow Mode — 발그림 고양이가 데스크탑 위를 돌아다닙니다. A doodle kitten that wanders your desktop with its own little house, bowls, and chaotic charm.",
   "homepage": "https://github.com/Celeste232/main",
   "repository": {
@@ -21,9 +21,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build && electron-builder",
     "build:unpacked": "tsc -b && vite build && electron-builder --dir",
+    "build:fox": "tsc -b && VITE_FOX=1 vite build && electron-builder --config electron-builder-fox.json",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
-    "slice": "node scripts/slice-frames.mjs"
+    "slice": "node scripts/slice-frames.mjs",
+    "slice:fox": "node scripts/slice-fox.mjs"
   },
   "dependencies": {
     "electron-store": "^10.0.1",
