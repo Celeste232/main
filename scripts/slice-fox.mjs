@@ -50,15 +50,46 @@ const ALIAS = {
   pounce: 'zoomies', happy: 'tail-wag',
 };
 
+// The sheet has an opaque near-white background (no alpha). Flood-fill it to
+// transparent starting from the borders; the fox's own white fur is enclosed by
+// dark outlines, so the fill can't reach it and it stays opaque.
+function removeBackground(data, info) {
+  const W = info.width, H = info.height, ch = 4;
+  const removable = (i) =>
+    data[i + 3] < 20 || (data[i] >= 228 && data[i + 1] >= 228 && data[i + 2] >= 228);
+  const visited = new Uint8Array(W * H);
+  const stack = [];
+  const push = (x, y) => {
+    if (x < 0 || x >= W || y < 0 || y >= H) return;
+    const p = y * W + x;
+    if (!visited[p]) { visited[p] = 1; stack.push(p); }
+  };
+  for (let x = 0; x < W; x++) { push(x, 0); push(x, H - 1); }
+  for (let y = 0; y < H; y++) { push(0, y); push(W - 1, y); }
+  while (stack.length) {
+    const p = stack.pop();
+    const i = p * ch;
+    if (!removable(i)) continue;
+    data[i + 3] = 0;
+    const x = p % W, y = (p / W) | 0;
+    push(x + 1, y); push(x - 1, y); push(x, y + 1); push(x, y - 1);
+  }
+}
+
 async function sliceAction(key, col, row) {
   const dir = path.join(OUT, key);
   await fs.mkdir(dir, { recursive: true });
   for (let f = 0; f < 3; f++) {
     const left = col * PANEL_W + FX[f];
     const top = row * PANEL_H + BAND;
-    await sharp(SRC)
+    const { data, info } = await sharp(SRC)
       .extract({ left, top, width: FRAME_W, height: FRAME_H })
-      .resize(SIZE, SIZE, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .resize(SIZE, SIZE, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 255 } })
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    removeBackground(data, info);
+    await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
       .png()
       .toFile(path.join(dir, `${f + 1}.png`));
   }

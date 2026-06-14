@@ -2,7 +2,7 @@
   "appId": "com.celinelee.foxmode",
   "productName": "Fox Mode",
   "copyright": "Copyright © 2026 Celine Lee",
-  "extraMetadata": { "version": "1.0.3" },
+  "extraMetadata": { "version": "1.0.4" },
   "directories": {
     "output": "release-fox",
     "buildResources": "build"
