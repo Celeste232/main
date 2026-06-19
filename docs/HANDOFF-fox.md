@@ -1,63 +1,116 @@
-# 인수인계서 / Handoff — Meow Mode + Fox Mode (2026-06-14)
+# 철저한 인수인계서 / Full Handoff — Meow Mode + Fox Mode
 
-> 이 세션이 길어져서 다음 세션(또는 다른 도구)이 이어받도록 현재 상태를 정리한 문서.
+> 작성: 2026-06-15. 이 문서 하나로 다른 에이전트(Claude/GPT/사람)가 차갑게 받아도 이어갈 수 있게 작성.
+> 대화 맥락 없이 이 문서 + repo만으로 작업 가능하도록 함.
 
-## 한 줄 요약
-**Meow Mode(고양이)** = 판매중인 macOS 데스크탑 펫. **Fox Mode(여우)** = 같은 repo에서 별도 빌드하는 신규 별개 제품. 지금 **활성 블로커: Fox Mode v1.0.4가 맥에서 "손상되어 휴지통으로" 뜨며 안 열림** (Gatekeeper/서명 문제).
+---
 
-## 저장소 / 브랜치
-- repo: `Celeste232/main` (private)
-- **dev (빌드 대상)**: `claude/cat-house-interactions-pFJxU` ← 모든 코드 + 워크플로가 항상 이 브랜치 HEAD를 체크아웃해 빌드
-- `claude/sweet-heisenberg-JhBcl` : 작업 브랜치, dev와 동일하게 유지
-- `main` : 워크플로 파일 보유 (release.yml=Meow, release-fox.yml=Fox)
+## 0. 지금 가장 급한 것 (TL;DR)
+**활성 블로커: Fox Mode dmg가 맥에서 "손상되어 휴지통으로 이동"으로 안 열림.**
+- **빌드 버그 아님** — 빌드 로그 확인 결과 ad-hoc 서명 정상(`codesign --verify` 통과: "valid on disk / satisfies its Designated Requirement"). Meow Mode와 동일한 서명 방식.
+- 원인: macOS Gatekeeper가 **ad-hoc 서명 + 다운로드(quarantine)** 앱을 막는 표준 동작. Meow dmg도 같은 macOS에서 새로 받으면 동일하게 막힘.
+- **임시 우회(사용자 맥에서)**: `xattr -dr com.apple.quarantine "/Applications/Fox Mode.app"; open "/Applications/Fox Mode.app"` → 무조건 열림. 또는 시스템 설정 → 개인정보 보호 및 보안 → "그래도 열기".
+- **영구 해결(사용자+구매자 모두 깔끔하게) = Apple 공증(notarization).** 이게 다음 작업자가 해야 할 핵심. → §6 참조. **사용자 Apple Developer 계정($99/년) 필요.**
 
-## 두 제품 구조 (한 코드베이스, 별도 빌드)
-- **Meow Mode**: 손코딩 SVG 고양이(`src/components/Cat/CatSvg.tsx`). 버전=`package.json`(현 0.2.10). 빌드=`npm run build` / 워크플로 `release.yml` / 태그 `v*`. published: v0.2.9.
-- **Fox Mode**: `여우_01.png` 시트에서 잘라낸 PNG 스킨. 빌드=`npm run build:fox` (`electron-builder-fox.json`: appId `com.celinelee.foxmode`, productName "Fox Mode", 버전=`extraMetadata.version` 현 1.0.4, output `release-fox/`). 워크플로 `release-fox.yml` / 태그 `fox-v*`. published: fox-v1.0.1(구버그). v1.0.2~1.0.4는 코드 커밋됨(빌드는 사용자가 워크플로 돌려야 생성).
+사용자는 매우 지쳐있고 빠른 해결을 원함. "다른 애한테 시키겠다"고 함.
 
-## 빌드 분기 메커니즘
-- `VITE_FOX=1 vite build` → `vite.config.ts`의 `define: { __IS_FOX__ }` 로 주입
-- `__IS_FOX__` 면: ① `Cat.tsx`가 PNG 여우 강제 + 좌우반전 보정(여우 그림이 기본 왼쪽 봄) ② `src/i18n/strings.ts`의 `foxify()`가 UI 글자 여우化(먀우 모드→Fox Mode, 고양이→여우, 4개국어)
-- 트레이(main 프로세스)는 `electron/i18n.ts`에서 `app.getName()`에 "fox" 포함 여부로 여우化
+---
 
-## 여우 에셋 파이프라인
-- `scripts/slice-fox.mjs`: `src/assets/reference/여우_01.png`(불투명 흰배경) → 패널 그리드(3열×4행, 패널 512×256)에서 슬라이스 → `src/assets/cat/<action>/<n>.png`
-- **흰배경 제거 = flood-fill** (`removeBackground`): 테두리에서 흰색 따라 들어가며 투명화, 여우 흰털은 윤곽선에 막혀 보존. → 흰배경 시트 `여우_02~06`도 같은 방식으로 추가 가능(미래 동작).
-- 액션: walking/zoomies/sitting/sleeping/tail-wag/jumping/curious/roll + 별칭(idle=sitting 등). 앉기 3번(뒷모습)은 드롭.
-- 매핑 스펙: `docs/fox-actions.md`
+## 1. 제품 개요
+- **Meow Mode**: 손코딩 SVG 고양이 데스크탑 펫 (macOS). 이미 Gumroad 판매중. $2.99.
+- **Fox Mode**: 여우 데스크탑 펫. Meow와 **별개 제품**, 같은 repo에서 별도 빌드. 신규.
+- 둘 다 Electron 투명 오버레이 위를 돌아다니는 데스크탑 펫. 집·밥그릇·물그릇, 30+ 행동, 한/영/일/중 4개국어, 메뉴바 트레이.
+- 판매: 사용자가 dmg를 직접 다운로드 → Gumroad에 업로드(수동). private repo라 무료 유출 없음.
 
-## 🔴 활성 블로커: Fox Mode "손상되어 휴지통으로" (안 열림)
-- 증상: fox-v1.0.4 dmg 더블클릭 시 "손상되어 휴지통으로 이동". Meow Mode는 "그래도 열기"(소프트 프롬프트)로 열렸는데 Fox는 더 강하게 막힘.
-- **원인 후보**: Fox 빌드의 ad-hoc 서명(`build/afterPack.cjs`)이 Meow와 다르게 깨짐. `--config electron-builder-fox.json` 빌드에서 afterPack이 실행/검증됐는지 확인 필요.
-- **진단 절차**: fox-v1.0.4 빌드 로그(Actions→Release Fox→해당 run→Build Fox Mode 스텝)에서 `[afterPack] ad-hoc signing` / `ad-hoc signature verified ✓` 출력 확인. Meow의 Release 빌드 로그와 비교. 차이 있으면 거기.
-- **즉시 우회(사용자 맥)**: `xattr -dr com.apple.quarantine "/Applications/Fox Mode.app"; open "/Applications/Fox Mode.app"` (격리 제거 → 서명 상관없이 무조건 열림).
-- **영구 해결**: Apple 공증(notarization, Apple Developer $99/년). 그러면 사용자·구매자 모두 더블클릭으로 그냥 열림. 빌드에 공증 단계 추가 필요(Apple ID/앱암호/팀ID 시크릿).
+## 2. 저장소 / 브랜치
+- repo: **`Celeste232/main`** (private)
+- **`claude/cat-house-interactions-pFJxU`** = dev = **빌드 대상**. 모든 코드 + 워크플로가 항상 이 브랜치 HEAD를 체크아웃해 빌드. ← 작업은 여기에.
+- `claude/sweet-heisenberg-JhBcl` = 보조 작업 브랜치, dev와 동일하게 유지해옴.
+- `main` = 워크플로 파일 보유(release.yml, release-fox.yml) + 옛 코드. 배포 기본 브랜치.
+- ⚠️ 사용자 로컬 클론이 한 번 꼬였던 적 있음(엉뚱한 e107222 갈래). 원격 dev는 깨끗. 로컬에서 dev로 force-push 금지. 새로 clone 권장.
 
-## ⚠️ 어시스턴트 환경 제약 (반드시 인지)
-- **클라우드 리눅스 컨테이너** — 사용자 맥 접근 불가(`/Users`, `/Volumes` 안 보임). 앱 실행·Gatekeeper 통과·맥 터미널은 **사용자가** 해야 함.
-- **GitHub Actions 트리거 불가** (403 "Resource not accessible by integration" — actions:write 없음). **태그 push도 403**. → 빌드/태그는 **사용자 또는 브라우저 클로드**가 GitHub UI / 인증된 git으로.
-- 가능: 코드 편집, repo 브랜치 push, 컨테이너 내 typecheck/vite build/슬라이스 검증, GitHub MCP로 릴리스·PR·파일·워크플로 run **조회**.
+## 3. 기술 스택 / 핵심 파일
+Electron 33 + React 18 + TypeScript + Vite 6 + electron-builder 25 (vite-plugin-electron).
+- `electron/main.ts` — 투명 풀스크린 창(가장 왼쪽 디스플레이), 트레이, **클릭-통과**(setIgnoreMouseEvents + 60fps 커서 샘플링; focus/show/blur에서 `mouseIgnored` 상태 재적용 — 이전에 focus 핸들러가 무조건 통과ON으로 만들어 설정창 클릭이 뒤로 새던 버그 수정함).
+- `electron/i18n.ts` — 트레이 문구 i18n + **fox 여우化**(app.getName()에 "fox" 포함 시).
+- `electron/store.ts` — electron-store 설정(catSkin 등). 기본 catSkin='svg-doodle'.
+- `electron/preload.ts` — IPC 브리지(window.api).
+- `src/components/Cat/Cat.tsx` — 스프라이트 렌더. `__IS_FOX__`면 PNG 여우 + **좌우반전 보정**(여우 그림이 기본 왼쪽 보므로). png 프레임 없으면 idle 프레임으로 폴백(고양이 SVG로 안 감).
+- `src/components/Cat/CatSvg.tsx` — 손코딩 고양이 SVG(1024줄). `src/components/Cat/catFrames.ts` — PNG 프레임 글롭/사양.
+- `src/i18n/strings.ts` — UI 문구 i18n(ko/en/ja/zh) + `foxify()`(=__IS_FOX__면 고양이단어→여우단어 치환).
+- `src/components/Settings/SettingsMenu.tsx` — 설정 패널.
+- `scripts/slice-fox.mjs` — 여우 시트 슬라이스 + **배경제거(flood-fill)**.
+- `vite.config.ts` — `define: { __IS_FOX__: JSON.stringify(process.env.VITE_FOX === '1') }`.
+- `electron-builder-fox.json` — Fox 빌드 설정(appId com.celinelee.foxmode, productName "Fox Mode", extraMetadata.version, output release-fox/, afterPack, mac identity:null).
+- `.github/workflows/release.yml`(Meow), `.github/workflows/release-fox.yml`(Fox).
+- `build/afterPack.cjs` — **ad-hoc 서명**(`codesign --force --deep --sign -`) + verify. mac/win/linux 중 darwin만.
+- `build/icon-fox.png` — 투명 여우 아이콘. `docs/fox-actions.md` — 여우 동작 매핑 스펙.
 
-## 빌드 트리거 방법 (사용자/브라우저 클로드)
-- Fox: https://github.com/Celeste232/main/actions/workflows/release-fox.yml → **Run workflow**. 매 실행이 **현재 dev 코드**로 새 `fox-v<version>` 빌드 (버전=electron-builder-fox.json). 브랜치 아무거나 OK(항상 dev 빌드).
-- Meow: Actions → "Release" → Run workflow (버전=package.json).
-- 태그 방식도 가능: `git push origin <tag>` (fox-v*, v*) — 사용자 인증 git에서.
+## 4. 두 제품 분기 메커니즘
+- 빌드 시 `VITE_FOX=1` → vite `define`이 `__IS_FOX__=true` 주입.
+- `__IS_FOX__`면: ① Cat.tsx가 PNG 여우 강제 + 좌우반전 ② strings.ts `foxify`가 UI 문구 여우化(먀우 모드→Fox Mode, 고양이→여우, 4개국어).
+- 트레이(main 프로세스)는 `app.getName()`("Fox Mode" 포함) 기준으로 여우化.
+- 고양이 앱은 `__IS_FOX__=false` → 전혀 영향 없음(검증함: 고양이 빌드엔 foxify 코드가 DCE로 빠짐).
 
-## 남은 할 일
-1. 🔴 **Fox "손상됨" 서명 해결** (위 진단) — 또는 공증 세팅.
-2. **여우 집/그릇**: 사용자 맥 `/Users/wony/Desktop/V-Main/판매앱 프로그램 만들기`에 이미지 있음, repo 미반영. push되면 `House/Bowls`(현재 SVG)를 여우 그림으로 교체(flood-fill 재활용) → v1.1.
-3. **여우 추가 동작**(밥/물/하품 등): `여우_02~06` 흰배경 시트 슬라이스(flood-fill) 추가.
-4. **판매자료**: Meow=`docs/`(sales-copy.md, meow-mode-guide.html, gumroad-snippets.md). Fox=`docs/fox/`(sales-copy.md, guide.html, gumroad-snippets.md). 영/일/중 도입부 flavor에 고양이끼 약간 남음(다듬기 선택).
+## 5. 여우 에셋 파이프라인
+- 원본: `src/assets/reference/여우_01~06.png` (사용자가 ChatGPT로 생성, 흰 배경 불투명). `여우_01`만 슬라이스에 씀(현재).
+- `scripts/slice-fox.mjs`: `여우_01`을 패널 그리드(3열×4행, 패널 512×256, 제목/번호 band 위쪽 80px 스킵)에서 고정박스로 잘라 `src/assets/cat/<action>/<n>.png` 생성.
+- **배경제거 = flood-fill**(`removeBackground`): 테두리에서 흰색(rgb≥228)/투명 따라 들어가며 alpha 0. 여우 흰 털은 검은 윤곽선에 막혀 보존. (검증: 배경 alpha=0, 여우 픽셀 유지.) → **흰배경 시트 `여우_02~06`도 이 방식으로 추가 가능**(미래 동작).
+- 액션 매핑(`docs/fox-actions.md`): walking/zoomies/sitting/sleeping/tail-wag/jumping/curious/roll + 별칭(idle=sitting, napping/loaf/sprawl/curl/flop=sleeping, pounce=zoomies, happy=tail-wag). 앉기 3번(뒷모습)은 드롭.
+- 재슬라이스: `node scripts/slice-fox.mjs`.
+
+## 6. 🔴 핵심 작업: Fox "손상됨" → Apple 공증(notarization)
+ad-hoc 서명은 macOS에서 한계(다운로드 시 "손상됨"/"확인 불가"). **유일한 진짜 해결 = Developer ID 서명 + 공증.** Meow에도 동일 적용 필요.
+필요한 것(사용자가 제공):
+1. **Apple Developer Program** 가입($99/년).
+2. **Developer ID Application 인증서**(.p12) → GitHub Secret `CSC_LINK`(base64) + `CSC_KEY_PASSWORD`.
+3. 공증 크레덴셜 → Secret `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID`.
+
+다음 작업자 할 일:
+- `electron-builder-fox.json`(및 package.json build)에서 `mac.identity: null` 제거 → Developer ID로 서명되게.
+- `build/afterPack.cjs`의 ad-hoc 서명 제거(또는 비-darwin/미인증 시에만).
+- `mac`에 `"notarize": { "teamId": "..." }` 또는 env 방식, `"hardenedRuntime": true`, entitlements 추가.
+- 워크플로(release.yml, release-fox.yml)에 위 Secret들을 env로 주입(CSC_LINK 등).
+- 빌드 → 공증 → staple 확인. 그러면 더블클릭으로 깔끔하게 열림.
+- 인증서/계정 없으면: ad-hoc 유지 + 구매자에게 "우클릭→열기 / 그래도 열기" 안내(이미 guide.html/gumroad-snippets에 있음)가 최선.
+
+## 7. ⚠️ 어시스턴트(에이전트) 환경 제약 — 반드시 인지
+- **클라우드 리눅스 컨테이너**. 사용자 맥 접근 불가(`/Users`,`/Volumes` 안 보임). → 앱 실행·Gatekeeper 통과·맥 터미널은 **사용자만** 가능.
+- **GitHub Actions 트리거 불가**(403 "Resource not accessible by integration" = actions:write 없음). **태그 push/삭제도 403**. → 빌드·태그는 **사용자 또는 "브라우저 클로드"(GitHub 웹 UI 조종 에이전트)**가 수행.
+- 가능: 코드 편집, repo **브랜치** push(git), 컨테이너 내 `npm run typecheck`/`vite build`/슬라이스 검증, GitHub MCP로 릴리스·PR·워크플로 run·로그 **조회**, create_or_update_file로 파일 커밋.
+
+## 8. 빌드 & 릴리스 방법 (사용자/브라우저 클로드가 실행)
+- **Fox**: https://github.com/Celeste232/main/actions/workflows/release-fox.yml → "Run workflow". **매 실행이 현재 dev 코드로** 새 `fox-v<version>` 빌드(버전=electron-builder-fox.json의 extraMetadata.version). 브랜치 아무거나 OK(항상 dev 빌드). 또는 `git push origin fox-v<x>` 태그.
+- **Meow**: Actions → "Release" → Run workflow(버전=package.json) 또는 `v*` 태그.
+- 빌드 후 dmg는 Releases 페이지에 첨부됨 → 사용자가 받아 Gumroad 업로드.
+
+## 9. 현재 상태 (빌드/릴리스)
+- Meow Mode: **v0.2.9 published**. v0.2.10(클릭-통과 수정) 코드만 있고 빌드 안 함.
+- Fox Mode: **fox-v1.0.1**(초기, 버그) + **fox-v1.0.4**(아래 수정 다 포함) published. fox-v1.0.0 태그는 꼬여서 삭제함.
+- 최신 dev HEAD: 이 핸드오프 커밋(직전 = `32cc68f` 부근, 이 파일 추가분).
+
+## 10. 여우 작업 변경 이력 (changelog)
+- 여우 PNG 스킨 추가 → Fox Mode 별개앱 분리(electron-builder-fox.json, release-fox.yml, build:fox, __IS_FOX__)
+- fox-v1.0.1: 첫 빌드(버그: 고양이단어 UI, 뒤로걷기, 흰배경, 크림아이콘)
+- v1.0.2: __IS_FOX__ define로 여우 강제 확정 + i18n 여우化(설정패널+트레이)
+- v1.0.3: 좌우반전(뒤로걷기) 수정 + 투명 아이콘 + 앉기 뒷모습 프레임 제거
+- v1.0.4: **흰배경 flood-fill 제거**(진짜 투명) ← 사용자가 받은 최신
+- (현재) Fox "손상됨"으로 안 열림 = Gatekeeper/공증 이슈(빌드는 정상).
+
+## 11. 남은 할 일
+1. 🔴 **공증 세팅**(§6) — 또는 ad-hoc 유지 + 우회 안내.
+2. **여우 집/그릇**: 사용자 맥 `/Users/wony/Desktop/V-Main/판매앱 프로그램 만들기`에 이미지 있음, repo 미반영. push되면 `House`(HouseSvg)·`FoodBowl`/`WaterBowl`(SVG)를 여우 그림 PNG로 교체(flood-fill 재활용) → v1.1.
+3. **여우 추가 동작**(밥/물/하품/굴파기 등): `여우_02~06` 흰배경 시트 슬라이스(flood-fill) 추가 + `docs/fox-actions.md` 매핑대로.
+4. 판매자료 영/일/중 도입부에 고양이끼 약간 남음(다듬기 선택).
 5. PR #1(cat release.yml→main) 열려있음. 깨진 draft 릴리스(v0.2.3/0.2.4) 정리 선택.
-6. Gumroad: Meow Mode + Fox Mode **별도 상품**. private repo라 무료유출 없음, 사용자가 dmg 받아 업로드. 첫 실행 안내(우클릭→열기/그래도 열기) 상품페이지 필수.
 
-## 핵심 파일
-- `electron/main.ts` (투명창/트레이/클릭통과 — focus 핸들러가 mouseIgnored 재적용), `electron/i18n.ts` (트레이 i18n+여우化), `electron/store.ts`
-- `src/components/Cat/Cat.tsx` (스프라이트 렌더 + `__IS_FOX__` + 좌우반전), `CatSvg.tsx`, `catFrames.ts`(PNG glob)
-- `src/i18n/strings.ts` (UI i18n + `foxify`), `src/components/Settings/SettingsMenu.tsx`
-- `scripts/slice-fox.mjs` (슬라이스+배경제거), `vite.config.ts` (`__IS_FOX__` define)
-- `electron-builder-fox.json`, `.github/workflows/release-fox.yml`, `build/afterPack.cjs` (ad-hoc 서명), `build/icon-fox.png` (투명 여우 아이콘)
-- `docs/fox-actions.md` (매핑 스펙), `docs/HANDOFF.md` (초기 고양이 핸드오프)
+## 12. 문서 위치 (전부 docs/)
+- 사용설명서: `docs/meow-mode-guide.html`(Meow 4개국어), `docs/manual-ko.md`, `docs/fox/guide.html`(Fox 4개국어)
+- 설계도/구조: **`docs/cat-svg-blueprint.json`**(고양이 SVG 설계), **`docs/fox-actions.md`**(여우 동작 매핑), `docs/HANDOFF.md`(초기), 이 파일
+- 판매: `README.{md,ko,ja,zh}.md`, `docs/sales-copy.md`, `docs/gumroad-snippets.md`, `docs/SALES_CHECKLIST.md`, `docs/short-description.md`, `docs/itch-description.md`, `docs/social-copy.md`, `docs/fox/sales-copy.md`, `docs/fox/gumroad-snippets.md`
+- 여우 원본 시트: `src/assets/reference/여우_01~06.png`
 
-## 최근 커밋 흐름 (dev)
-... → 여우 스킨 추가 → Fox Mode 별개앱 분리 → fox 1.0.1 → 1.0.2(플래그/i18n) → 1.0.3(좌우반전/투명아이콘/뒷모습프레임제거) → 1.0.4(흰배경 flood-fill 제거) → (이 핸드오프)
+## 13. 사용자 협업 방식 / 톤
+- 빌드/맥/git 조작은 "브라우저 클로드"(웹 UI 조종)에 위임하거나 본인이 터미널로 직접.
+- 한국어로 소통. 빠른 실행을 원하고, 막히면 매우 답답해함. 지시는 **짧고 정확하게, 실행 가능한 한 가지 행동**으로.
+- 맥: Mac mini (woniui-Macmini-2), macOS Sequoia 계열로 추정(Gatekeeper 빡셈).
