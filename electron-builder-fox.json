@@ -2,12 +2,13 @@
   "appId": "com.celinelee.foxmode",
   "productName": "Fox Mode",
   "copyright": "Copyright © 2026 Celine Lee",
-  "extraMetadata": { "version": "1.0.4" },
+  "extraMetadata": { "version": "1.0.5" },
   "directories": {
     "output": "release-fox",
     "buildResources": "build"
   },
   "afterPack": "build/afterPack.cjs",
+  "afterSign": "build/notarize.cjs",
   "files": [
     "dist",
     "dist-electron",
@@ -31,6 +32,9 @@
     ],
     "icon": "build/icon-fox.png",
     "category": "public.app-category.entertainment",
-    "identity": null
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist"
   }
 }

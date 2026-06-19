@@ -66,13 +66,26 @@ ad-hoc 서명은 macOS에서 한계(다운로드 시 "손상됨"/"확인 불가"
 2. **Developer ID Application 인증서**(.p12) → GitHub Secret `CSC_LINK`(base64) + `CSC_KEY_PASSWORD`.
 3. 공증 크레덴셜 → Secret `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID`.
 
-다음 작업자 할 일:
-- `electron-builder-fox.json`(및 package.json build)에서 `mac.identity: null` 제거 → Developer ID로 서명되게.
-- `build/afterPack.cjs`의 ad-hoc 서명 제거(또는 비-darwin/미인증 시에만).
-- `mac`에 `"notarize": { "teamId": "..." }` 또는 env 방식, `"hardenedRuntime": true`, entitlements 추가.
-- 워크플로(release.yml, release-fox.yml)에 위 Secret들을 env로 주입(CSC_LINK 등).
-- 빌드 → 공증 → staple 확인. 그러면 더블클릭으로 깔끔하게 열림.
-- 인증서/계정 없으면: ad-hoc 유지 + 구매자에게 "우클릭→열기 / 그래도 열기" 안내(이미 guide.html/gumroad-snippets에 있음)가 최선.
+**✅ 공증 패치 = 코드 구현 완료 (2026-06-15, Fox 한정).** 남은 건 시크릿뿐.
+구현된 것:
+- `build/entitlements.mac.plist` (hardened runtime entitlements)
+- `build/notarize.cjs` (afterSign 훅, @electron/notarize. CI에서 시크릿 없으면 throw, 로컬은 skip)
+- `build/afterPack.cjs` — `CSC_LINK` 있으면 ad-hoc 건너뜀(=실인증서 서명 경로), 없으면 ad-hoc 로컬 폴백
+- `electron-builder-fox.json` — `afterSign` 추가, `mac`에 `hardenedRuntime/gatekeeperAssess:false/entitlements/entitlementsInherit` 추가, **`identity:null` 제거**, version 1.0.5
+- `.github/workflows/release-fox.yml` — 빌드 env에 5개 시크릿 주입 + 빌드 후 codesign/spctl/stapler 검증 스텝
+- `package.json` — `@electron/notarize` devDep 추가
+
+**남은 것(워니만 가능): GitHub repo Secrets 5개 등록**
+`Settings → Secrets and variables → Actions → New repository secret`:
+- `APPLE_ID` (Apple 계정 이메일)
+- `APPLE_APP_SPECIFIC_PASSWORD` (appleid.apple.com → 앱 암호 생성)
+- `APPLE_TEAM_ID` (developer.apple.com → Membership → Team ID)
+- `CSC_LINK` (Developer ID Application 인증서 .p12 를 base64로: `base64 -i cert.p12 | pbcopy`)
+- `CSC_KEY_PASSWORD` (그 .p12 비밀번호)
+
+그 후: Release Fox 실행 → **fox-v1.0.5**가 서명+공증되어 더블클릭으로 깔끔히 열림. 검증 스텝 로그에서 `spctl: accepted` / `stapler validate: worked` 확인.
+⚠️ **시크릿 없이 Release Fox 돌리면 빌드 실패함(의도된 동작)** — 시크릿 등록 전엔 fox-v1.0.4(ad-hoc, 우회 필요)로 테스트.
+Meow Mode도 동일 처리 필요(package.json build + release.yml) — 아직 안 함.
 
 ## 7. ⚠️ 어시스턴트(에이전트) 환경 제약 — 반드시 인지
 - **클라우드 리눅스 컨테이너**. 사용자 맥 접근 불가(`/Users`,`/Volumes` 안 보임). → 앱 실행·Gatekeeper 통과·맥 터미널은 **사용자만** 가능.

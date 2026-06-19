@@ -23,6 +23,14 @@ exports.default = async function afterPack(context) {
   // Only macOS bundles need this; skip win/linux.
   if (context.electronPlatformName !== 'darwin') return;
 
+  // When a real Developer ID cert is provided (CSC_LINK), DON'T ad-hoc sign —
+  // electron-builder signs with the cert and afterSign (notarize.cjs) notarizes.
+  // Ad-hoc stays only as a local/dev fallback for builds without a certificate.
+  if (process.env.CSC_LINK) {
+    console.log('[afterPack] CSC_LINK present — skipping ad-hoc (Developer ID signing + notarization will run)');
+    return;
+  }
+
   const appName = context.packager.appInfo.productFilename; // "Meow Mode"
   const appPath = path.join(context.appOutDir, `${appName}.app`);
 
