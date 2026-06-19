@@ -1,10 +1,13 @@
-// electron-builder afterSign hook — notarizes the macOS app with Apple.
+// electron-builder afterSign hook — OPTIONAL Apple notarization.
 //
-// Runs AFTER electron-builder signs the app (Developer ID). Requires the Apple
-// notarization secrets. Modern notarytool flow via @electron/notarize.
+// Fox Mode and Meow Mode ship NON-notarized (ad-hoc signed, see afterPack.cjs).
+// This hook is NOT wired into electron-builder-fox.json anymore, so it does not
+// run during the normal Gumroad build. It is kept only as an opt-in path for if
+// we ever buy an Apple Developer ID.
 //
-//   In CI without the secrets → throws (we never ship an un-notarized build).
-//   Locally without the secrets → warns and skips (ad-hoc dev build is fine).
+// IMPORTANT: it must NEVER fail a build. With no Apple credentials it warns and
+// skips — in CI and locally alike — so the ad-hoc / unsigned build keeps
+// shipping. (Previously this threw in CI; that was removed on purpose.)
 const { notarize } = require('@electron/notarize');
 
 exports.default = async function notarizing(context) {
@@ -12,27 +15,24 @@ exports.default = async function notarizing(context) {
 
   if (electronPlatformName !== 'darwin') return;
 
-  const { APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID, CI } = process.env;
+  const { APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID } = process.env;
 
   if (!APPLE_ID || !APPLE_APP_SPECIFIC_PASSWORD || !APPLE_TEAM_ID) {
-    if (CI) {
-      throw new Error(
-        'Missing Apple notarization secrets: APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID',
-      );
-    }
-    console.warn('Skipping notarization because Apple credentials are missing (local/dev build).');
+    console.warn(
+      '[notarize] No Apple credentials — skipping notarization (shipping ad-hoc / unsigned, which is expected for Gumroad distribution).',
+    );
     return;
   }
 
   const appName = packager.appInfo.productFilename;
   const appPath = `${appOutDir}/${appName}.app`;
 
-  console.log(`Notarizing ${appPath} …`);
+  console.log(`[notarize] Notarizing ${appPath} …`);
   await notarize({
     appPath,
     appleId: APPLE_ID,
     appleIdPassword: APPLE_APP_SPECIFIC_PASSWORD,
     teamId: APPLE_TEAM_ID,
   });
-  console.log('Notarization complete.');
+  console.log('[notarize] Notarization complete.');
 };

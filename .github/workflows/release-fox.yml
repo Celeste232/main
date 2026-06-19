@@ -37,19 +37,20 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: Build Fox Mode + package
+        # Non-notarized Gumroad build. No Apple Developer secrets required — the
+        # app is ad-hoc signed in build/afterPack.cjs (same as Meow Mode), so it
+        # opens via right-click → Open / "Open Anyway". See docs/fox/guide.html.
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Apple Developer ID signing + notarization. Set these as repo secrets.
-          # Without them the build fails here BY DESIGN (build/notarize.cjs throws
-          # in CI) — we never publish an un-notarized Fox Mode.
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
         run: npm run build:fox
 
-      - name: Verify signature & notarization (informational)
+      # Diagnostic only (never fails the build). The ad-hoc signature should be
+      # valid; `spctl` is EXPECTED to say "rejected / unnotarized" — that's the
+      # normal non-notarized state that the right-click → Open bypass handles.
+      # What we're watching for here is a BROKEN signature (codesign --verify
+      # --deep --strict failing), which is what would turn the soft "unverified
+      # developer" prompt into the hard "is damaged" block on a buyer's Mac.
+      - name: Inspect signature (diagnostic)
         if: always()
         run: |
           APP=$(find release-fox -maxdepth 2 -name "Fox Mode.app" 2>/dev/null | head -1)
@@ -57,12 +58,8 @@ jobs:
           if [ -n "$APP" ]; then
             echo "== codesign -dv --verbose=4 =="; codesign -dv --verbose=4 "$APP" 2>&1 || true
             echo "== codesign --verify --deep --strict =="; codesign --verify --deep --strict --verbose=4 "$APP" 2>&1 || true
-            echo "== spctl -a -vv =="; spctl -a -vv "$APP" 2>&1 || true
+            echo "== spctl -a -vv (expected: rejected/unnotarized) =="; spctl -a -vv "$APP" 2>&1 || true
           fi
-          for d in release-fox/*.dmg; do
-            [ -e "$d" ] || continue
-            echo "== stapler validate $d =="; xcrun stapler validate "$d" 2>&1 || true
-          done
 
       - name: Upload artifacts to Release
         uses: softprops/action-gh-release@v2

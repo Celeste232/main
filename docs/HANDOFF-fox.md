@@ -6,13 +6,13 @@
 ---
 
 ## 0. 지금 가장 급한 것 (TL;DR)
-**활성 블로커: Fox Mode dmg가 맥에서 "손상되어 휴지통으로 이동"으로 안 열림.**
-- **빌드 버그 아님** — 빌드 로그 확인 결과 ad-hoc 서명 정상(`codesign --verify` 통과: "valid on disk / satisfies its Designated Requirement"). Meow Mode와 동일한 서명 방식.
-- 원인: macOS Gatekeeper가 **ad-hoc 서명 + 다운로드(quarantine)** 앱을 막는 표준 동작. Meow dmg도 같은 macOS에서 새로 받으면 동일하게 막힘.
-- **임시 우회(사용자 맥에서)**: `xattr -dr com.apple.quarantine "/Applications/Fox Mode.app"; open "/Applications/Fox Mode.app"` → 무조건 열림. 또는 시스템 설정 → 개인정보 보호 및 보안 → "그래도 열기".
-- **영구 해결(사용자+구매자 모두 깔끔하게) = Apple 공증(notarization).** 이게 다음 작업자가 해야 할 핵심. → §6 참조. **사용자 Apple Developer 계정($99/년) 필요.**
+**결정(소유자, 2026-06-19): Fox Mode는 Meow Mode와 똑같이 "비공증 ad-hoc 배포"로 간다. Apple 공증($99) 안 함.**
+- Fox는 ad-hoc 서명(`build/afterPack.cjs`)된 dmg/zip으로 배포 → 구매자는 **우클릭 → 열기** 또는 **시스템 설정 → 개인정보 보호 및 보안 → "그래도 열기"**로 실행. (Meow가 늘 열리던 방식과 동일.)
+- 우회 안내 문서 포함: `docs/fox/guide.html`, `docs/fox/gumroad-snippets.md`, Release 본문.
+- ⚠️ 한때 시도했던 공증 패치(afterSign 훅 / 시크릿 5개 / CI throw)는 **전부 되돌림**(2026-06-19, 커밋 참조). Release Fox는 이제 **시크릿 없이도 성공**하고, `notarize.cjs`는 더 이상 throw 안 함. → §6.
+- v1.0.4 "손상됨/확인 불가" 원인 분석 = §6. 요약: Meow와 패키징 차이는 아이콘 포맷(.png vs .icns)뿐이고 그건 Gatekeeper 원인이 아님 → 둘 다 동일한 ad-hoc+quarantine 게이트에 걸림. "확인 불가"는 우회로 열림(정상). 진짜 "손상됨"은 보통 zip 재압축으로 서명이 깨진 경우 → **dmg를 마운트해 Applications로 드래그**하면 해결.
 
-사용자는 매우 지쳐있고 빠른 해결을 원함. "다른 애한테 시키겠다"고 함.
+사용자는 매우 지쳐있고 빠른 해결을 원함. 지시는 짧고 정확하게.
 
 ---
 
@@ -59,33 +59,37 @@ Electron 33 + React 18 + TypeScript + Vite 6 + electron-builder 25 (vite-plugin-
 - 액션 매핑(`docs/fox-actions.md`): walking/zoomies/sitting/sleeping/tail-wag/jumping/curious/roll + 별칭(idle=sitting, napping/loaf/sprawl/curl/flop=sleeping, pounce=zoomies, happy=tail-wag). 앉기 3번(뒷모습)은 드롭.
 - 재슬라이스: `node scripts/slice-fox.mjs`.
 
-## 6. 🔴 핵심 작업: Fox "손상됨" → Apple 공증(notarization)
-ad-hoc 서명은 macOS에서 한계(다운로드 시 "손상됨"/"확인 불가"). **유일한 진짜 해결 = Developer ID 서명 + 공증.** Meow에도 동일 적용 필요.
-필요한 것(사용자가 제공):
-1. **Apple Developer Program** 가입($99/년).
-2. **Developer ID Application 인증서**(.p12) → GitHub Secret `CSC_LINK`(base64) + `CSC_KEY_PASSWORD`.
-3. 공증 크레덴셜 → Secret `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID`.
+## 6. Fox "손상됨/확인 불가" — 원인 분석 & 비공증 배포 (현 방침)
+**방침(소유자 결정, 2026-06-19): 공증 안 함. Meow와 동일한 비공증 ad-hoc 배포 + 우회 안내.** Apple Developer($99)·시크릿 불필요.
 
-**✅ 공증 패치 = 코드 구현 완료 (2026-06-15, Fox 한정).** 남은 건 시크릿뿐.
-구현된 것:
-- `build/entitlements.mac.plist` (hardened runtime entitlements)
-- `build/notarize.cjs` (afterSign 훅, @electron/notarize. CI에서 시크릿 없으면 throw, 로컬은 skip)
-- `build/afterPack.cjs` — `CSC_LINK` 있으면 ad-hoc 건너뜀(=실인증서 서명 경로), 없으면 ad-hoc 로컬 폴백
-- `electron-builder-fox.json` — `afterSign` 추가, `mac`에 `hardenedRuntime/gatekeeperAssess:false/entitlements/entitlementsInherit` 추가, **`identity:null` 제거**, version 1.0.5
-- `.github/workflows/release-fox.yml` — 빌드 env에 5개 시크릿 주입 + 빌드 후 codesign/spctl/stapler 검증 스텝
-- `package.json` — `@electron/notarize` devDep 추가
+### Meow vs Fox 패키징 비교 (v1.0.4 기준)
+`package.json`의 `build`(Meow) ↔ `electron-builder-fox.json`(Fox)를 직접 비교:
+- **공통**: 동일한 `build/afterPack.cjs`로 ad-hoc 서명(`codesign --force --deep --sign -`), `mac.identity:null`, dmg+zip(arm64+x64), category, publish 설정.
+- **차이**: ① `mac.icon` = Fox `.png` vs Meow `.icns` — electron-builder가 mac 러너에서 png→icns 변환하므로 번들엔 둘 다 정상 `Contents/Resources/icon.icns`가 들어감. **Gatekeeper/서명 원인 아님.** ② appId/productName/output/version — 무관. ③ extraResources에 아이콘·트레이 png 복사 — 둘 다 동일하게 ad-hoc 서명에 봉인됨.
+- **결론**: Fox를 Meow보다 "손상됨"에 더 취약하게 만드는 패키징 차이는 **없음**. 둘 다 ad-hoc+quarantine이라 똑같은 Gatekeeper 게이트에 걸린다.
 
-**남은 것(워니만 가능): GitHub repo Secrets 5개 등록**
-`Settings → Secrets and variables → Actions → New repository secret`:
-- `APPLE_ID` (Apple 계정 이메일)
-- `APPLE_APP_SPECIFIC_PASSWORD` (appleid.apple.com → 앱 암호 생성)
-- `APPLE_TEAM_ID` (developer.apple.com → Membership → Team ID)
-- `CSC_LINK` (Developer ID Application 인증서 .p12 를 base64로: `base64 -i cert.p12 | pbcopy`)
-- `CSC_KEY_PASSWORD` (그 .p12 비밀번호)
+### "확인 불가"(soft) vs "손상됨"(hard) 구분
+- **"확인할 수 없는 개발자"(soft)** = 정상적인 비공증 동작. **우클릭 → 열기** 또는 **그래도 열기**로 열림. Meow가 늘 열리던 그 방식. Fox도 동일.
+- **"손상되어 휴지통으로"(hard)** = quarantine된 앱의 서명이 strict 검증에 실패할 때. 보통 설정 차이가 아니라 **전송 중 서명 깨짐**(zip을 브라우저/파인더/클라우드가 재압축, 또는 dmg 대신 zip 다운로드)이 원인. → **dmg를 마운트해서 Applications로 드래그**하면 해결.
 
-그 후: Release Fox 실행 → **fox-v1.0.5**가 서명+공증되어 더블클릭으로 깔끔히 열림. 검증 스텝 로그에서 `spctl: accepted` / `stapler validate: worked` 확인.
-⚠️ **시크릿 없이 Release Fox 돌리면 빌드 실패함(의도된 동작)** — 시크릿 등록 전엔 fox-v1.0.4(ad-hoc, 우회 필요)로 테스트.
-Meow Mode도 동일 처리 필요(package.json build + release.yml) — 아직 안 함.
+### 사용자 맥에서 확정 진단(원하면)
+```
+spctl -a -vv "/Applications/Fox Mode.app"
+codesign --verify --deep --strict --verbose=4 "/Applications/Fox Mode.app"
+```
+- `source=Unnotarized Developer ID` / `rejected` → soft. 우클릭→열기로 열림(정상).
+- `a sealed resource is missing or invalid` / `not signed at all` → 서명 깨짐(전송 문제). 새 dmg 재설치.
+- 그래도 막히면 즉시 우회: `xattr -dr com.apple.quarantine "/Applications/Fox Mode.app"; open "/Applications/Fox Mode.app"`
+
+### 코드 상태 (공증 패치 되돌림, 2026-06-19)
+- `electron-builder-fox.json` — `afterSign` **제거**, `mac`에서 hardenedRuntime/gatekeeperAssess/entitlements/entitlementsInherit **제거**, **`identity:null` 복구**. = Meow와 동일한 ad-hoc 설정.
+- `build/notarize.cjs` — **더 이상 throw 안 함**(시크릿 없으면 warn+skip). 설정에서 afterSign을 안 걸므로 평소엔 실행조차 안 됨. 미래에 공증할 때만 opt-in용으로 남겨둠.
+- `build/afterPack.cjs` — ad-hoc 서명(변경 없음, Meow와 공유). CSC_LINK 없으면(=평소) 항상 ad-hoc 서명.
+- `.github/workflows/release-fox.yml` — Apple 시크릿 env **제거 → 시크릿 없이 빌드 성공**. 빌드 후 "Inspect signature (diagnostic)" 스텝은 빌드를 실패시키지 않고 서명만 점검(서명이 깨진 빌드를 출하 전에 잡기 위함).
+- `build/entitlements.mac.plist` — 안 쓰지만 남겨둠(미래 공증용).
+
+### (선택) 미래에 정말 공증하려면
+Apple Developer 가입 후 시크릿 5개(`APPLE_ID`/`APPLE_APP_SPECIFIC_PASSWORD`/`APPLE_TEAM_ID`/`CSC_LINK`/`CSC_KEY_PASSWORD`) 등록 + `electron-builder-fox.json`에 `afterSign:"build/notarize.cjs"`와 hardened runtime/entitlements 재추가하면 됨. 하지만 **현 방침은 비공증**이므로 불필요.
 
 ## 7. ⚠️ 어시스턴트(에이전트) 환경 제약 — 반드시 인지
 - **클라우드 리눅스 컨테이너**. 사용자 맥 접근 불가(`/Users`,`/Volumes` 안 보임). → 앱 실행·Gatekeeper 통과·맥 터미널은 **사용자만** 가능.
@@ -108,10 +112,10 @@ Meow Mode도 동일 처리 필요(package.json build + release.yml) — 아직 �
 - v1.0.2: __IS_FOX__ define로 여우 강제 확정 + i18n 여우化(설정패널+트레이)
 - v1.0.3: 좌우반전(뒤로걷기) 수정 + 투명 아이콘 + 앉기 뒷모습 프레임 제거
 - v1.0.4: **흰배경 flood-fill 제거**(진짜 투명) ← 사용자가 받은 최신
-- (현재) Fox "손상됨"으로 안 열림 = Gatekeeper/공증 이슈(빌드는 정상).
+- v1.0.5: **공증 패치 되돌림** → Meow와 동일한 비공증 ad-hoc 배포로 확정 + 우회 안내(§6) (현재)
 
 ## 11. 남은 할 일
-1. 🔴 **공증 세팅**(§6) — 또는 ad-hoc 유지 + 우회 안내.
+1. ✅ **비공증 ad-hoc 배포로 확정**(§6). 추가 작업 없음 — Release Fox로 fox-v1.0.5 빌드 후 dmg를 Gumroad 업로드. (공증은 선택, 현재 안 함.)
 2. **여우 집/그릇**: 사용자 맥 `/Users/wony/Desktop/V-Main/판매앱 프로그램 만들기`에 이미지 있음, repo 미반영. push되면 `House`(HouseSvg)·`FoodBowl`/`WaterBowl`(SVG)를 여우 그림 PNG로 교체(flood-fill 재활용) → v1.1.
 3. **여우 추가 동작**(밥/물/하품/굴파기 등): `여우_02~06` 흰배경 시트 슬라이스(flood-fill) 추가 + `docs/fox-actions.md` 매핑대로.
 4. 판매자료 영/일/중 도입부에 고양이끼 약간 남음(다듬기 선택).

@@ -8,7 +8,6 @@
     "buildResources": "build"
   },
   "afterPack": "build/afterPack.cjs",
-  "afterSign": "build/notarize.cjs",
   "files": [
     "dist",
     "dist-electron",
@@ -32,9 +31,6 @@
     ],
     "icon": "build/icon-fox.png",
     "category": "public.app-category.entertainment",
-    "hardenedRuntime": true,
-    "gatekeeperAssess": false,
-    "entitlements": "build/entitlements.mac.plist",
-    "entitlementsInherit": "build/entitlements.mac.plist"
+    "identity": null
   }
 }
